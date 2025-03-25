@@ -1,0 +1,1258 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -660,
+        560
+      ],
+      "id": "a8759a45-4d8c-4b23-9a76-bed04d2fc820",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "url": "https://graph.microsoft.com/v1.0/me/drives",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        940,
+        200
+      ],
+      "id": "d5f1658c-422e-4093-bf67-1e7faa0698d8",
+      "name": "get drives",
+      "alwaysOutputData": false,
+      "credentials": {
+        "microsoftOAuth2Api": {
+          "id": "OwQ0YTXkLNO8NlIj",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/me/drive",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        940,
+        380
+      ],
+      "id": "4bba15f7-5592-4b78-ba33-ec216b2e19a6",
+      "name": "get personal drive",
+      "alwaysOutputData": true,
+      "credentials": {
+        "microsoftOAuth2Api": {
+          "id": "OwQ0YTXkLNO8NlIj",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4e0ffd60-153f-4464-8ed9-19c7a99af6c8",
+              "name": "deal.folders.drive.id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1140,
+        380
+      ],
+      "id": "43dd28b9-1726-4b05-9390-5e2226838695",
+      "name": "get personal drive ID"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5bee18d9-16bf-4358-9633-a90a770db165",
+              "name": "deal.folders.drive.id",
+              "value": "={{ $json.value.find(item => item.name === $('When Executed by Another Workflow').item.json.config.drive.name).id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1380,
+        0
+      ],
+      "id": "24c0b93a-2496-4c9c-a84f-ad0629ad1260",
+      "name": "get configured drive ID"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1740,
+        560
+      ],
+      "id": "2caf9583-b5e4-43e3-a6be-3cc29783c23b",
+      "name": "merge drive folder with deal"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.deal.folders.drive.id }}/{{ \n    $('loop over parents').item.json.parents.parent.name === \"root\" \n    ? \"root/children\" \n    : \"items/\" + $('loop over parents').item.json.parents.parent.id + \"/children\"\n}}\n",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3300,
+        160
+      ],
+      "id": "35f5cd8e-d110-4f3c-94a5-a7fe8e44faff",
+      "name": "get parent's children",
+      "alwaysOutputData": true,
+      "credentials": {
+        "microsoftOAuth2Api": {
+          "id": "OwQ0YTXkLNO8NlIj",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "824a9600-e2cf-4bac-b97d-f94e28c3cbb3",
+              "name": "=deal.folders.root.folders.{{ $('loop over parents').item.json.parents.child.index }}.id",
+              "value": "={{$json.id ? $json.id : $json.value.find(item => item.name === $('loop over parents').item.json.parents.child.name).id}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3900,
+        160
+      ],
+      "id": "24d5959d-f64d-4f35-affd-8d79a99be436",
+      "name": "get child ID"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "460d7355-0af9-4594-933b-10836c639d76",
+              "name": "deal.folders.root.parents",
+              "value": "={{ \n  Object.keys($json.deal.folders.root.folders)\n    .map(Number) // Ensure keys are treated as numbers for sorting\n    .sort((a, b) => a - b) // Sort keys in ascending order\n    .slice(0, -1) // Exclude the last key to avoid out-of-bounds errors\n    .map(key => ({\n      parent: {\n        index: key,\n        id: $json.deal.folders.root.folders[key].id,\n        name: $json.deal.folders.root.folders[key].name\n      },\n      child: {\n        index: Number(key) + 1,\n        id: $json.deal.folders.root.folders[Number(key) + 1]?.id,\n        name: $json.deal.folders.root.folders[Number(key) + 1]?.name\n      }\n    }))\n}}",
+              "type": "array"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2340,
+        380
+      ],
+      "id": "69ace93b-7688-455c-8432-7fef6fa8a598",
+      "name": "set parents"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "deal.folders.root.parents",
+        "include": "allOtherFields",
+        "options": {
+          "destinationFieldName": "parents"
+        }
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2520,
+        380
+      ],
+      "id": "0d50cfc1-7719-4545-92fc-6b7d7ceb6948",
+      "name": "split parents"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": "={{ $prevNode.name === \"split parents\" }}"
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2720,
+        380
+      ],
+      "id": "018aa238-76bd-4bc8-83e3-889ee4310de9",
+      "name": "loop over parents"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $('loop over parents').last().json.deal.folders.drive.id }}/{{ $('loop over parents').last().json.parents.parent.name === \"root\" || !$('loop over parents').last().json.parents.parent.id ? \"root/children\" : \"items/\" + $('loop over parents').last().json.parents.parent.id + \"/children\" }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{ $('loop over parents').item.json.parents.child.name }}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"replace\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3700,
+        0
+      ],
+      "id": "0d0aa046-4102-483b-947f-46ea87a11a41",
+      "name": "create child folder",
+      "credentials": {
+        "microsoftOAuth2Api": {
+          "id": "OwQ0YTXkLNO8NlIj",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {
+          "includeUnpaired": false
+        }
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        4120,
+        360
+      ],
+      "id": "4eda36d8-cae6-4d48-9bed-3d1c607421b7",
+      "name": "merge child folder with email",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8df52b2f-782d-49b7-b2cb-9cdc7856d010",
+              "name": "deal.folders.root.folders",
+              "value": "={{ \n  [ \n    { name: 'root', id: $json.config.drive.id }, \n    ...$json.config.folder.path.replace(/^\\/|\\/$/g, '').split('/').filter(name => name.trim() !== '').map(name => ({ name, id: null })), \n    { name: $json.config.folder.name || 'attachments', id: null } \n  ].reduce((acc, folder, index) => {\n    acc[index] = folder; \n    return acc;\n  }, {})\n}}",
+              "type": "object"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1960,
+        380
+      ],
+      "id": "44162c3a-57dd-48ef-a8c3-5eb4ba77ad62",
+      "name": "set folders"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": []
+        },
+        "includeOtherFields": true,
+        "include": "except",
+        "excludeFields": "=deal.folders.root.folders.{{ $('loop over parents').item.json.parents.child.index }}.id",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3300,
+        360
+      ],
+      "id": "329101d5-1bfb-46f3-8b72-ba492c2621c4",
+      "name": "remove deprecated parent",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "keep": "lastItems"
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        3000,
+        560
+      ],
+      "id": "f07f5905-653f-467b-9a0c-7236cab0dcce",
+      "name": "keep last item"
+    },
+    {
+      "parameters": {
+        "keep": "lastItems"
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        2140,
+        380
+      ],
+      "id": "50f64a25-ef0e-49d6-bf32-82a875b89ae5",
+      "name": "keep last deal"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        3680,
+        700
+      ],
+      "id": "c5bab570-d135-458d-9b4a-5b82569e80e9",
+      "name": "merge folder with email"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "216ab9b8-8a6d-4be6-8275-d26f657aa468",
+              "name": "deal.folders.root.name",
+              "value": "={{$json.deal.folders.root.folders.last().name}}",
+              "type": "string"
+            },
+            {
+              "id": "b8b4ae7f-ee53-414e-b899-94e3fefb59bb",
+              "name": "deal.folders.root.id",
+              "value": "={{$json.deal.folders.root.folders.last().id}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3300,
+        560
+      ],
+      "id": "45b2d0e2-afb1-4fd8-9002-d1477e22a3e5",
+      "name": "get folder ID"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c044f47b-fea4-42f3-b5ab-f6d4f7390c3f",
+              "leftValue": "={{ $json.parents.child.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3000,
+        160
+      ],
+      "id": "f5aa3a25-b5bf-436e-8c3c-2a09d98ced79",
+      "name": "child does not have ID"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "558b4a06-4540-4c3a-b658-82febe036baf",
+              "leftValue": "={{ $('When Executed by Another Workflow').item.json.config.drive.name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "6fa7e9ab-b74d-426a-9f04-ed36157182ff",
+              "leftValue": "={{ $('When Executed by Another Workflow').item.json.config.drive.name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -320,
+        380
+      ],
+      "id": "1a653969-752a-4566-b147-818113c5078f",
+      "name": "is drive configured"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b78788a0-6839-47a5-b8a8-abf99bd3bde1",
+              "leftValue": "={{ $json.value.map(item => item.name) }}",
+              "rightValue": "={{ $('loop over parents').item.json.parents.child.name }}",
+              "operator": {
+                "type": "array",
+                "operation": "notContains",
+                "rightType": "any"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3500,
+        160
+      ],
+      "id": "2e6d1a82-f111-400e-ae20-3cc8e9dfeb1f",
+      "name": "child does not exist"
+    },
+    {
+      "parameters": {
+        "errorMessage": "Drive not found!"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        200
+      ],
+      "id": "b09626b9-d720-4f76-9de6-e1bf9e736c23",
+      "name": "Drive not found!"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4a485a06-6f9b-43a6-902a-84dc333888b1",
+              "leftValue": "={{ $('When Executed by Another Workflow').item.json.config.site.host }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "454539a1-c449-4f47-aced-8f7953a45860",
+              "leftValue": "={{ $('When Executed by Another Workflow').item.json.config.site.host }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "5a86adae-50b8-4804-aaeb-b3f03061d9dd",
+              "leftValue": "={{ $('When Executed by Another Workflow').item.json.config.site.name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "8ef2d75e-f04f-479b-afde-f7ffb1a04d14",
+              "leftValue": "={{ $('When Executed by Another Workflow').item.json.config.site.name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -320,
+        -140
+      ],
+      "id": "3f5c9712-ff99-4aaa-aa9b-a28c52c199a5",
+      "name": "is site configured"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5bee18d9-16bf-4358-9633-a90a770db165",
+              "name": "deal.folders.site.id",
+              "value": "={{ $json.value.find(item => item.name === $('When Executed by Another Workflow').item.json.config.drive.name).id }}",
+              "type": "string"
+            },
+            {
+              "id": "121ab035-eee6-43f9-85de-b6ecc5461b6f",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        760,
+        -140
+      ],
+      "id": "eb229435-f2ae-47d4-8a9c-eba1f994bd10",
+      "name": "get configured site ID"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/sites/{{ $json.id }}/drives",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        940,
+        -140
+      ],
+      "id": "4cc19d04-19fa-48ef-9d03-2ac6a24a6182",
+      "name": "get drives in site",
+      "alwaysOutputData": false,
+      "credentials": {
+        "microsoftOAuth2Api": {
+          "id": "OwQ0YTXkLNO8NlIj",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "09a77218-1fae-4561-b7fc-553d98538961",
+              "leftValue": "={{ $json.value.find(item => item.name === $('When Executed by Another Workflow').item.json.config.drive.name) }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1140,
+        200
+      ],
+      "id": "a43e0767-423f-4d46-bf31-70c9222e9b55",
+      "name": "contains configured drive"
+    },
+    {
+      "parameters": {
+        "errorMessage": "Site not found!"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        760,
+        20
+      ],
+      "id": "cd32bfb7-b78c-4901-b3d3-bc5804f7b6c1",
+      "name": "Site not found"
+    },
+    {
+      "parameters": {
+        "errorMessage": "Site not found!"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        360,
+        20
+      ],
+      "id": "9da3d5ed-92b3-4c87-b10d-ec18e0f655e1",
+      "name": "Drive in site not configured!"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch",
+        "output": "empty"
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        180,
+        -140
+      ],
+      "id": "dc03ed89-7dfb-42c9-854a-f1a54063affe",
+      "name": "site and drive configured"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch",
+        "output": "empty"
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        180,
+        20
+      ],
+      "id": "e82c9e10-3284-4cdd-b9fd-23cfc209f41d",
+      "name": "site and not drive configured"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch",
+        "output": "empty"
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        180,
+        200
+      ],
+      "id": "cd94b1cb-e2f9-4eb9-ac36-859dcacd366c",
+      "name": "drive and not site configured"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch",
+        "output": "empty"
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        180,
+        380
+      ],
+      "id": "c95b1801-58f1-46ce-ab1f-6df7d74b364f",
+      "name": "site and drive not configured"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/sites/{{$('When Executed by Another Workflow').item.json.config.site.host.extractDomain().replaceAll(\"-my\", \"\")}}:/sites/{{$('When Executed by Another Workflow').item.json.config.site.name}}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        360,
+        -140
+      ],
+      "id": "a78f059a-9e5f-4ce6-83f8-aeb999abf002",
+      "name": "get site",
+      "alwaysOutputData": false,
+      "credentials": {
+        "microsoftOAuth2Api": {
+          "id": "OwQ0YTXkLNO8NlIj",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "09a77218-1fae-4561-b7fc-553d98538961",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "05571877-3540-46c7-a999-3fc8afef1013",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "7750784c-b36c-4de7-a2da-7caba5bd4aad",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "={{$('When Executed by Another Workflow').item.json.config.site.host.extractDomain().replaceAll(\"-my\", \"\")}}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        540,
+        -140
+      ],
+      "id": "55cbd594-2875-47e1-acbf-ce7276d15031",
+      "name": "contains configured site ID"
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "merge drive folder with deal",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "is site configured",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "is drive configured",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get drives": {
+      "main": [
+        [
+          {
+            "node": "contains configured drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get personal drive": {
+      "main": [
+        [
+          {
+            "node": "get personal drive ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get personal drive ID": {
+      "main": [
+        [
+          {
+            "node": "merge drive folder with deal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get configured drive ID": {
+      "main": [
+        [
+          {
+            "node": "merge drive folder with deal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "merge drive folder with deal": {
+      "main": [
+        [
+          {
+            "node": "set folders",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "merge folder with email",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "get parent's children": {
+      "main": [
+        [
+          {
+            "node": "child does not exist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get child ID": {
+      "main": [
+        [
+          {
+            "node": "merge child folder with email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set parents": {
+      "main": [
+        [
+          {
+            "node": "split parents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "split parents": {
+      "main": [
+        [
+          {
+            "node": "loop over parents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "loop over parents": {
+      "main": [
+        [
+          {
+            "node": "keep last item",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "child does not have ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create child folder": {
+      "main": [
+        [
+          {
+            "node": "get child ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "merge child folder with email": {
+      "main": [
+        [
+          {
+            "node": "keep last deal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set folders": {
+      "main": [
+        [
+          {
+            "node": "keep last deal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "remove deprecated parent": {
+      "main": [
+        [
+          {
+            "node": "merge child folder with email",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "keep last item": {
+      "main": [
+        [
+          {
+            "node": "get folder ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "keep last deal": {
+      "main": [
+        [
+          {
+            "node": "set parents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get folder ID": {
+      "main": [
+        [
+          {
+            "node": "merge folder with email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "child does not have ID": {
+      "main": [
+        [
+          {
+            "node": "get parent's children",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "remove deprecated parent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "loop over parents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is drive configured": {
+      "main": [
+        [
+          {
+            "node": "drive and not site configured",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "site and drive configured",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "site and drive not configured",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "site and not drive configured",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "child does not exist": {
+      "main": [
+        [
+          {
+            "node": "create child folder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get child ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is site configured": {
+      "main": [
+        [
+          {
+            "node": "site and drive configured",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "site and not drive configured",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "site and drive not configured",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "drive and not site configured",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get configured site ID": {
+      "main": [
+        [
+          {
+            "node": "get drives in site",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get drives in site": {
+      "main": [
+        [
+          {
+            "node": "contains configured drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "contains configured drive": {
+      "main": [
+        [
+          {
+            "node": "get configured drive ID",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Drive not found!",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "site and drive configured": {
+      "main": [
+        [
+          {
+            "node": "get site",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "site and not drive configured": {
+      "main": [
+        [
+          {
+            "node": "Drive in site not configured!",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "drive and not site configured": {
+      "main": [
+        [
+          {
+            "node": "get drives",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "site and drive not configured": {
+      "main": [
+        [
+          {
+            "node": "get personal drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get site": {
+      "main": [
+        [
+          {
+            "node": "contains configured site ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "contains configured site ID": {
+      "main": [
+        [
+          {
+            "node": "get configured site ID",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Site not found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
+  }
+}

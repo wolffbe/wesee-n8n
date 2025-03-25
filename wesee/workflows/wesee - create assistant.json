@@ -1,0 +1,376 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1320,
+        380
+      ],
+      "id": "05d357ba-321c-4786-8440-46c8682c04d1",
+      "name": "merge assistant with email"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7e6e9e06-d46f-4b78-909d-dbd1012e1e1d",
+              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        880,
+        140
+      ],
+      "id": "12971721-a6bb-46cf-b0b0-9d1e5e00ce1a",
+      "name": "error creating assistant"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch",
+        "useDataOfInput": 2
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        340,
+        140
+      ],
+      "id": "9bcb49b1-13e5-4a8d-ac29-7a9cc4f2855f",
+      "name": "drop error from email for assistant"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a4477236-0ec1-40a3-ac6f-17bc94b7e2fd",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "bad",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "fa2e5766-8831-421c-ab18-a3baf782586a",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "gateway",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -240,
+        -20
+      ],
+      "id": "92af7d70-e0fb-4c92-8ca0-40d0f7a9ef4a",
+      "name": "is bad gateway"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        120,
+        380
+      ],
+      "id": "fd1b051b-74d0-4d64-a296-4e11f7380176",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "operation": "create",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "name": "=wesee{{ $now.format('x') }}",
+        "description": "An assistant capable of extracting company properties from emails and their attachments.",
+        "instructions": "=Role:\n\nYou are an expert VC analyst.\n\nObjective:\n\nYour objective is to find properties of a startup based on an email and its email attachments, if there are any.\n\nYou can find the EMAIL and its EMAIL ATTACHMENTS below. If there are no attachments, the fact that there are no attachments will be mentioned below.\n\nPay attention to the BLACKLIST below. Any entries in the blacklist are never startup properties as they are related to the VC for which you are doing the analysis.\n\nTask:\n\nIn the messages following this prompt, you will receive startup properties from the database and their definitions.\n\nYour task is to assign each property with values taken from the following EMAIL and ATTACHMENTS.\n\nDo not produce any response until you have not yet received the properties and their definitions that you are meant to look for.\n\nHere are the email and attachment:\n\nEMAIL:\n\n{{ $('When Executed by Another Workflow').item.json.deal.text.hasField(\"forwarding\") ? $('When Executed by Another Workflow').item.json.deal.text.forwarding.core : $('When Executed by Another Workflow').item.json.deal.text.cleaned }}\n\nEMAIL ATTACHMENTS:\n\n{{ $('When Executed by Another Workflow').item.json.attachments \n    ? Object.values($('When Executed by Another Workflow').item.json.attachments)\n        .map(item => item.parsed)\n        .filter(item => item.length > 0).length > 0 \n        ? Object.values($json.attachments).map(item => item.parsed) \n        : \"There are no attachments.\" \n    : \"There are no attachments.\"\n}}\nBLACKLIST:\n\n{{ \"- \" + $json.config.blacklist.properties.contains.join(\"\\n- \") }}\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        640,
+        140
+      ],
+      "id": "cecd017c-a955-4779-a248-3a3f59fafca4",
+      "name": "create assistant",
+      "retryOnFail": false,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "openAiApi": {
+          "id": "RHBGyb0N9eTeoTwJ",
+          "name": "wesee"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a4477236-0ec1-40a3-ac6f-17bc94b7e2fd",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "The connection to the server was closed unexpectedly, perhaps it is offline. You can retry the request immediately or wait and retry later.",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -60,
+        140
+      ],
+      "id": "b793179c-9faa-47a9-bce6-bff4f5890a31",
+      "name": "is unexpected error"
+    },
+    {
+      "parameters": {
+        "amount": 1,
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        120,
+        -20
+      ],
+      "id": "177bee50-2629-48fc-bbea-d8a2cbd16177",
+      "name": "wait",
+      "webhookId": "1c60b188-b8ec-4082-ae2d-260ec7af9b89"
+    },
+    {
+      "parameters": {
+        "errorMessage": "Error creating assistant!"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        120,
+        140
+      ],
+      "id": "a33aaff2-a167-4e5d-882a-d5ca235baeec",
+      "name": "throw error"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "18824072-2498-4dd9-99bc-e99eb125f22d",
+              "name": "deal.flowAssistant.id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1080,
+        140
+      ],
+      "id": "e0c8eed4-a356-49de-a465-e1f16832137c",
+      "name": "get assistant ID"
+    }
+  ],
+  "connections": {
+    "error creating assistant": {
+      "main": [
+        [
+          {
+            "node": "get assistant ID",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "is bad gateway",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "drop error from email for assistant": {
+      "main": [
+        [
+          {
+            "node": "create assistant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is bad gateway": {
+      "main": [
+        [
+          {
+            "node": "wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "is unexpected error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "drop error from email for assistant",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "merge assistant with email",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "create assistant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create assistant": {
+      "main": [
+        [
+          {
+            "node": "error creating assistant",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "error creating assistant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is unexpected error": {
+      "main": [
+        [
+          {
+            "node": "wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "throw error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wait": {
+      "main": [
+        [
+          {
+            "node": "drop error from email for assistant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get assistant ID": {
+      "main": [
+        [
+          {
+            "node": "merge assistant with email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
+  }
+}

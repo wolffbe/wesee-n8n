@@ -1,0 +1,366 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "db740c44-935c-4680-a229-180109e5a649",
+              "name": "deal.text.decoded",
+              "value": "={{ \n$json.deal.text.decoded.replace(/&nbsp;|&amp;|&lt;|&gt;|&quot;|&#39;/g, m => ({\"&nbsp;\": \" \", \"&amp;\": \"&\", \"&lt;\": \"<\", \"&gt;\": \">\", \"&quot;\": \"\\\"\", \"&#39;\": \"'\"}[m] || m)) \n}}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -820,
+        140
+      ],
+      "id": "dc9499ee-2949-44b9-8c38-0a4477b21a9d",
+      "name": "decode special characters"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c1a6a2f-d008-409a-acab-16598432004d",
+              "name": "deal.text.decoded",
+              "value": "={{ $json.deal.text.decoded.removeTags() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1020,
+        140
+      ],
+      "id": "d0b596b9-2f44-4617-b39e-ad2bb5727b23",
+      "name": "remove markup tags"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5ae6754a-f122-4970-8e65-3e2504e0c4e8",
+              "name": "=deal.text.forwarding.forward",
+              "value": "={{ $json.deal.text.decoded.split(\"---------- Forwarded message ----------\", 2)[0].trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "94bae6d2-d7a8-4f22-b621-d6970fe13554",
+              "name": "deal.text.forwarding.core",
+              "value": "={{ $json.deal.text.decoded.split(\"---------- Forwarded message ----------\", 2)[1].trim() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "814afb3a-12b8-4f05-b8b9-d7d02ef7990b",
+      "name": "extract forwarding"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5a52a6cd-0dc9-4c15-848c-93677a54f397",
+              "name": "deal.text.decoded",
+              "value": "={{ $json.email.body.content.replace(\"<br>\", \" \".hash()) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1220,
+        140
+      ],
+      "id": "c50362f9-52c7-4962-88a5-ada2b209ee61",
+      "name": "hash line breaks"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ed0e3a92-61ae-43f0-a05a-9c4ea790554d",
+              "name": "deal.text.decoded",
+              "value": "={{ $json.deal.text.decoded.replaceAll(\" \".hash(), \" \")}}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -620,
+        140
+      ],
+      "id": "c20dc063-2a1f-4c6b-a2da-2f30f97eb8ac",
+      "name": "replace hashed line breaks"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9d520fac-1e19-448b-9d78-0eddcc87a5a6",
+              "name": "deal.text.decoded",
+              "value": "={{ $json.deal.text.decoded.replace(/,/g, ', ') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -420,
+        140
+      ],
+      "id": "74b3e823-6638-45e6-9ebd-e946a053dfa3",
+      "name": "add whitespace after comma"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1420,
+        140
+      ],
+      "id": "fc603c7a-57e3-4a6e-9f46-fa4daa224f8d",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1034569d-4e2e-4c68-9130-459f5d12e9e5",
+              "name": "deal.source",
+              "value": "={{ $json.email.from.emailAddress.address }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        400,
+        140
+      ],
+      "id": "03991a02-46ec-4f53-8650-bfe29d4fe17f",
+      "name": "extract source"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7e776c3c-b4a2-49f0-a39a-f1f3ff5ba3d7",
+              "leftValue": "={{ $json.deal.text.decoded }}",
+              "rightValue": "=---------- Forwarded message ----------",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -220,
+        140
+      ],
+      "id": "c7e925c9-eb88-43ef-b211-15a837b70a1a",
+      "name": "has forwarding"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3732cf10-7bc0-4576-86f2-4879597023c2",
+              "name": "deal.text.cleaned",
+              "value": "={{ ($json.deal.text.forwarding?.core ?? $json.deal.text.decoded)?.replace(/https?:\\/\\/\\S+|www\\.\\S+/g, '').replaceAll('\\n', \"\").trim() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        140
+      ],
+      "id": "d6247496-2773-4c1a-b545-bcdff5664175",
+      "name": "remove URLs and new lines"
+    }
+  ],
+  "connections": {
+    "decode special characters": {
+      "main": [
+        [
+          {
+            "node": "replace hashed line breaks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "remove markup tags": {
+      "main": [
+        [
+          {
+            "node": "decode special characters",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "extract forwarding": {
+      "main": [
+        [
+          {
+            "node": "remove URLs and new lines",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "hash line breaks": {
+      "main": [
+        [
+          {
+            "node": "remove markup tags",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "replace hashed line breaks": {
+      "main": [
+        [
+          {
+            "node": "add whitespace after comma",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add whitespace after comma": {
+      "main": [
+        [
+          {
+            "node": "has forwarding",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "hash line breaks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "has forwarding": {
+      "main": [
+        [
+          {
+            "node": "extract forwarding",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "remove URLs and new lines",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "remove URLs and new lines": {
+      "main": [
+        [
+          {
+            "node": "extract source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
+  }
+}

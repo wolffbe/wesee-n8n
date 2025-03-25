@@ -1,0 +1,356 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "binary",
+        "options": {
+          "joinPages": true
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ],
+      "id": "3cbc3828-9c6f-4d6c-8e77-c93eb819d63a",
+      "name": "parse PDF"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "attachments",
+        "include": "allOtherFields",
+        "options": {
+          "destinationFieldName": "attachment"
+        }
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        180
+      ],
+      "id": "ac5f1da5-8c65-4026-be02-f95d316b07d1",
+      "name": "split attachments for PDF parsing"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1d1b8c50-4b34-44ef-9f5c-41358dedc4ff",
+              "name": "=attachments.{{ Object.keys($('When Executed by Another Workflow').item.json.attachments)[0] }}.parsed",
+              "value": "={{ $json.text.replaceAll(\"\\n\", \"\") }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        460,
+        0
+      ],
+      "id": "a7c9dbf9-be20-449e-84b0-c05a9ff0ea20",
+      "name": "parse PDF text"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "94631357-ac58-4ea6-b198-552a672ccffc",
+              "leftValue": "={{ $json.attachment.fileExtension }}",
+              "rightValue": "pdf",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -460,
+        180
+      ],
+      "id": "3665e3c2-42b2-485f-8c93-70aa3ae801cf",
+      "name": "filter PDF",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        800,
+        180
+      ],
+      "id": "b13e8811-0745-4b7a-b78b-b080c93c7f5e",
+      "name": "merge PDF text with email"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "347218ee-96f3-4fe7-ac45-497a7df3f3d6",
+              "leftValue": "={{ $json.attachments }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -860,
+        340
+      ],
+      "id": "0f636191-62d3-482c-a041-8fe003c2300d",
+      "name": "has attachments for PDF parsing"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bd2d78ed-82ec-4ccc-aaf3-e235e9735c0a",
+              "leftValue": "={{ $json.keys().length > 0 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -280,
+        180
+      ],
+      "id": "f9d5e7f3-8db7-46c9-874c-482195bc2310",
+      "name": "has PDF attachments"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1040,
+        340
+      ],
+      "id": "abd49c51-ff76-449d-92e5-a4063b99b413",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch"
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1040,
+        340
+      ],
+      "id": "6c3a7577-f676-4839-9068-01e3ed81ce99",
+      "name": "consolidate output"
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "=attachment.data",
+        "binaryPropertyName": "binary",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "002f78ae-658e-4a4c-b35e-f6d229c3ed30",
+      "name": "Convert to File"
+    }
+  ],
+  "connections": {
+    "parse PDF": {
+      "main": [
+        [
+          {
+            "node": "parse PDF text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "split attachments for PDF parsing": {
+      "main": [
+        [
+          {
+            "node": "filter PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parse PDF text": {
+      "main": [
+        [
+          {
+            "node": "merge PDF text with email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter PDF": {
+      "main": [
+        [
+          {
+            "node": "has PDF attachments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "merge PDF text with email": {
+      "main": [
+        [
+          {
+            "node": "consolidate output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "has attachments for PDF parsing": {
+      "main": [
+        [
+          {
+            "node": "split attachments for PDF parsing",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "merge PDF text with email",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "consolidate output",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "consolidate output",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "consolidate output",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "has PDF attachments": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "merge PDF text with email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "has attachments for PDF parsing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "parse PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
+  }
+}

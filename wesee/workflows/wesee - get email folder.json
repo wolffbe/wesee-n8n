@@ -1,0 +1,258 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0fe54d35-48d7-4f06-a764-b3460ac37a0a",
+              "leftValue": "={{ Array.isArray($json.value) && $json.value.length > 0 ? $json.value.find(value => value.name === $('When Executed by Another Workflow').item.json.email.internetMessageId.hash()) : {} }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -240,
+        180
+      ],
+      "id": "2c6d10bd-1f2f-4662-9734-7320bb446e0c",
+      "name": "if email folder does not exist"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "da7c71df-1154-45ce-8568-f404c837579b",
+              "name": "id",
+              "value": "={{ $json.value.find(value => value.name === $('When Executed by Another Workflow').item.json.email.internetMessageId.hash()).id }}",
+              "type": "string"
+            },
+            {
+              "id": "3a4d0567-5bc8-4e46-8137-0a6c5a0dcb12",
+              "name": "webUrl",
+              "value": "={{ $json.value.find(value => value.name === $('When Executed by Another Workflow').item.json.email.internetMessageId.hash()).webUrl }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        180
+      ],
+      "id": "f68ccdf4-e958-4b5b-99be-8f2cd85598c1",
+      "name": "get email folder"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6c879900-75fd-48e4-b6db-c13685f4f6ee",
+              "name": "deal.folders.email.id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "f9663bdd-1ddf-45d7-9233-e5d254f8343f",
+              "name": "deal.folders.email.url",
+              "value": "={{ $json.webUrl }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        200,
+        180
+      ],
+      "id": "6b58b6ad-338d-43a4-84a8-df14fe976cbc",
+      "name": "get email folder ID and URL"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -740,
+        340
+      ],
+      "id": "e041d0e6-c173-4164-968a-792be4e20392",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{$('When Executed by Another Workflow').item.json.deal.folders.drive.id}}/items/{{$('When Executed by Another Workflow').item.json.deal.folders.root.id}}/children",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"name\": \"{{$('When Executed by Another Workflow').item.json.email.internetMessageId.hash()}}\",\n  \"folder\": {},\n  \"@microsoft.graph.conflictBehavior\": \"replace\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "32391c46-0368-4656-bccc-9f30974f87f0",
+      "name": "create root folder",
+      "credentials": {
+        "microsoftOAuth2Api": {
+          "id": "OwQ0YTXkLNO8NlIj",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{$json.deal.folders.drive.id}}/items/{{$json.deal.folders.root.id}}/children",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -460,
+        180
+      ],
+      "id": "86a49fbb-7d7f-4687-ae17-3dd0daaf5a42",
+      "name": "search for email folder",
+      "credentials": {
+        "microsoftOAuth2Api": {
+          "id": "OwQ0YTXkLNO8NlIj",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        440,
+        340
+      ],
+      "id": "1318045d-6497-4f39-abe0-bbe0d9e2e688",
+      "name": "merge email folder with email"
+    }
+  ],
+  "connections": {
+    "if email folder does not exist": {
+      "main": [
+        [
+          {
+            "node": "create root folder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get email folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get email folder": {
+      "main": [
+        [
+          {
+            "node": "get email folder ID and URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get email folder ID and URL": {
+      "main": [
+        [
+          {
+            "node": "merge email folder with email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "search for email folder",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "merge email folder with email",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "create root folder": {
+      "main": [
+        [
+          {
+            "node": "get email folder ID and URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "search for email folder": {
+      "main": [
+        [
+          {
+            "node": "if email folder does not exist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
+  }
+}

@@ -1,0 +1,429 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "chooseBranch",
+        "useDataOfInput": 2
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        0,
+        580
+      ],
+      "id": "dc299178-ba0d-4f01-be84-955a13b89144",
+      "name": "drop Notion from email"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7e6e9e06-d46f-4b78-909d-dbd1012e1e1d",
+              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        640,
+        200
+      ],
+      "id": "4a660364-dbb6-4305-872e-96ec8aba8db9",
+      "name": "error deleting assistant"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a4477236-0ec1-40a3-ac6f-17bc94b7e2fd",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "bad",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "fa2e5766-8831-421c-ab18-a3baf782586a",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "gateway",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -260,
+        200
+      ],
+      "id": "00478b8a-dfa0-4477-9091-3fddbd262418",
+      "name": "is bad gateway for assistant deletion"
+    },
+    {
+      "parameters": {
+        "errorMessage": "Error extracting property!"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "3a197cac-9b85-49af-9ac7-d034a258b62d",
+      "name": "throw non-gateway error for assistant deletion"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -540,
+        780
+      ],
+      "id": "ffe3cd90-dc43-4f4b-9864-2d5a6c804b28",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{$('When Executed by Another Workflow').item.json.deal.folders.drive.id}}/items/{{$('When Executed by Another Workflow').item.json.deal.folders.email.id}}:/{{$('When Executed by Another Workflow').item.json.email.internetMessageId.hash() + \".json\" }}:/content",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        280,
+        580
+      ],
+      "id": "05ca33b8-33ff-4bca-866c-29a1ebd0ce2c",
+      "name": "upload email to OneDrive",
+      "credentials": {
+        "microsoftOAuth2Api": {
+          "id": "OwQ0YTXkLNO8NlIj",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "operation": "deleteAssistant",
+        "assistantId": {
+          "__rl": true,
+          "value": "={{ $json.deal.flowAssistant.id }}",
+          "mode": "id"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        280,
+        200
+      ],
+      "id": "64ca15a9-4967-4314-b23b-e703b2ef84c2",
+      "name": "delete assistant",
+      "credentials": {
+        "openAiApi": {
+          "id": "RHBGyb0N9eTeoTwJ",
+          "name": "wesee"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.notion.com/v1/pages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify((() => {\n  const obj = {\n    parent: { database_id: $json.deal.notion.id },\n    properties: Object.fromEntries(\n      Object.entries($json.deal.properties)\n        .filter(([_, entry]) => entry.value !== \"\" && entry.value !== \"\\\"\\\"\" && entry.value !== null && entry.value !== undefined)\n        .map(([key, entry]) => [\n          key,\n          key === \"Company\"\n            ? { title: [{ text: { content: entry.value } }] }\n            : entry.type === \"rich_text\" || entry.type === \"text\"\n            ? { rich_text: [{ text: { content: entry.value } }] }\n            : entry.type === \"multi_select\"\n            ? { multi_select: Array.isArray(entry.value) ? entry.value.map(option => ({ name: option.trim() })) : entry.value.split(\",\").map(option => ({ name: option.trim() })) }\n            : entry.type === \"select\"\n            ? { select: { name: entry.value } }\n            : entry.type === \"url\"\n            ? { url: entry.value }\n            : entry.type === \"number\"\n            ? { number: Number(entry.value) }\n            : entry.type === \"email\"\n            ? { email: entry.value }\n            : null\n        ])\n        .filter(([_, value]) => value !== null)\n    )\n  };\n\n  // Recursive function to remove empty fields, including empty objects and nested empty objects\n  const removeEmptyFields = (obj) => {\n    if (Array.isArray(obj)) {\n      const filteredArray = obj.map(removeEmptyFields).filter(item => item !== null && item !== \"\" && item !== \"\\\"\\\"\");\n      return filteredArray.length > 0 ? filteredArray : null;\n    } else if (typeof obj === \"object\" && obj !== null) {\n      const filteredObject = Object.fromEntries(\n        Object.entries(obj)\n          .map(([key, value]) => [key, removeEmptyFields(value)])\n          .filter(([_, value]) => \n            value !== null && \n            value !== \"\" && \n            value !== \"\\\"\\\"\" && \n            !(typeof value === \"object\" && Object.keys(value).length === 0) // Removes empty objects!\n          )\n      );\n\n      // If the object is empty after filtering, return null (removes parent field)\n      return Object.keys(filteredObject).length > 0 ? filteredObject : null;\n    }\n    return obj;\n  };\n\n  // Ensure the whole object is removed if it becomes empty\n  return removeEmptyFields(obj) || null;\n})());\n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -260,
+        440
+      ],
+      "id": "bb5c9045-5a24-48dc-8921-6adf135ddd9b",
+      "name": "add email to database",
+      "credentials": {
+        "notionApi": {
+          "id": "5rpIZheN6586Tvlo",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch",
+        "useDataOfInput": 2
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1140,
+        760
+      ],
+      "id": "e14d2897-2279-41ad-9361-fb58fa2c25e8",
+      "name": "keep email"
+    },
+    {
+      "parameters": {
+        "amount": 1,
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        200
+      ],
+      "id": "3a6b888b-4e01-47e6-b527-20f7a66cb8e5",
+      "name": "wait one minute for gateway",
+      "webhookId": "1c60b188-b8ec-4082-ae2d-260ec7af9b89"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch",
+        "output": "empty"
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        920,
+        580
+      ],
+      "id": "696e130e-a4b3-4fb6-bfcd-d0ce0878132f",
+      "name": "wait for assistant deletion"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "messageId": {
+          "__rl": true,
+          "value": "={{$json.email.id}}",
+          "mode": "id"
+        },
+        "updateFields": {
+          "isRead": true
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1340,
+        760
+      ],
+      "id": "9753580b-619b-4dee-bebc-7874ca3bfb6b",
+      "name": "set email to read",
+      "webhookId": "2baaac7f-7fb7-4c35-8b3f-66c92d60fd99",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "juI8yxXGQl6ci0BY",
+          "name": "wesee"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "drop Notion from email": {
+      "main": [
+        [
+          {
+            "node": "upload email to OneDrive",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "delete assistant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "error deleting assistant": {
+      "main": [
+        [
+          {
+            "node": "wait for assistant deletion",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "is bad gateway for assistant deletion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is bad gateway for assistant deletion": {
+      "main": [
+        [
+          {
+            "node": "throw non-gateway error for assistant deletion",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "wait one minute for gateway",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "add email to database",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "drop Notion from email",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "keep email",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "upload email to OneDrive": {
+      "main": [
+        [
+          {
+            "node": "wait for assistant deletion",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "delete assistant": {
+      "main": [
+        [
+          {
+            "node": "error deleting assistant",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "error deleting assistant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add email to database": {
+      "main": [
+        [
+          {
+            "node": "drop Notion from email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "keep email": {
+      "main": [
+        [
+          {
+            "node": "set email to read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wait one minute for gateway": {
+      "main": [
+        [
+          {
+            "node": "delete assistant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wait for assistant deletion": {
+      "main": [
+        [
+          {
+            "node": "keep email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set email to read": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
+  }
+}

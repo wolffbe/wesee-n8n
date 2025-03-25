@@ -1,0 +1,338 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b9652f91-1028-4b66-a1a8-4e13f15c2bf7",
+              "leftValue": "={{ \n  (() => {\n    let blacklist = $('When Executed by Another Workflow').item.json.config.blacklist.file.name.contains.map(name => name.toLowerCase());\n    let fileName = $json.attachments.fileName.toLowerCase();\n    \n    return blacklist.some(name => fileName.includes(name));\n  })()\n}}",
+              "rightValue": "=",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -200,
+        -120
+      ],
+      "id": "0b1e42c7-cbf0-43bd-8839-3c41b8e3cf47",
+      "name": "filter by file name"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0db6ca21-874f-40a2-8e06-e3daf6450d0f",
+              "leftValue": "={{$('When Executed by Another Workflow').item.json.config.blacklist.file.name.contains}}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -440,
+        40
+      ],
+      "id": "f1ff7235-5fd2-4dbf-8ae5-32664e8a78a4",
+      "name": "has file name blacklist items"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "attachments",
+              "renameField": true,
+              "outputFieldName": "=attachments"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        40,
+        40
+      ],
+      "id": "f1cb5df4-45fe-4f47-84f4-0cf27e1c3050",
+      "name": "aggregate attachments"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "14b92192-d76b-4253-a488-04a299eab292",
+              "name": "attachments",
+              "value": "={{ Object.fromEntries($json.attachments.map((value, index) => [`attachment_${index}`, value])) }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        260,
+        40
+      ],
+      "id": "20696c0a-99f8-4bc2-b26b-d02768bca7d5",
+      "name": "convert attachment array into object"
+    },
+    {
+      "parameters": {
+        "includeOtherFields": true,
+        "include": "except",
+        "excludeFields": "attachments",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -660,
+        200
+      ],
+      "id": "2e6e2404-fdd6-4b56-88c3-cec62fa29664",
+      "name": "remove attachments"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "674ba0e0-17b5-4893-b0cb-68d708e9eec6",
+              "leftValue": "={{ $json.attachments }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "25798526-efe7-43d2-a8fa-ab1fce4cb5f5",
+              "leftValue": "={{ $json.attachments }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -960,
+        320
+      ],
+      "id": "ec286a15-9800-44c6-8259-102e2b05b6c9",
+      "name": "has attachments"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        540,
+        320
+      ],
+      "id": "c4840311-5ef9-45db-bbb2-857a2e93b462",
+      "name": "merge filtered attachments with email"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1160,
+        320
+      ],
+      "id": "68b6a15b-2c77-4032-b678-f2557e36cb2f",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "attachments",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -660,
+        40
+      ],
+      "id": "60c3e59e-3dc4-4266-9d52-ff65feb858f7",
+      "name": "split attachments"
+    }
+  ],
+  "connections": {
+    "filter by file name": {
+      "main": [
+        [
+          {
+            "node": "aggregate attachments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "has file name blacklist items": {
+      "main": [
+        [
+          {
+            "node": "filter by file name",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "aggregate attachments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "aggregate attachments": {
+      "main": [
+        [
+          {
+            "node": "convert attachment array into object",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "convert attachment array into object": {
+      "main": [
+        [
+          {
+            "node": "merge filtered attachments with email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "remove attachments": {
+      "main": [
+        [
+          {
+            "node": "merge filtered attachments with email",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "has attachments": {
+      "main": [
+        [
+          {
+            "node": "split attachments",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "remove attachments",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "merge filtered attachments with email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "merge filtered attachments with email",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "has attachments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "split attachments": {
+      "main": [
+        [
+          {
+            "node": "has file name blacklist items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
+  }
+}

@@ -1,0 +1,1188 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        360,
+        560
+      ],
+      "id": "88b89c35-472f-4511-afe0-a3e404858f69",
+      "name": "merge property with output"
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "assistantId": {
+          "__rl": true,
+          "value": "={{ $json['deal.flowAssistant.id'] }}",
+          "mode": "id"
+        },
+        "prompt": "define",
+        "text": "=Task:\n\nFind the following property in the email and attachments.\n\nProperty definition:\n\nThe property \"{{ $json.property.name }}\" is defined as \"{{ $json.property.description }}\".\n\nProperty and response type:\n\n{{ $json.property.type === \"email\" ? \"Your response is an email. Please look for it in the attachments. DO NOT INVENT AN EMAIL. Be as precise as possible\" : \"\" }}\n\n{{ $json.property.type === \"multi_select\" ? \n  \"Response Format: \\n- Your response must be a single string containing only the exact predefined options below, separated by commas if multiple apply. \\n- DO NOT add any extra words, formatting, explanations, or modifications. \\n- DO NOT change the formatting of each of any of the options. \\n- If no valid option applies, respond with \\\"\\\" (an empty string).\" \n: \"\"}}\n{{ $json.property.type === \"multi_select\" ? \"Predefined Options (ONLY use these): \" +\n$json.property.multi_select.options.map(option => option.name).join(\", \") : \"\" }}\n\n{{ $json.property.type === \"number\" ? \"Your response is a numerical value. Respond with the full value. Do not abbreviate large numbers with K or M.\" : \"\" }}\n\n{{ $json.property.type === \"select\" ? \"Your response is pre-defined based on a selection of options. DO NOT MAKE UP OPTIONS YOURSELF! DO NOT change the formatting of each of any of the options. You may choose exactly one of the following options: \" : \"\" }}\n{{ $json.property.type === \"select\" ? $json.properties.select.options.map(option => option.name).join(\", \") : \"\" }}\n\n{{ $json.property.type === \"url\" ? \"Your response is a URL.\" : \"\" }}\n\nAs a response type, produce a string without any formatting.\nIf you cannot find any appropriate response, respond with \"\".\n",
+        "memory": "threadId",
+        "threadId": "=",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        380,
+        120
+      ],
+      "id": "26cbd470-8b6f-430a-93ed-80d15dec8381",
+      "name": "extract property",
+      "retryOnFail": false,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "openAiApi": {
+          "id": "RHBGyb0N9eTeoTwJ",
+          "name": "wesee"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "amount": "={{ $json.rateLimit * 1,5 }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -240,
+        -40
+      ],
+      "id": "73dfe750-0470-4332-a86b-7331e5c06b8a",
+      "name": "wait for rate limit",
+      "webhookId": "1c60b188-b8ec-4082-ae2d-260ec7af9b89"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7da434d1-c9e9-419d-9c6d-acca50b1b6f4",
+              "leftValue": "={{ $json.property.description }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "bb42ced3-b113-433a-acb3-2bdc43c5d68d",
+              "leftValue": "={{ $json.property.description }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -240,
+        580
+      ],
+      "id": "4f27ce4c-496e-4d7e-96db-6e5d53a1bf4f",
+      "name": "filter properties with description"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        2380,
+        1060
+      ],
+      "id": "63cc5356-1bc2-4aab-a636-66d15fc7a9a8",
+      "name": "merge properties for AI with email"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4ef9166b-1eff-476d-a989-47ecc17f439c",
+              "leftValue": "={{ $json.property.description }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "bb42ced3-b113-433a-acb3-2bdc43c5d68d",
+              "leftValue": "={{ $json.property.description }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -240,
+        900
+      ],
+      "id": "99d7f6cd-ed0c-4a47-b3f7-9355dffec623",
+      "name": "filter properties without description"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "=deal.properties",
+        "include": "selectedOtherFields",
+        "fieldsToInclude": "deal.flowAssistant.id",
+        "options": {
+          "destinationFieldName": "property"
+        }
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -660,
+        900
+      ],
+      "id": "e381f410-1647-41aa-8f73-7b317d62dcd3",
+      "name": "split properties for AI"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b1086a41-4315-4985-bdcc-d4fd73050711",
+              "name": "property.value",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "include": "selected",
+        "includeFields": "property",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        560
+      ],
+      "id": "68f1aa34-58ac-4ff9-a19e-325ab83f1c7f",
+      "name": "add value property"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": []
+        },
+        "includeOtherFields": true,
+        "include": "except",
+        "excludeFields": "deal.flowAssistant.id",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        900
+      ],
+      "id": "5946ec92-cbfb-4abe-b599-a52fe1616a1f",
+      "name": "remove assistant"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1800,
+        900
+      ],
+      "id": "78608a06-d418-41f9-ad9e-450f617df685",
+      "name": "merge properties"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "=properties",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1980,
+        900
+      ],
+      "id": "5d0062d4-ec5f-42a7-974e-2c465eb8120d",
+      "name": "aggregate properties"
+    },
+    {
+      "parameters": {
+        "includeOtherFields": true,
+        "include": "except",
+        "excludeFields": "deal.properties",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        1060
+      ],
+      "id": "34623429-5c3b-4ea5-ab9c-9f15fd079e54",
+      "name": "remove properties"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2e8c297c-1125-448b-8d0c-113a48dec1b4",
+              "name": "deal.properties",
+              "value": "={{ Object.fromEntries(\n  $json.properties.map(item => {\n    const { name, ...rest } = item.property;\n    return [name, rest];\n  })\n) }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2160,
+        900
+      ],
+      "id": "b4b537ad-f259-411b-aec6-c1f57a6ca6fe",
+      "name": "reduce properties to Object"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3bc19462-14e4-4964-8eef-17eaa3056246",
+              "name": "output",
+              "value": "={{ !$json.output || $json.output.length === 0 || $json.output === \"\\\"\\\"\" ? null : $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "080aaf73-1341-4bb3-9a60-173f4d2957cb",
+              "name": "output",
+              "value": "={{ $json.output && $json.output.includes('\"') ? $json.output.replace(/\"/g, '') : $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1080,
+        120
+      ],
+      "id": "0ab2fae9-7d7e-4a23-bea9-82a7df9ac520",
+      "name": "nullify empty fields"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch",
+        "useDataOfInput": 2
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        20,
+        120
+      ],
+      "id": "91127f1d-bd64-4e1a-95aa-945ecab0be6f",
+      "name": "drop error from email for property"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -900,
+        1060
+      ],
+      "id": "25e4ac56-e578-4c1b-8df0-84cd4d9f1f0b",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7e6e9e06-d46f-4b78-909d-dbd1012e1e1d",
+              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        860,
+        120
+      ],
+      "id": "e0363df8-f3cc-41de-a928-450d1e6f880d",
+      "name": "no error"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6fe6bf01-e06b-4f22-8716-5b7d0062d80b",
+              "leftValue": "={{ $json.property.select }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1080,
+        380
+      ],
+      "id": "1f43c946-0094-4887-b9b3-badd8f22ea41",
+      "name": "filter select"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1580,
+        720
+      ],
+      "id": "cb57435e-2164-4918-ad2c-d4e76d5b896d",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6fe6bf01-e06b-4f22-8716-5b7d0062d80b",
+              "leftValue": "={{ $json.property.multi_select }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1080,
+        560
+      ],
+      "id": "40160fb5-625d-4e56-ad61-35d68d702d4e",
+      "name": "filter multi_select"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6fe6bf01-e06b-4f22-8716-5b7d0062d80b",
+              "leftValue": "={{ $json.property.select }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "22b8f248-8d86-48e5-87dd-0b9d29dee834",
+              "leftValue": "={{ $json.property.multi_select }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1080,
+        720
+      ],
+      "id": "55ec1821-fd81-4de8-bc44-f93f381bd6dd",
+      "name": "filter non-select and non-multi_select"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "82f8c176-8f90-4373-952f-90775cbb55bc",
+              "name": "property.value",
+              "value": "={{\n    ($json.property.value || \"\")\n      .split(\",\")\n      .map((val) => val.trim())\n      .filter((val) =>\n        $json.property.multi_select.options\n          .map((item) => item.name)\n          .includes(val),\n      )\n      .join(\", \") || \"\";\n}}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1300,
+        560
+      ],
+      "id": "e17b015e-6396-4cca-981d-f6a7b77dfaad",
+      "name": "remove false multi_select"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "82f8c176-8f90-4373-952f-90775cbb55bc",
+              "name": "property.value",
+              "value": "={{ \n  $json.property.value && $json.property.select.options.map(item => item.name).includes($json.property.value) \n    ? $json.property.value \n    : \"\" \n}}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1300,
+        380
+      ],
+      "id": "1be55a81-f1c7-4865-92da-e913d4aee79e",
+      "name": "remove false select"
+    },
+    {
+      "parameters": {
+        "errorMessage": "Error extracting property!"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        120
+      ],
+      "id": "1c0f3782-faff-4e77-bf53-f98e5bb1e616",
+      "name": "throw other error"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5ed44b08-216c-4b03-b07b-f0ed9ce47f6c",
+              "leftValue": "={{ $('merge properties for AI with email').item.json.deal.properties.Company.value }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "beebb7e5-c148-4d95-aa7a-5c8627bbddee",
+              "leftValue": "={{ $('merge properties for AI with email').item.json.deal.properties.Company.value }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2580,
+        1060
+      ],
+      "id": "05584900-5eec-4b89-9db5-3c6c37a329b8",
+      "name": "if company exists"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $json.email.id }}",
+          "mode": "id"
+        },
+        "updateFields": {
+          "isRead": true
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        2840,
+        1200
+      ],
+      "id": "d0504b1a-c23e-47e0-92a4-2a701cc9ff87",
+      "name": "set email to read",
+      "webhookId": "e6a3af6d-5933-46e0-9394-e988cefb876c",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "juI8yxXGQl6ci0BY",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "removeItemsSeenInPreviousExecutions",
+        "dedupeValue": "={{$('if company exists').item.json.email.internetMessageId}}",
+        "options": {
+          "scope": "workflow"
+        }
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        3480,
+        1200
+      ],
+      "id": "6273d587-97f6-412e-93a0-82be17b539e9",
+      "name": "remove message"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e7514e33-fa0f-4826-b434-ea219df293dd",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "Connection error",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "78f4388f-520b-4afc-89ce-ea4b533e8c92",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "Unexpected run status expired",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "0b1a3db1-b137-48cc-adc7-e6e8e4f47002",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "Unexpected run status failed",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -460,
+        120
+      ],
+      "id": "cfddbaa0-ddf2-4665-a41d-16b57bf7d123",
+      "name": "known error"
+    },
+    {
+      "parameters": {
+        "operation": "clearDeduplicationHistory",
+        "options": {
+          "scope": "workflow"
+        }
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        3240,
+        1080
+      ],
+      "id": "80bf98cc-cb71-4f7f-af5d-61e80594272e",
+      "name": "clear duplication cache"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "46e7c308-019a-4414-9bb3-4caaa914a985",
+              "leftValue": "={{ $('if company exists').item.json.config.cache.keep }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3020,
+        1200
+      ],
+      "id": "7945c97c-49ff-46ee-9b9b-f4ef90f39159",
+      "name": "clear cache"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        3240,
+        1420
+      ],
+      "id": "0d0a2ef1-b1d2-4dd6-9849-a979071f82c3",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "clearDeduplicationHistory",
+        "options": {
+          "scope": "workflow"
+        }
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        3480,
+        1420
+      ],
+      "id": "8a1ae531-499a-4383-a0bd-a1e772423af7",
+      "name": "clear duplication cache manually"
+    }
+  ],
+  "connections": {
+    "merge property with output": {
+      "main": [
+        [
+          {
+            "node": "add value property",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "extract property": {
+      "main": [
+        [
+          {
+            "node": "no error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "no error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wait for rate limit": {
+      "main": [
+        [
+          {
+            "node": "drop error from email for property",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter properties with description": {
+      "main": [
+        [
+          {
+            "node": "extract property",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "merge property with output",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "drop error from email for property",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "merge properties for AI with email": {
+      "main": [
+        [
+          {
+            "node": "if company exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter properties without description": {
+      "main": [
+        [
+          {
+            "node": "remove assistant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "split properties for AI": {
+      "main": [
+        [
+          {
+            "node": "filter properties with description",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "filter properties without description",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add value property": {
+      "main": [
+        [
+          {
+            "node": "filter select",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "filter multi_select",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "filter non-select and non-multi_select",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "remove assistant": {
+      "main": [
+        [
+          {
+            "node": "merge properties",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "merge properties": {
+      "main": [
+        [
+          {
+            "node": "aggregate properties",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "aggregate properties": {
+      "main": [
+        [
+          {
+            "node": "reduce properties to Object",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "remove properties": {
+      "main": [
+        [
+          {
+            "node": "merge properties for AI with email",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "reduce properties to Object": {
+      "main": [
+        [
+          {
+            "node": "merge properties for AI with email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "nullify empty fields": {
+      "main": [
+        [
+          {
+            "node": "merge property with output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "drop error from email for property": {
+      "main": [
+        [
+          {
+            "node": "extract property",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "split properties for AI",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "remove properties",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "no error": {
+      "main": [
+        [
+          {
+            "node": "nullify empty fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "known error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter select": {
+      "main": [
+        [
+          {
+            "node": "remove false select",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "merge properties",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter multi_select": {
+      "main": [
+        [
+          {
+            "node": "remove false multi_select",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter non-select and non-multi_select": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "remove false multi_select": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "remove false select": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "if company exists": {
+      "main": [
+        [],
+        [
+          {
+            "node": "set email to read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set email to read": {
+      "main": [
+        [
+          {
+            "node": "clear cache",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "remove message": {
+      "main": [
+        [
+          {
+            "node": "remove message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "known error": {
+      "main": [
+        [
+          {
+            "node": "wait for rate limit",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "throw other error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "clear duplication cache": {
+      "main": [
+        [
+          {
+            "node": "remove message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "clear cache": {
+      "main": [
+        [
+          {
+            "node": "clear duplication cache",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "remove message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "clear duplication cache manually",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
+  }
+}

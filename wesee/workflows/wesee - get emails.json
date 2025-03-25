@@ -1,0 +1,573 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "getAll",
+        "returnAll": true,
+        "output": "raw",
+        "filtersUI": {
+          "values": {
+            "filters": {
+              "readStatus": "={{ $json.config.email.get.read ?? \"both\" }}"
+            }
+          }
+        },
+        "options": {
+          "downloadAttachments": false
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        420,
+        220
+      ],
+      "id": "869a24b7-2f58-45aa-a3c8-670d40b41858",
+      "name": "get messages",
+      "webhookId": "f372e5b7-308a-4a64-92ae-7f2db7176d57",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "juI8yxXGQl6ci0BY",
+          "name": "wesee"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "60717627-37d4-46af-8a61-a3dd86dd9370",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7e6e9e06-d46f-4b78-909d-dbd1012e1e1d",
+              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        640,
+        220
+      ],
+      "id": "13c95a7c-1ef8-41c8-bd83-29424c80fa8e",
+      "name": "no error"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        900,
+        0
+      ],
+      "id": "bb42baa0-03e1-4da8-bd0a-b1dff2774bd6",
+      "name": "merge configuration with emails"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": []
+        },
+        "includeOtherFields": true,
+        "include": "selected",
+        "includeFields": "config",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1180,
+        0
+      ],
+      "id": "feaecd45-ca38-486f-9666-3ad5aace82fd",
+      "name": "keep config field"
+    },
+    {
+      "parameters": {
+        "amount": 30
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        640,
+        460
+      ],
+      "id": "9551a926-9968-49d7-96d3-7db4363a74ae",
+      "name": "wait 30 seconds",
+      "webhookId": "1bd9acc9-3cb4-4065-b6af-f46c853b46ff"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1180,
+        220
+      ],
+      "id": "608793d8-60fe-41f8-8515-8cd0784599a7",
+      "name": "merge configuration with email"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ba57b17e-0d7a-4fa1-89ff-cd5c28be22f0",
+              "name": "email",
+              "value": "={{$json}}",
+              "type": "object"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "include": "selected",
+        "includeFields": "$binary",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        900,
+        220
+      ],
+      "id": "eb76ce28-7c79-48b0-b6d1-96f60596cff8",
+      "name": "set email field"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "fa13cc69-c749-4903-b210-737f31c629b2",
+              "leftValue": "={{ $json.config.email.get.read }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "3e9f40db-3391-49d6-89ed-ec8fee1bdebe",
+              "leftValue": "={{ $json.config.email.get.read }}",
+              "rightValue": "read",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "fc2d97fd-2438-4892-94cd-eaa7c3b80d1b",
+              "leftValue": "={{ $json.config.email.get.read }}",
+              "rightValue": "unread",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "69e1c543-b2aa-49d6-b11a-ef4c6eaabc46",
+              "leftValue": "={{ $json.config.email.get.read }}",
+              "rightValue": "both",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        220
+      ],
+      "id": "8214b9b1-bb8f-49b7-b6cb-23f061d50e71",
+      "name": "email config set"
+    },
+    {
+      "parameters": {
+        "errorMessage": "config.email.get.read is not valid!"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        200,
+        380
+      ],
+      "id": "39de9e1f-1697-43fb-8809-a9ec71288f83",
+      "name": "throw error"
+    },
+    {
+      "parameters": {
+        "operation": "removeItemsSeenInPreviousExecutions",
+        "dedupeValue": "={{$json.email.internetMessageId}}",
+        "options": {
+          "scope": "workflow"
+        }
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        220
+      ],
+      "id": "279afa5d-24be-40a7-8d75-0306f5078894",
+      "name": "remove duplicates"
+    },
+    {
+      "parameters": {
+        "operation": "clearDeduplicationHistory",
+        "options": {
+          "scope": "workflow"
+        }
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        420,
+        -280
+      ],
+      "id": "bcd02311-fe0f-42f5-bdaf-c67bd4bf76bd",
+      "name": "clear duplication cache"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch",
+        "useDataOfInput": 2
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        660,
+        0
+      ],
+      "id": "4f015928-e7e7-4aa5-a33c-c0031c8aba76",
+      "name": "keep email"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "46e7c308-019a-4414-9bb3-4caaa914a985",
+              "leftValue": "={{ $json.config.cache.keep }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        200,
+        -140
+      ],
+      "id": "f0a303ce-ff72-4399-b76a-e2b540eabef1",
+      "name": "clear cache"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        400
+      ],
+      "id": "07c65b0b-fee0-4ad6-b806-e3d1b5966c91",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "maxItems": "={{ $json.config.email.get.batch === 0 ? $('no error').all().length : $json.config.email.get.batch }}",
+        "keep": "lastItems"
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        220
+      ],
+      "id": "3a1d98ab-090b-4dad-98fe-5516baf6072c",
+      "name": "throttle message batch"
+    },
+    {
+      "parameters": {
+        "operation": "clearDeduplicationHistory",
+        "options": {
+          "scope": "workflow"
+        }
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        400
+      ],
+      "id": "9a39da18-ff0f-453d-9308-938f143c1c99",
+      "name": "clear duplication cache manually"
+    }
+  ],
+  "connections": {
+    "get messages": {
+      "main": [
+        [
+          {
+            "node": "no error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "no error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "email config set",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "keep email",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "clear cache",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "no error": {
+      "main": [
+        [
+          {
+            "node": "merge configuration with emails",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "set email field",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "wait 30 seconds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "merge configuration with emails": {
+      "main": [
+        [
+          {
+            "node": "keep config field",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "keep config field": {
+      "main": [
+        [
+          {
+            "node": "merge configuration with email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wait 30 seconds": {
+      "main": [
+        [
+          {
+            "node": "get messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "merge configuration with email": {
+      "main": [
+        [
+          {
+            "node": "throttle message batch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set email field": {
+      "main": [
+        [
+          {
+            "node": "merge configuration with email",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "email config set": {
+      "main": [
+        [
+          {
+            "node": "get messages",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "throw error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "clear duplication cache": {
+      "main": [
+        [
+          {
+            "node": "keep email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "keep email": {
+      "main": [
+        [
+          {
+            "node": "merge configuration with emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "clear cache": {
+      "main": [
+        [
+          {
+            "node": "clear duplication cache",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "keep email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "clear duplication cache manually",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "throttle message batch": {
+      "main": [
+        [
+          {
+            "node": "remove duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
+  }
+}

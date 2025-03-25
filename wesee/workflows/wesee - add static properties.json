@@ -1,0 +1,165 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e8a5cf8c-cd28-4f08-84b0-f5922b049005",
+              "name": "deal.properties.Files.value",
+              "value": "={{ $json.deal.folders.email.url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        200,
+        0
+      ],
+      "id": "6dd37f51-a9e5-4ba4-acfc-c90842149092",
+      "name": "add files property value"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "16fdf853-a3ce-4f35-8f01-95d3d759426b",
+              "name": "deal.properties.Stage.value",
+              "value": "={{ $json.deal.properties.Stage.select.options[0].name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        420,
+        240
+      ],
+      "id": "dc77fbbf-2563-41c8-b4d0-1993eada8122",
+      "name": "add stage property value"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "16fdf853-a3ce-4f35-8f01-95d3d759426b",
+              "name": "deal.properties.Source.value",
+              "value": "={{ $json.deal.source }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        200,
+        240
+      ],
+      "id": "26594698-39e7-4152-b9c3-a45c1421f978",
+      "name": "add source property value"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "16fdf853-a3ce-4f35-8f01-95d3d759426b",
+              "name": "deal.properties.Comment.value",
+              "value": "={{ $json.deal.text.forwarding.forward.substring(0,2000).trim()}}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        420,
+        0
+      ],
+      "id": "4155fdc6-08c4-43e7-9f51-7369dead4e05",
+      "name": "add comments property value"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9306c4e3-ab22-45a5-ae64-73e3926366d1",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "connections": {
+    "add files property value": {
+      "main": [
+        [
+          {
+            "node": "add comments property value",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add source property value": {
+      "main": [
+        [
+          {
+            "node": "add stage property value",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add comments property value": {
+      "main": [
+        [
+          {
+            "node": "add source property value",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "add files property value",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
+  }
+}

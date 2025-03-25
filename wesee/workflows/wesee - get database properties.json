@@ -1,0 +1,1461 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=https://api.notion.com/v1/databases/{{ $json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1220,
+        360
+      ],
+      "id": "1e3d4b4d-ac68-4511-aa37-9a5cdbe6d05e",
+      "name": "get database properties",
+      "credentials": {
+        "notionApi": {
+          "id": "5rpIZheN6586Tvlo",
+          "name": "wesee"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.notion.com/v1/databases/{{ $('get database').item.json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"properties\": {\n    \"Files\": {\n      \"url\": {}\n    }\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2360,
+        1020
+      ],
+      "id": "36ccdc7f-2b9d-4fe1-9d72-3c82e7ff213d",
+      "name": "add files field to database",
+      "credentials": {
+        "notionApi": {
+          "id": "5rpIZheN6586Tvlo",
+          "name": "wesee"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.notion.com/v1/databases/{{ $('get database').item.json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"properties\": {\n    \"Comment\": {\n      \"type\": \"rich_text\",\n      \"rich_text\": {}\n    }\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2640,
+        1260
+      ],
+      "id": "8bece8c0-5623-49ad-9e5a-b6c39496c443",
+      "name": "add comment field to database",
+      "credentials": {
+        "notionApi": {
+          "id": "5rpIZheN6586Tvlo",
+          "name": "wesee"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.notion.com/v1/databases/{{ $('get database').item.json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"properties\": {\n    \"Stage\": {\n      \"type\": \"select\",\n      \"select\": {\n        \"options\": [\n          { \"name\": \"Inflow (deals@)\", \"color\": \"default\" },\n          { \"name\": \"To Approach\", \"color\": \"yellow\" },\n          { \"name\": \"Initial conversation\", \"color\": \"purple\" },\n          { \"name\": \"To Pass\", \"color\": \"blue\" },\n          { \"name\": \"To Present to Team\", \"color\": \"teal\" },\n          { \"name\": \"Opportunity Qualification\", \"color\": \"green\" },\n          { \"name\": \"Watchlist\", \"color\": \"brown\" },\n          { \"name\": \"Invest\", \"color\": \"green\" },\n          { \"name\": \"Direct Reject\", \"color\": \"gray\" },\n          { \"name\": \"Rejected\", \"color\": \"red\" },\n          { \"name\": \"Interested\", \"color\": \"purple\" }\n        ]\n      }\n    }\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2920,
+        1500
+      ],
+      "id": "76b1e3d1-10e8-49b5-900f-f5d77cb6304d",
+      "name": "add source field to database",
+      "credentials": {
+        "notionApi": {
+          "id": "5rpIZheN6586Tvlo",
+          "name": "wesee"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.notion.com/v1/databases/{{ $('get database').item.json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"properties\": {\n    \"Description\": {\n      \"description\": \"A short summary of the company. It should be as concise and factual as possible, and use as little marketing language as possible.\",\n      \"type\": \"rich_text\",\n      \"rich_text\": {}\n    }\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2060,
+        780
+      ],
+      "id": "09d5d25f-1427-4692-a181-3bccf3ac9c28",
+      "name": "add description field to database",
+      "credentials": {
+        "notionApi": {
+          "id": "5rpIZheN6586Tvlo",
+          "name": "wesee"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.notion.com/v1/databases/{{ $('get database').item.json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"properties\": {\n    \"Company\": {\n      \"description\": \"The name of the company, ideally including its legal form\",\n      \"type\": \"rich_text\",\n      \"rich_text\": {}\n    }\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1800,
+        520
+      ],
+      "id": "85f987e5-4151-4400-8283-5c6028a985b2",
+      "name": "add company field to database",
+      "credentials": {
+        "notionApi": {
+          "id": "5rpIZheN6586Tvlo",
+          "name": "wesee"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.notion.com/v1/databases/{{ $('get database').item.json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"properties\": {\n    \"Stage\": {\n      \"type\": \"select\",\n      \"select\": {\n        \"options\": [\n          { \"name\": \"Inflow (deals@)\", \"color\": \"default\" },\n          { \"name\": \"To Approach\", \"color\": \"yellow\" },\n          { \"name\": \"Initial conversation\", \"color\": \"purple\" },\n          { \"name\": \"To Pass\", \"color\": \"blue\" },\n          { \"name\": \"To Present to Team\", \"color\": \"teal\" },\n          { \"name\": \"Opportunity Qualification\", \"color\": \"green\" },\n          { \"name\": \"Watchlist\", \"color\": \"brown\" },\n          { \"name\": \"Invest\", \"color\": \"green\" },\n          { \"name\": \"Direct Reject\", \"color\": \"gray\" },\n          { \"name\": \"Rejected\", \"color\": \"red\" },\n          { \"name\": \"Interested\", \"color\": \"purple\" }\n        ]\n      }\n    }\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3200,
+        1740
+      ],
+      "id": "65d2768f-3143-49a0-8496-8ee190020b5e",
+      "name": "add stage field to database",
+      "credentials": {
+        "notionApi": {
+          "id": "5rpIZheN6586Tvlo",
+          "name": "wesee"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "80dd1489-ef23-4c4b-b237-a26759275c3a",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
+              "leftValue": "={{ $json?.properties &&     typeof $json.properties === \"object\" &&     Object.keys($json.properties).some(key => key.toLowerCase() === \"company\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1620,
+        360
+      ],
+      "id": "a6be590c-5e9c-411f-8d4c-1f5a7d2a613c",
+      "name": "has company field"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f3b68674-8f2f-417b-a904-ff3f42afa012",
+              "leftValue": "={{ $json?.properties &&     typeof $json.properties === \"object\" &&     Object.keys($json.properties).some(key => key.toLowerCase() === \"description\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2060,
+        520
+      ],
+      "id": "00f429de-8779-464c-9ff6-4468dbe7e49a",
+      "name": "has description field"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4b9f167a-ac54-40fa-959b-014b70f1740e",
+              "leftValue": "={{ $json.properties }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "179d802f-8e70-4ce1-958e-6144602158c0",
+              "leftValue": "={{ $json.properties.Files }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "f641caa1-2e5c-4677-ae1e-f10df7ddc263",
+              "leftValue": "={{ $json.properties.Files.type }}",
+              "rightValue": "url",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2360,
+        800
+      ],
+      "id": "8740eb14-39ac-4134-a755-ab70f68db6f9",
+      "name": "has files field"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "28a18903-03af-4c8a-ae81-8b0fee516a24",
+              "leftValue": "={{ $json?.properties &&     typeof $json.properties === \"object\" &&     Object.keys($json.properties).some(key => key.toLowerCase() === \"comment\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2640,
+        1020
+      ],
+      "id": "8a35b295-83a4-4287-881a-da63c04f9146",
+      "name": "has comments field"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8661d0b3-f121-445f-9792-ce65b1ae77ed",
+              "leftValue": "={{ $json?.properties &&     typeof $json.properties === \"object\" &&     Object.keys($json.properties).some(key => key.toLowerCase() === \"comment\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2920,
+        1260
+      ],
+      "id": "9e026d0e-e717-448e-8087-ad34fd7ad0c8",
+      "name": "has source field"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9f9429f2-0f7b-4d0b-b6c6-e439394fdfe1",
+              "leftValue": "={{ $json?.properties &&     typeof $json.properties === \"object\" &&     Object.keys($json.properties).some(key => key.toLowerCase() === \"stage\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3200,
+        1500
+      ],
+      "id": "b8c4d57b-d0c9-4f4a-9b23-e0ce72c15664",
+      "name": "has stage field"
+    },
+    {
+      "parameters": {
+        "resource": "database",
+        "databaseId": {
+          "__rl": true,
+          "value": "={{ $json.config.notion.url }}",
+          "mode": "url"
+        }
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        280
+      ],
+      "id": "a8c4a084-9ef5-4ea3-b63e-4721099b13f1",
+      "name": "get database",
+      "executeOnce": false,
+      "credentials": {
+        "notionApi": {
+          "id": "5rpIZheN6586Tvlo",
+          "name": "wesee"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "46849bdf-37d9-4c39-bb58-6e4189111333",
+              "name": "notion.id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "1339c63b-f0a2-41eb-88ff-eab1b834e282",
+              "name": "notion.name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "b84569f4-a7a2-4a21-8c85-12d3f1f6b615",
+              "name": "notion.url",
+              "value": "={{ $json.url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1220,
+        180
+      ],
+      "id": "5f719534-05f5-4f35-bb22-cc04e3b80afb",
+      "name": "get database identifiers"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        3600,
+        180
+      ],
+      "id": "7a128eed-8ca1-4f34-8792-946db3d4eee7",
+      "name": "merge identifiers with properties"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "16f5a4b0-b717-4e53-84f5-5ac6667df623",
+              "name": "deal.properties",
+              "value": "={{ $json.properties }}",
+              "type": "object"
+            },
+            {
+              "id": "89c31286-122a-4a78-a490-f83e44774b2d",
+              "name": "deal.notion",
+              "value": "={{ $json.notion }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3800,
+        180
+      ],
+      "id": "73348cc9-b2fc-4462-bda8-3d7149db27d3",
+      "name": "extract identifiers and properties"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        4020,
+        0
+      ],
+      "id": "0ca3cd04-7371-409e-ab50-b80354222de1",
+      "name": "merge email with properties"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
+              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1420,
+        500
+      ],
+      "id": "e565bb56-e533-4967-abd2-4299063945ed",
+      "name": "does not have error getting database properties"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
+              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1800,
+        780
+      ],
+      "id": "80e1b7d4-1d34-4a30-878e-6935eed51098",
+      "name": "does not have error adding company"
+    },
+    {
+      "parameters": {
+        "amount": 1,
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        240,
+        280
+      ],
+      "id": "83f51025-4229-4ab6-9d3c-6d77fbb525e6",
+      "name": "wait one minute",
+      "webhookId": "fb794516-d5bf-41d1-ba87-8d10eff2e8df"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
+              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2060,
+        1020
+      ],
+      "id": "bd6e5ed9-a933-49d7-8f2e-8a127665a5ae",
+      "name": "does not have error adding description"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
+              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2360,
+        1260
+      ],
+      "id": "5f8f5b23-971c-4b72-a4d3-fd8657595434",
+      "name": "does not have error adding files"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
+              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2640,
+        1500
+      ],
+      "id": "0445d24c-1b27-4e97-8e10-4d51a9af5c5a",
+      "name": "does not have error adding comment"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
+              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2920,
+        1740
+      ],
+      "id": "beb6c440-6983-4b42-950b-a3df749d53c9",
+      "name": "does not have error adding source"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
+              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3200,
+        1980
+      ],
+      "id": "05e552e9-a469-4dc9-aa59-97f1a9385605",
+      "name": "does not have error adding stage"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "07f64532-3260-4020-a7d9-0eaa926bb4b4",
+              "leftValue": "={{ $json.error.toLower }}",
+              "rightValue": " 504 Gateway Time-out 504 Gateway Time-out ",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -220,
+        280
+      ],
+      "id": "4c5b40be-5b97-403e-be66-c5efbdbf68ac",
+      "name": "gateway timed out"
+    },
+    {
+      "parameters": {
+        "errorMessage": "={{$json.error}}"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        240,
+        500
+      ],
+      "id": "000b80c0-3035-46d3-8903-44d2fc0d9d26",
+      "name": "throw error not related to gateway"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
+              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        920,
+        280
+      ],
+      "id": "a3cd917b-7151-4f69-917d-f173c1fd98e0",
+      "name": "does not have error getting database"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "07f64532-3260-4020-a7d9-0eaa926bb4b4",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "=closed",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "26c179eb-fc17-425e-bf83-0845eafabb1b",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "offline",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        180
+      ],
+      "id": "50e03cd8-877f-4e1d-901a-a79222e3b359",
+      "name": "connection closed or offline"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch"
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        520,
+        280
+      ],
+      "id": "6c6ca7fa-7b89-4fe2-8795-8254ef3c4dd8",
+      "name": "Merge"
+    }
+  ],
+  "connections": {
+    "get database properties": {
+      "main": [
+        [
+          {
+            "node": "does not have error getting database properties",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "does not have error getting database properties",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add files field to database": {
+      "main": [
+        [
+          {
+            "node": "does not have error adding files",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "does not have error adding files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add comment field to database": {
+      "main": [
+        [
+          {
+            "node": "does not have error adding comment",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "does not have error adding comment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add source field to database": {
+      "main": [
+        [
+          {
+            "node": "does not have error adding source",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "does not have error adding source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add description field to database": {
+      "main": [
+        [
+          {
+            "node": "does not have error adding description",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "does not have error adding description",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add company field to database": {
+      "main": [
+        [
+          {
+            "node": "does not have error adding company",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "does not have error adding company",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add stage field to database": {
+      "main": [
+        [
+          {
+            "node": "does not have error adding stage",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "does not have error adding stage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "merge email with properties",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "has company field": {
+      "main": [
+        [
+          {
+            "node": "has description field",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "add company field to database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "has description field": {
+      "main": [
+        [
+          {
+            "node": "has files field",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "add description field to database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "has files field": {
+      "main": [
+        [
+          {
+            "node": "has comments field",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "add files field to database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "has comments field": {
+      "main": [
+        [
+          {
+            "node": "has source field",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "add comment field to database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "has source field": {
+      "main": [
+        [
+          {
+            "node": "has stage field",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "add source field to database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "has stage field": {
+      "main": [
+        [
+          {
+            "node": "merge identifiers with properties",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "add stage field to database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get database": {
+      "main": [
+        [
+          {
+            "node": "does not have error getting database",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "does not have error getting database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get database identifiers": {
+      "main": [
+        [
+          {
+            "node": "merge identifiers with properties",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "merge identifiers with properties": {
+      "main": [
+        [
+          {
+            "node": "extract identifiers and properties",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "extract identifiers and properties": {
+      "main": [
+        [
+          {
+            "node": "merge email with properties",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "does not have error getting database properties": {
+      "main": [
+        [
+          {
+            "node": "has company field",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "gateway timed out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "does not have error adding company": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "gateway timed out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wait one minute": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "does not have error adding description": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "gateway timed out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "does not have error adding files": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "gateway timed out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "does not have error adding comment": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "gateway timed out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "does not have error adding source": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "gateway timed out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "does not have error adding stage": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "gateway timed out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "gateway timed out": {
+      "main": [
+        [
+          {
+            "node": "connection closed or offline",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "throw error not related to gateway",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "does not have error getting database": {
+      "main": [
+        [
+          {
+            "node": "get database identifiers",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "get database properties",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "gateway timed out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "connection closed or offline": {
+      "main": [
+        [
+          {
+            "node": "wait one minute",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "throw error not related to gateway",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "get database",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
+  }
+}

@@ -1,0 +1,577 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        520,
+        460
+      ],
+      "id": "0bfca725-0775-4a6b-8f41-4ec85a849559",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "RHBGyb0N9eTeoTwJ",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputText": "=\"{{$json.deal.text.cleaned}}\"",
+        "categories": {
+          "categories": [
+            {
+              "category": "startup investment",
+              "description": "=Analyze the following email and classify its relevance to a venture capital fund {{ $json.config.thesis ? \"with the following investment thesis: \" + $json.config.thesis : \"\" }}. Determine if it contains valuable insights, potential investment opportunities, market signals, or industry intelligence. It is critical that a company is mentioned in the email."
+            }
+          ]
+        },
+        "options": {
+          "fallback": "other",
+          "enableAutoFixing": true
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1,
+      "position": [
+        620,
+        200
+      ],
+      "id": "f7d0a4ba-b231-4400-9872-2e0226e72931",
+      "name": "classify email",
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -40,
+        440
+      ],
+      "id": "ea051885-7ef0-47b0-8003-e1b0bdb63934",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "82ea2e16-90ea-44c4-9ebc-56bdf2db7672",
+              "name": "rateLimit",
+              "value": "={{ $json.error.replaceAll(\"Unexpected run status expired.\\nFull run info:\\n\\n\", \"\").parseJson().last_error.message.match(/(\\d+\\.\\d+)s/)[1] }}\n",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -160,
+        60
+      ],
+      "id": "09216e55-7888-4eab-b0e3-30cc9bfe731a",
+      "name": "get rate limit"
+    },
+    {
+      "parameters": {
+        "amount": "={{ $json.rateLimit * 1,5 }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        20,
+        60
+      ],
+      "id": "ec7a1954-89cc-4315-95dc-7e4a58f6d86e",
+      "name": "wait for rate limit",
+      "webhookId": "1c60b188-b8ec-4082-ae2d-260ec7af9b89"
+    },
+    {
+      "parameters": {
+        "mode": "expression",
+        "numberOutputs": 3,
+        "output": "={{\n    $json.error.includes(\"Connection error.\") ? 2 :\n    $json.error.includes(\"Unexpected run status expired.\") ? \n        (\n            (() => {\n                let errorData = $json.error.replaceAll(\"Unexpected run status expired.\\nFull run info:\\n\\n\", \"\").parseJson();\n                return errorData.hasField(\"status\") && errorData.status == \"expired\" ? 2 : 0;\n            })()\n        ) :\n    $json.error.includes(\"Unexpected run status failed.\") ? \n        (\n            (() => {\n                let errorData = $json.error.replaceAll(\"Unexpected run status failed.\\nFull run info:\\n\\n\", \"\").parseJson();\n                return errorData.hasField(\"status\") && errorData.status === \"failed\" ? \n                    (errorData.hasField(\"rateLimit\") ? 1 : 0) \n                    : 0;\n            })()\n        ) :\n    0\n}}"
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -400,
+        60
+      ],
+      "id": "93b61daf-ed95-4395-9506-02e13165266d",
+      "name": "handle error"
+    },
+    {
+      "parameters": {
+        "amount": "=30"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -160,
+        220
+      ],
+      "id": "8b5901ff-ed2f-4e20-8b17-baa67ec332e2",
+      "name": "wait for 30 seconds",
+      "webhookId": "1c60b188-b8ec-4082-ae2d-260ec7af9b89"
+    },
+    {
+      "parameters": {
+        "errorMessage": "Error extracting property!"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        -100
+      ],
+      "id": "3013131f-c235-4922-aba8-2217e7f0bdac",
+      "name": "throw other error"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch",
+        "useDataOfInput": 2
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        240,
+        200
+      ],
+      "id": "4d36a64c-18a0-499f-a64d-28f56fdd669a",
+      "name": "drop error from email for classification"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $json.email.id }}",
+          "mode": "id"
+        },
+        "updateFields": {
+          "isRead": true
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        1240,
+        440
+      ],
+      "id": "f061b293-1a82-46d7-8178-362342e57048",
+      "name": "set email to read",
+      "webhookId": "e6a3af6d-5933-46e0-9394-e988cefb876c",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "juI8yxXGQl6ci0BY",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7e6e9e06-d46f-4b78-909d-dbd1012e1e1d",
+              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1020,
+        440
+      ],
+      "id": "6529223b-a0b0-4628-9cd0-6911d7a9de4d",
+      "name": "no error in other branch"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7e6e9e06-d46f-4b78-909d-dbd1012e1e1d",
+              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1240,
+        200
+      ],
+      "id": "cf72d928-7560-49a0-9e15-0ff7b48dec63",
+      "name": "no error in main branch"
+    },
+    {
+      "parameters": {
+        "operation": "removeItemsSeenInPreviousExecutions",
+        "dedupeValue": "={{$('no error in other branch').item.json.email.internetMessageId}}",
+        "options": {
+          "scope": "workflow"
+        }
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        1900,
+        440
+      ],
+      "id": "a59f1830-6528-4c03-8ee1-e418d9573154",
+      "name": "remove message"
+    },
+    {
+      "parameters": {
+        "operation": "clearDeduplicationHistory",
+        "options": {
+          "scope": "workflow"
+        }
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        1660,
+        320
+      ],
+      "id": "1b99f944-5dae-4974-89bb-c43f06dbfb9b",
+      "name": "clear duplication cache"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "46e7c308-019a-4414-9bb3-4caaa914a985",
+              "leftValue": "={{ $('no error in other branch').item.json.config.cache.keep }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1440,
+        440
+      ],
+      "id": "665bd00e-b4bd-4447-b0b6-25e3ded5779b",
+      "name": "clear cache"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        660
+      ],
+      "id": "ef3df009-3df6-48b9-82ff-2b4a2089e3e2",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "clearDeduplicationHistory",
+        "options": {
+          "scope": "workflow"
+        }
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        1900,
+        660
+      ],
+      "id": "3a5daac5-20d6-41e8-80b7-27a9ea860df4",
+      "name": "clear duplication cache manually"
+    }
+  ],
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "classify email",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "classify email": {
+      "main": [
+        [
+          {
+            "node": "no error in main branch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "no error in other branch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "no error in other branch",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "no error in main branch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "classify email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "drop error from email for classification",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "get rate limit": {
+      "main": [
+        [
+          {
+            "node": "wait for rate limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wait for rate limit": {
+      "main": [
+        [
+          {
+            "node": "drop error from email for classification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "handle error": {
+      "main": [
+        [
+          {
+            "node": "throw other error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get rate limit",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "wait for 30 seconds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wait for 30 seconds": {
+      "main": [
+        [
+          {
+            "node": "drop error from email for classification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "drop error from email for classification": {
+      "main": [
+        [
+          {
+            "node": "classify email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set email to read": {
+      "main": [
+        [
+          {
+            "node": "clear cache",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "no error in other branch": {
+      "main": [
+        [
+          {
+            "node": "set email to read",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "handle error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "no error in main branch": {
+      "main": [
+        [],
+        [
+          {
+            "node": "handle error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "remove message": {
+      "main": [
+        [
+          {
+            "node": "remove message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "clear duplication cache": {
+      "main": [
+        [
+          {
+            "node": "remove message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "clear cache": {
+      "main": [
+        [
+          {
+            "node": "clear duplication cache",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "remove message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "clear duplication cache manually",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
+  }
+}

@@ -1,0 +1,344 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -640,
+        340
+      ],
+      "id": "73f98804-f495-49ae-8cb3-c44757eb3a35",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": {
+          "__rl": true,
+          "value": "={{ $json.email.id }}",
+          "mode": "id"
+        },
+        "output": "fields",
+        "options": {
+          "attachmentsPrefix": "",
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        -420,
+        180
+      ],
+      "id": "35747a3a-bab6-4991-9699-a48f0a257a11",
+      "name": "Microsoft Outlook",
+      "webhookId": "776dc26b-69d5-4d9f-9c26-a1f64cf79e15",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "juI8yxXGQl6ci0BY",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "binaryPropertyName": "={{ Object.keys($input.item.binary)[0] }}",
+        "destinationKey": "={{ Object.keys($input.item.binary)[0] }}.data",
+        "options": {
+          "keepSource": "both"
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        180,
+        0
+      ],
+      "id": "386f4991-1894-4178-b8fd-dac75d7730d8",
+      "name": "extract attachments"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "=$binary",
+        "options": {
+          "includeBinary": true
+        }
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "060f899a-d896-4278-be9e-649457eb3571",
+      "name": "split attachments"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8e6ba5ec-1b3c-488e-b262-ddbb5dc8d17e",
+              "name": "attachments",
+              "value": "={{ $json.attachments.reduce((acc, item, index) => { \n    const key = `attachment_${index}`;\n    acc[key] = Object.values(item)[0]; // Extract the first value from the object\n    return acc; \n}, {}) }}",
+              "type": "object"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        800,
+        0
+      ],
+      "id": "59b38768-72fd-4bd3-a7b4-9b2528dcd8f0",
+      "name": "consolidate attachments into object"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1060,
+        340
+      ],
+      "id": "a9d7e670-11d3-43d2-815f-c828293403c9",
+      "name": "merge attachment object with email"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0626f94e-ecdd-46c1-94cb-a03ebf63602f",
+              "name": "={{ Object.keys($input.item.binary)[0] }}.fileName",
+              "value": "={{ Object.values($input.item.binary)[0].fileName }}",
+              "type": "string"
+            },
+            {
+              "id": "1c325f61-55e6-4ef4-934c-4f710dabd39e",
+              "name": "={{ Object.keys($input.item.binary)[0] }}.fileExtension",
+              "value": "={{ Object.values($input.item.binary)[0].fileExtension}}",
+              "type": "string"
+            },
+            {
+              "id": "ee1a0942-93ba-4f73-9ad2-07c89d2e9974",
+              "name": "={{ Object.keys($input.item.binary)[0] }}.mimeType",
+              "value": "={{ Object.values($input.item.binary)[0].mimeType}}",
+              "type": "string"
+            },
+            {
+              "id": "bd676bdf-9bd7-4735-9bc9-e6a05f9d1d42",
+              "name": "={{ Object.keys($input.item.binary)[0] }}.fileType",
+              "value": "={{ Object.values($input.item.binary)[0].fileType}}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        380,
+        0
+      ],
+      "id": "0e022944-ccee-45e6-8893-0d9db34d8731",
+      "name": "set file properties"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        180
+      ],
+      "id": "4858e6f7-bd41-4d97-90b3-610f6e7ca1e6",
+      "name": "return empty field"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "57209ea7-5ed6-42d2-8eaa-22894532a1be",
+              "leftValue": "={{ $binary }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -220,
+        180
+      ],
+      "id": "d5c1a4cc-c014-4699-92a7-9b0e3588fc95",
+      "name": "has attachments"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "attachments",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        580,
+        0
+      ],
+      "id": "062117dc-7f29-41aa-ae03-e88dec510d8d",
+      "name": "aggregate attachments"
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Microsoft Outlook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "merge attachment object with email",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Microsoft Outlook": {
+      "main": [
+        [
+          {
+            "node": "has attachments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "extract attachments": {
+      "main": [
+        [
+          {
+            "node": "set file properties",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "split attachments": {
+      "main": [
+        [
+          {
+            "node": "extract attachments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "consolidate attachments into object": {
+      "main": [
+        [
+          {
+            "node": "merge attachment object with email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set file properties": {
+      "main": [
+        [
+          {
+            "node": "aggregate attachments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "return empty field": {
+      "main": [
+        [
+          {
+            "node": "merge attachment object with email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "has attachments": {
+      "main": [
+        [
+          {
+            "node": "split attachments",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "return empty field",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "aggregate attachments": {
+      "main": [
+        [
+          {
+            "node": "consolidate attachments into object",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
+  }
+}
