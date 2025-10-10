@@ -1,15 +1,21 @@
 CONTAINER_NAME = n8n
 VOLUME_NAME = n8n_data
-IMAGE_NAME = docker.n8n.io/n8nio/n8n
+
+# Default to Docker Hub image; optionally override at runtime:
+#   make start IMAGE_NAME=docker.n8n.io/n8nio/n8n
+IMAGE_NAME ?= n8nio/n8n
+FALLBACK_IMAGE = n8nio/n8n
 
 OS := $(shell uname 2>/dev/null || echo Windows)
 
 ifeq ($(OS), Windows)
     PWD_CMD = cd
     MKDIR_CMD = if not exist "$(WESEE_DIR)" mkdir "$(WESEE_DIR)"
+    RMDIR_CMD = if exist "$(WESEE_DIR)" rmdir /S /Q "$(WESEE_DIR)"
 else
     PWD_CMD = pwd
     MKDIR_CMD = mkdir -p $(WESEE_DIR)
+    RMDIR_CMD = rm -rf $(WESEE_DIR)
 endif
 
 CURRENT_DIR := $(shell $(PWD_CMD))
@@ -39,17 +45,36 @@ ensure-wesee-dir:
 install: check-volume ensure-wesee-dir
 	@echo "n8n installation setup complete."
 
-start:
+start: ## Start n8n in detached mode (auto-fallback image)
 	@echo "Starting n8n..."
-	docker run -d $(ENV_VARS) --name $(CONTAINER_NAME) -p 5678:5678 -v $(VOLUME_NAME):/home/node/.n8n -v $(WESEE_DIR):/home/node/wesee $(IMAGE_NAME)
+	@if docker ps -q -f name=$(CONTAINER_NAME) >/dev/null 2>&1 && [ -n "$$(docker ps -q -f name=$(CONTAINER_NAME))" ]; then \
+		echo "n8n is already running. Container ID:"; \
+		docker ps -q -f name=$(CONTAINER_NAME); \
+	else \
+		IMAGE=$$(docker manifest inspect $(IMAGE_NAME) >/dev/null 2>&1 && echo "$(IMAGE_NAME)" || echo "$(FALLBACK_IMAGE)"); \
+		echo "Using image: $$IMAGE"; \
+		docker run -d $(ENV_VARS) --name $(CONTAINER_NAME) -p 5678:5678 \
+			-v $(VOLUME_NAME):/home/node/.n8n \
+			-v $(WESEE_DIR):/home/node/wesee $$IMAGE; \
+	fi
 
-startfg:
+startfg: ## Start n8n in foreground mode (auto-fallback image)
 	@echo "Starting n8n in foreground mode..."
-	docker run -it --rm $(ENV_VARS) --name $(CONTAINER_NAME) -p 5678:5678 -v $(VOLUME_NAME):/home/node/.n8n -v $(WESEE_DIR):/home/node/wesee $(IMAGE_NAME)
+	@if docker ps -q -f name=$(CONTAINER_NAME) >/dev/null 2>&1 && [ -n "$$(docker ps -q -f name=$(CONTAINER_NAME))" ]; then \
+		echo "n8n is already running. Container ID:"; \
+		docker ps -q -f name=$(CONTAINER_NAME); \
+	else \
+		IMAGE=$$(docker manifest inspect $(IMAGE_NAME) >/dev/null 2>&1 && echo "$(IMAGE_NAME)" || echo "$(FALLBACK_IMAGE)"); \
+		echo "Using image: $$IMAGE"; \
+		docker run -it --rm $(ENV_VARS) --name $(CONTAINER_NAME) -p 5678:5678 \
+			-v $(VOLUME_NAME):/home/node/.n8n \
+			-v $(WESEE_DIR):/home/node/wesee $$IMAGE; \
+	fi
 
 stop:
 	@echo "Stopping n8n..."
-	docker stop $(CONTAINER_NAME) && docker rm $(CONTAINER_NAME)
+	-@docker stop $(CONTAINER_NAME) >/dev/null 2>&1 || true
+	-@docker rm $(CONTAINER_NAME) >/dev/null 2>&1 || true
 
 imwf: ensure-wesee-dir
 	@echo "Cleaning /home/node/wesee directory in container..."
@@ -59,7 +84,7 @@ imwf: ensure-wesee-dir
 	docker cp $(WESEE_DIR)/workflows/. $(CONTAINER_NAME):/home/node/wesee/workflows
 
 	@echo "Importing workflows into n8n..."
-	docker exec -it $(ENV_VARS) $(CONTAINER_NAME) n8n import:workflow --separate --input=/home/node/wesee/workflows
+	docker exec -it $(CONTAINER_NAME) n8n import:workflow --separate --input=/home/node/wesee/workflows
 
 imcr: ensure-wesee-dir
 	@echo "Cleaning /home/node/wesee directory in container..."
@@ -69,16 +94,16 @@ imcr: ensure-wesee-dir
 	docker cp $(WESEE_DIR)/credentials/. $(CONTAINER_NAME):/home/node/wesee/credentials
 
 	@echo "Importing credentials into n8n..."
-	docker exec -it $(ENV_VARS) $(CONTAINER_NAME) n8n import:credentials --separate --input=/home/node/wesee/credentials
+	docker exec -it $(CONTAINER_NAME) n8n import:credentials --separate --input=/home/node/wesee/credentials
 
 im: imcr imwf
 
 exwf: ensure-wesee-dir
 	@echo "Clearing the workflows folder inside the container..."
-	docker exec -it $(ENV_VARS) $(CONTAINER_NAME) sh -c "rm -rf /home/node/wesee/workflows*"
+	docker exec -it $(CONTAINER_NAME) sh -c "rm -rf /home/node/wesee/workflows*"
 
 	@echo "Exporting workflows inside container using backup format..."
-	docker exec -it $(ENV_VARS) $(CONTAINER_NAME) n8n export:workflow --backup --output=/home/node/wesee/workflows
+	docker exec -it $(CONTAINER_NAME) n8n export:workflow --backup --output=/home/node/wesee/workflows
 
 	@echo "Cleaning 'pinData' and renaming files based on workflow name inside the container..."
 	docker exec -it $(CONTAINER_NAME) sh -c '\
@@ -96,10 +121,10 @@ exwf: ensure-wesee-dir
 
 excr: ensure-wesee-dir
 	@echo "Clearing the credentials folder inside the container..."
-	docker exec -it $(ENV_VARS) $(CONTAINER_NAME) sh -c "rm -rf /home/node/wesee/credentials*"
+	docker exec -it $(CONTAINER_NAME) sh -c "rm -rf /home/node/wesee/credentials*"
 
 	@echo "Exporting all credentials..."
-	docker exec -it $(ENV_VARS) $(CONTAINER_NAME) n8n export:credentials --backup --output=/home/node/wesee/credentials
+	docker exec -it $(CONTAINER_NAME) n8n export:credentials --backup --output=/home/node/wesee/credentials
 
 	@echo "Renaming credential files to name_type.json format..."
 	docker exec -it $(CONTAINER_NAME) sh -c '\
@@ -117,10 +142,10 @@ excr: ensure-wesee-dir
 
 excrd: ensure-wesee-dir
 	@echo "Clearing the credentials folder inside the container..."
-	docker exec -it $(ENV_VARS) $(CONTAINER_NAME) sh -c "rm -rf /home/node/wesee/credentials*"
+	docker exec -it $(CONTAINER_NAME) sh -c "rm -rf /home/node/wesee/credentials*"
 
 	@echo "Exporting decrypted credentials inside container..."
-	docker exec -it $(ENV_VARS) $(CONTAINER_NAME) n8n export:credentials --backup --decrypted --output=/home/node/wesee/credentials
+	docker exec -it $(CONTAINER_NAME) n8n export:credentials --backup --decrypted --output=/home/node/wesee/credentials
 
 	@echo "Renaming credential files to name_type.json format..."
 	docker exec -it $(CONTAINER_NAME) sh -c '\
@@ -140,4 +165,15 @@ ex: excr exwf
 
 exd: exwf excrd
 
-.PHONY: install check-volume ensure-wesee-dir start start_fg stop import import-workflows import-credentials export export-workflows export-credentials export-credentials-decrypted
+remove:
+	@echo "Removing n8n setup (container, volumes, image)..."
+	@echo "Stopping and removing container (if it exists)..."
+	-@docker rm -f $(CONTAINER_NAME) >/dev/null 2>&1 || true
+	@echo "Removing Docker volume (if it exists): $(VOLUME_NAME)"
+	-@docker volume rm $(VOLUME_NAME) >/dev/null 2>&1 || true
+	@echo "Removing image(s) (if they exist): $(IMAGE_NAME) and $(FALLBACK_IMAGE)"
+	-@docker image rm $(IMAGE_NAME) >/dev/null 2>&1 || true
+	-@docker image rm $(FALLBACK_IMAGE) >/dev/null 2>&1 || true
+	@echo "Removal complete."
+
+.PHONY: install check-volume ensure-wesee-dir start startfg stop im imwf imcr ex exwf excr excrd exd remove

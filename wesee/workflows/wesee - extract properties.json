@@ -1,4 +1,10 @@
 {
+  "createdAt": "2025-10-13T04:05:15.370Z",
+  "updatedAt": "2025-10-13T04:38:09.000Z",
+  "id": "lEudgL4ULbE6jqzu",
+  "name": "wesee - extract properties",
+  "active": false,
+  "isArchived": false,
   "nodes": [
     {
       "parameters": {
@@ -9,8 +15,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        360,
-        560
+        576,
+        336
       ],
       "id": "88b89c35-472f-4511-afe0-a3e404858f69",
       "name": "merge property with output"
@@ -32,17 +38,17 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
-        380,
-        120
+        -224,
+        40
       ],
       "id": "26cbd470-8b6f-430a-93ed-80d15dec8381",
       "name": "extract property",
-      "retryOnFail": false,
+      "retryOnFail": true,
       "maxTries": 5,
       "waitBetweenTries": 5000,
       "credentials": {
         "openAiApi": {
-          "id": "RHBGyb0N9eTeoTwJ",
+          "id": "eukNxUc5q1dN0W0u",
           "name": "wesee"
         }
       },
@@ -55,8 +61,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        -240,
-        -40
+        576,
+        -48
       ],
       "id": "73dfe750-0470-4332-a86b-7331e5c06b8a",
       "name": "wait for rate limit",
@@ -100,8 +106,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        -240,
-        580
+        -448,
+        424
       ],
       "id": "4f27ce4c-496e-4d7e-96db-6e5d53a1bf4f",
       "name": "filter properties with description"
@@ -115,8 +121,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        2380,
-        1060
+        2368,
+        960
       ],
       "id": "63cc5356-1bc2-4aab-a636-66d15fc7a9a8",
       "name": "merge properties for AI with email"
@@ -159,8 +165,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        -240,
-        900
+        1248,
+        816
       ],
       "id": "99d7f6cd-ed0c-4a47-b3f7-9355dffec623",
       "name": "filter properties without description"
@@ -177,8 +183,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        -660,
-        900
+        -672,
+        720
       ],
       "id": "e381f410-1647-41aa-8f73-7b317d62dcd3",
       "name": "split properties for AI"
@@ -203,8 +209,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        560,
-        560
+        800,
+        400
       ],
       "id": "68f1aa34-58ac-4ff9-a19e-325ab83f1c7f",
       "name": "add value property"
@@ -222,8 +228,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        560,
-        900
+        1472,
+        816
       ],
       "id": "5946ec92-cbfb-4abe-b599-a52fe1616a1f",
       "name": "remove assistant"
@@ -233,8 +239,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        1800,
-        900
+        1696,
+        792
       ],
       "id": "78608a06-d418-41f9-ad9e-450f617df685",
       "name": "merge properties"
@@ -248,8 +254,8 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        1980,
-        900
+        1920,
+        792
       ],
       "id": "5d0062d4-ec5f-42a7-974e-2c465eb8120d",
       "name": "aggregate properties"
@@ -264,8 +270,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        560,
-        1060
+        2144,
+        984
       ],
       "id": "34623429-5c3b-4ea5-ab9c-9f15fd079e54",
       "name": "remove properties"
@@ -287,8 +293,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2160,
-        900
+        2144,
+        792
       ],
       "id": "b4b537ad-f259-411b-aec6-c1f57a6ca6fe",
       "name": "reduce properties to Object"
@@ -316,8 +322,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1080,
-        120
+        352,
+        336
       ],
       "id": "0ab2fae9-7d7e-4a23-bea9-82a7df9ac520",
       "name": "nullify empty fields"
@@ -330,8 +336,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        20,
-        120
+        800,
+        136
       ],
       "id": "91127f1d-bd64-4e1a-95aa-945ecab0be6f",
       "name": "drop error from email for property"
@@ -343,8 +349,8 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -900,
-        1060
+        -896,
+        816
       ],
       "id": "25e4ac56-e578-4c1b-8df0-84cd4d9f1f0b",
       "name": "When Executed by Another Workflow"
@@ -377,8 +383,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        860,
-        120
+        128,
+        24
       ],
       "id": "e0363df8-f3cc-41de-a928-450d1e6f880d",
       "name": "no error"
@@ -411,8 +417,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        1080,
-        380
+        1024,
+        112
       ],
       "id": "1f43c946-0094-4887-b9b3-badd8f22ea41",
       "name": "filter select"
@@ -424,8 +430,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        1580,
-        720
+        1472,
+        312
       ],
       "id": "cb57435e-2164-4918-ad2c-d4e76d5b896d",
       "name": "Merge"
@@ -458,8 +464,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        1080,
-        560
+        1024,
+        400
       ],
       "id": "40160fb5-625d-4e56-ad61-35d68d702d4e",
       "name": "filter multi_select"
@@ -502,8 +508,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        1080,
-        720
+        1248,
+        616
       ],
       "id": "55ec1821-fd81-4de8-bc44-f93f381bd6dd",
       "name": "filter non-select and non-multi_select"
@@ -526,8 +532,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1300,
-        560
+        1248,
+        400
       ],
       "id": "e17b015e-6396-4cca-981d-f6a7b77dfaad",
       "name": "remove false multi_select"
@@ -550,8 +556,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1300,
-        380
+        1248,
+        112
       ],
       "id": "1be55a81-f1c7-4865-92da-e913d4aee79e",
       "name": "remove false select"
@@ -563,8 +569,8 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        -240,
-        120
+        576,
+        144
       ],
       "id": "1c0f3782-faff-4e77-bf53-f98e5bb1e616",
       "name": "throw other error"
@@ -607,8 +613,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2580,
-        1060
+        2592,
+        960
       ],
       "id": "05584900-5eec-4b89-9db5-3c6c37a329b8",
       "name": "if company exists"
@@ -628,35 +634,18 @@
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [
-        2840,
-        1200
+        2816,
+        960
       ],
       "id": "d0504b1a-c23e-47e0-92a4-2a701cc9ff87",
       "name": "set email to read",
       "webhookId": "e6a3af6d-5933-46e0-9394-e988cefb876c",
       "credentials": {
         "microsoftOutlookOAuth2Api": {
-          "id": "juI8yxXGQl6ci0BY",
+          "id": "pRe66D8yA97hf5uz",
           "name": "wesee"
         }
       }
-    },
-    {
-      "parameters": {
-        "operation": "removeItemsSeenInPreviousExecutions",
-        "dedupeValue": "={{$('if company exists').item.json.email.internetMessageId}}",
-        "options": {
-          "scope": "workflow"
-        }
-      },
-      "type": "n8n-nodes-base.removeDuplicates",
-      "typeVersion": 2,
-      "position": [
-        3480,
-        1200
-      ],
-      "id": "6273d587-97f6-412e-93a0-82be17b539e9",
-      "name": "remove message"
     },
     {
       "parameters": {
@@ -705,27 +694,11 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -460,
-        120
+        352,
+        24
       ],
       "id": "cfddbaa0-ddf2-4665-a41d-16b57bf7d123",
       "name": "known error"
-    },
-    {
-      "parameters": {
-        "operation": "clearDeduplicationHistory",
-        "options": {
-          "scope": "workflow"
-        }
-      },
-      "type": "n8n-nodes-base.removeDuplicates",
-      "typeVersion": 2,
-      "position": [
-        3240,
-        1080
-      ],
-      "id": "80bf98cc-cb71-4f7f-af5d-61e80594272e",
-      "name": "clear duplication cache"
     },
     {
       "parameters": {
@@ -739,7 +712,7 @@
           "conditions": [
             {
               "id": "46e7c308-019a-4414-9bb3-4caaa914a985",
-              "leftValue": "={{ $('if company exists').item.json.config.cache.keep }}",
+              "leftValue": "={{ $('if company exists').item.json.config.cache.add }}",
               "rightValue": "",
               "operator": {
                 "type": "boolean",
@@ -755,26 +728,16 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        3020,
-        1200
+        3040,
+        960
       ],
       "id": "7945c97c-49ff-46ee-9b9b-f4ef90f39159",
-      "name": "clear cache"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
-      "position": [
-        3240,
-        1420
-      ],
-      "id": "0d0a2ef1-b1d2-4dd6-9849-a979071f82c3",
-      "name": "When clicking ‘Test workflow’"
+      "name": "if config.cache.add"
     },
     {
       "parameters": {
-        "operation": "clearDeduplicationHistory",
+        "operation": "removeItemsSeenInPreviousExecutions",
+        "dedupeValue": "={{$('if company exists').item.json.email.internetMessageId}}",
         "options": {
           "scope": "workflow"
         }
@@ -782,11 +745,45 @@
       "type": "n8n-nodes-base.removeDuplicates",
       "typeVersion": 2,
       "position": [
-        3480,
-        1420
+        3264,
+        840
       ],
-      "id": "8a1ae531-499a-4383-a0bd-a1e772423af7",
-      "name": "clear duplication cache manually"
+      "id": "6273d587-97f6-412e-93a0-82be17b539e9",
+      "name": "add to cache"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6747379d-f84f-448c-8245-3d7cd9091d1b",
+              "leftValue": false,
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        3488,
+        960
+      ],
+      "id": "07aa6122-3477-44e9-ae24-936eb6f83815",
+      "name": "drop item"
     }
   ],
   "connections": {
@@ -1103,18 +1100,7 @@
       "main": [
         [
           {
-            "node": "clear cache",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "remove message": {
-      "main": [
-        [
-          {
-            "node": "remove message",
+            "node": "if config.cache.add",
             "type": "main",
             "index": 0
           }
@@ -1139,40 +1125,29 @@
         ]
       ]
     },
-    "clear duplication cache": {
+    "if config.cache.add": {
       "main": [
         [
           {
-            "node": "remove message",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "clear cache": {
-      "main": [
-        [
-          {
-            "node": "clear duplication cache",
+            "node": "add to cache",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "remove message",
+            "node": "drop item",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "When clicking ‘Test workflow’": {
+    "add to cache": {
       "main": [
         [
           {
-            "node": "clear duplication cache manually",
+            "node": "drop item",
             "type": "main",
             "index": 0
           }
@@ -1180,9 +1155,40 @@
       ]
     }
   },
-  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "versionId": "2977c4a9-0ff0-4aa1-8b23-993d215bbf33",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-10-10T09:46:26.421Z",
+      "updatedAt": "2025-10-10T09:46:26.421Z",
+      "id": "hPbNH8F18K7BMw1l",
+      "name": "v0.1.1"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-13T04:05:15.371Z",
+      "updatedAt": "2025-10-13T04:05:15.371Z",
+      "role": "workflow:owner",
+      "workflowId": "lEudgL4ULbE6jqzu",
+      "projectId": "WyrnMA2kuhTLTB2s",
+      "project": {
+        "createdAt": "2025-10-13T03:41:54.147Z",
+        "updatedAt": "2025-10-13T03:42:22.828Z",
+        "id": "WyrnMA2kuhTLTB2s",
+        "name": "Benedict Wolff <benedictwolff@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

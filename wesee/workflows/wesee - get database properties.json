@@ -1,4 +1,10 @@
 {
+  "createdAt": "2025-10-13T04:05:15.381Z",
+  "updatedAt": "2025-10-13T04:07:46.000Z",
+  "id": "e1sIwEQTAYGALRDt",
+  "name": "wesee - get database properties",
+  "active": false,
+  "isArchived": false,
   "nodes": [
     {
       "parameters": {
@@ -10,14 +16,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1220,
-        360
+        672,
+        885.5
       ],
       "id": "1e3d4b4d-ac68-4511-aa37-9a5cdbe6d05e",
       "name": "get database properties",
       "credentials": {
         "notionApi": {
-          "id": "5rpIZheN6586Tvlo",
+          "id": "G3mQRX7Ga4sm8sn9",
           "name": "wesee"
         }
       },
@@ -37,14 +43,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2360,
-        1020
+        1792,
+        936
       ],
       "id": "36ccdc7f-2b9d-4fe1-9d72-3c82e7ff213d",
       "name": "add files field to database",
       "credentials": {
         "notionApi": {
-          "id": "5rpIZheN6586Tvlo",
+          "id": "G3mQRX7Ga4sm8sn9",
           "name": "wesee"
         }
       },
@@ -64,14 +70,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2640,
-        1260
+        2016,
+        1128
       ],
       "id": "8bece8c0-5623-49ad-9e5a-b6c39496c443",
       "name": "add comment field to database",
       "credentials": {
         "notionApi": {
-          "id": "5rpIZheN6586Tvlo",
+          "id": "G3mQRX7Ga4sm8sn9",
           "name": "wesee"
         }
       },
@@ -91,14 +97,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2920,
-        1500
+        2240,
+        1320
       ],
       "id": "76b1e3d1-10e8-49b5-900f-f5d77cb6304d",
       "name": "add source field to database",
       "credentials": {
         "notionApi": {
-          "id": "5rpIZheN6586Tvlo",
+          "id": "G3mQRX7Ga4sm8sn9",
           "name": "wesee"
         }
       },
@@ -118,14 +124,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2060,
-        780
+        1568,
+        744
       ],
       "id": "09d5d25f-1427-4692-a181-3bccf3ac9c28",
       "name": "add description field to database",
       "credentials": {
         "notionApi": {
-          "id": "5rpIZheN6586Tvlo",
+          "id": "G3mQRX7Ga4sm8sn9",
           "name": "wesee"
         }
       },
@@ -145,14 +151,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1800,
-        520
+        1344,
+        552
       ],
       "id": "85f987e5-4151-4400-8283-5c6028a985b2",
       "name": "add company field to database",
       "credentials": {
         "notionApi": {
-          "id": "5rpIZheN6586Tvlo",
+          "id": "G3mQRX7Ga4sm8sn9",
           "name": "wesee"
         }
       },
@@ -172,14 +178,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        3200,
-        1740
+        2464,
+        1560
       ],
       "id": "65d2768f-3143-49a0-8496-8ee190020b5e",
       "name": "add stage field to database",
       "credentials": {
         "notionApi": {
-          "id": "5rpIZheN6586Tvlo",
+          "id": "G3mQRX7Ga4sm8sn9",
           "name": "wesee"
         }
       },
@@ -192,8 +198,8 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        0,
-        0
+        -224,
+        960
       ],
       "id": "80dd1489-ef23-4c4b-b237-a26759275c3a",
       "name": "When Executed by Another Workflow"
@@ -226,8 +232,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1620,
-        360
+        1120,
+        957.5
       ],
       "id": "a6be590c-5e9c-411f-8d4c-1f5a7d2a613c",
       "name": "has company field"
@@ -260,8 +266,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2060,
-        520
+        1344,
+        1053.5
       ],
       "id": "00f429de-8779-464c-9ff6-4468dbe7e49a",
       "name": "has description field"
@@ -314,8 +320,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2360,
-        800
+        1568,
+        1149.5
       ],
       "id": "8740eb14-39ac-4134-a755-ab70f68db6f9",
       "name": "has files field"
@@ -348,8 +354,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2640,
-        1020
+        1792,
+        1245.5
       ],
       "id": "8a35b295-83a4-4287-881a-da63c04f9146",
       "name": "has comments field"
@@ -382,8 +388,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2920,
-        1260
+        2016,
+        1344
       ],
       "id": "9e026d0e-e717-448e-8087-ad34fd7ad0c8",
       "name": "has source field"
@@ -416,8 +422,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        3200,
-        1500
+        2240,
+        1512
       ],
       "id": "b8c4d57b-d0c9-4f4a-9b23-e0ce72c15664",
       "name": "has stage field"
@@ -434,15 +440,15 @@
       "type": "n8n-nodes-base.notion",
       "typeVersion": 2.2,
       "position": [
-        720,
-        280
+        224,
+        288
       ],
       "id": "a8c4a084-9ef5-4ea3-b63e-4721099b13f1",
       "name": "get database",
       "executeOnce": false,
       "credentials": {
         "notionApi": {
-          "id": "5rpIZheN6586Tvlo",
+          "id": "G3mQRX7Ga4sm8sn9",
           "name": "wesee"
         }
       },
@@ -479,8 +485,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1220,
-        180
+        2240,
+        144
       ],
       "id": "5f719534-05f5-4f35-bb22-cc04e3b80afb",
       "name": "get database identifiers"
@@ -494,8 +500,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        3600,
-        180
+        2464,
+        144
       ],
       "id": "7a128eed-8ca1-4f34-8792-946db3d4eee7",
       "name": "merge identifiers with properties"
@@ -523,8 +529,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3800,
-        180
+        2688,
+        144
       ],
       "id": "73348cc9-b2fc-4462-bda8-3d7149db27d3",
       "name": "extract identifiers and properties"
@@ -538,7 +544,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        4020,
+        2912,
         0
       ],
       "id": "0ca3cd04-7371-409e-ab50-b80354222de1",
@@ -572,8 +578,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1420,
-        500
+        896,
+        885.5
       ],
       "id": "e565bb56-e533-4967-abd2-4299063945ed",
       "name": "does not have error getting database properties"
@@ -606,8 +612,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1800,
-        780
+        1568,
+        552
       ],
       "id": "80e1b7d4-1d34-4a30-878e-6935eed51098",
       "name": "does not have error adding company"
@@ -620,8 +626,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        240,
-        280
+        3360,
+        645.5
       ],
       "id": "83f51025-4229-4ab6-9d3c-6d77fbb525e6",
       "name": "wait one minute",
@@ -655,8 +661,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2060,
-        1020
+        1792,
+        744
       ],
       "id": "bd6e5ed9-a933-49d7-8f2e-8a127665a5ae",
       "name": "does not have error adding description"
@@ -689,8 +695,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2360,
-        1260
+        2016,
+        936
       ],
       "id": "5f8f5b23-971c-4b72-a4d3-fd8657595434",
       "name": "does not have error adding files"
@@ -723,8 +729,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2640,
-        1500
+        2240,
+        1128
       ],
       "id": "0445d24c-1b27-4e97-8e10-4d51a9af5c5a",
       "name": "does not have error adding comment"
@@ -757,8 +763,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2920,
-        1740
+        2464,
+        1320
       ],
       "id": "beb6c440-6983-4b42-950b-a3df749d53c9",
       "name": "does not have error adding source"
@@ -791,8 +797,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        3200,
-        1980
+        2688,
+        1560
       ],
       "id": "05e552e9-a469-4dc9-aa59-97f1a9385605",
       "name": "does not have error adding stage"
@@ -824,8 +830,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -220,
-        280
+        2912,
+        765.5
       ],
       "id": "4c5b40be-5b97-403e-be66-c5efbdbf68ac",
       "name": "gateway timed out"
@@ -837,8 +843,8 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        240,
-        500
+        3360,
+        1584
       ],
       "id": "000b80c0-3035-46d3-8903-44d2fc0d9d26",
       "name": "throw error not related to gateway"
@@ -871,8 +877,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        920,
-        280
+        448,
+        288
       ],
       "id": "a3cd917b-7151-4f69-917d-f173c1fd98e0",
       "name": "does not have error getting database"
@@ -913,8 +919,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        0,
-        180
+        3136,
+        693.5
       ],
       "id": "50e03cd8-877f-4e1d-901a-a79222e3b359",
       "name": "connection closed or offline"
@@ -926,8 +932,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        520,
-        280
+        0,
+        1944
       ],
       "id": "6c6ca7fa-7b89-4fe2-8795-8254ef3c4dd8",
       "name": "Merge"
@@ -1453,9 +1459,40 @@
       ]
     }
   },
-  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "versionId": "bacd50ea-241d-4fda-b72a-2bbae77ba275",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-10-10T09:46:26.421Z",
+      "updatedAt": "2025-10-10T09:46:26.421Z",
+      "id": "hPbNH8F18K7BMw1l",
+      "name": "v0.1.1"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-13T04:05:15.382Z",
+      "updatedAt": "2025-10-13T04:05:15.382Z",
+      "role": "workflow:owner",
+      "workflowId": "e1sIwEQTAYGALRDt",
+      "projectId": "WyrnMA2kuhTLTB2s",
+      "project": {
+        "createdAt": "2025-10-13T03:41:54.147Z",
+        "updatedAt": "2025-10-13T03:42:22.828Z",
+        "id": "WyrnMA2kuhTLTB2s",
+        "name": "Benedict Wolff <benedictwolff@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

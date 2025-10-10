@@ -1,4 +1,10 @@
 {
+  "createdAt": "2025-10-13T04:05:15.399Z",
+  "updatedAt": "2025-10-13T04:08:00.000Z",
+  "id": "CKGsB2lYC0HQLFZB",
+  "name": "wesee - parse PDF",
+  "active": false,
+  "isArchived": false,
   "nodes": [
     {
       "parameters": {
@@ -11,7 +17,7 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        220,
+        304,
         0
       ],
       "id": "3cbc3828-9c6f-4d6c-8e77-c93eb819d63a",
@@ -28,8 +34,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        -640,
-        180
+        -592,
+        48
       ],
       "id": "ac5f1da5-8c65-4026-be02-f95d316b07d1",
       "name": "split attachments for PDF parsing"
@@ -53,7 +59,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        460,
+        528,
         0
       ],
       "id": "a7c9dbf9-be20-449e-84b0-c05a9ff0ea20",
@@ -86,8 +92,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        -460,
-        180
+        -368,
+        48
       ],
       "id": "3665e3c2-42b2-485f-8c93-70aa3ae801cf",
       "name": "filter PDF",
@@ -102,8 +108,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        800,
-        180
+        752,
+        144
       ],
       "id": "b13e8811-0745-4b7a-b78b-b080c93c7f5e",
       "name": "merge PDF text with email"
@@ -136,8 +142,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -860,
-        340
+        -816,
+        240
       ],
       "id": "0f636191-62d3-482c-a041-8fe003c2300d",
       "name": "has attachments for PDF parsing"
@@ -170,8 +176,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -280,
-        180
+        -144,
+        48
       ],
       "id": "f9d5e7f3-8db7-46c9-874c-482195bc2310",
       "name": "has PDF attachments"
@@ -184,7 +190,7 @@
       "typeVersion": 1.1,
       "position": [
         -1040,
-        340
+        240
       ],
       "id": "abd49c51-ff76-449d-92e5-a4063b99b413",
       "name": "When Executed by Another Workflow"
@@ -196,8 +202,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        1040,
-        340
+        976,
+        264
       ],
       "id": "6c3a7577-f676-4839-9068-01e3ed81ce99",
       "name": "consolidate output"
@@ -212,7 +218,7 @@
       "type": "n8n-nodes-base.convertToFile",
       "typeVersion": 1.1,
       "position": [
-        0,
+        80,
         0
       ],
       "id": "002f78ae-658e-4a4c-b35e-f6d229c3ed30",
@@ -258,17 +264,6 @@
         [
           {
             "node": "has PDF attachments",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "merge PDF text with email": {
-      "main": [
-        [
-          {
-            "node": "consolidate output",
             "type": "main",
             "index": 0
           }
@@ -337,6 +332,17 @@
         ]
       ]
     },
+    "merge PDF text with email": {
+      "main": [
+        [
+          {
+            "node": "consolidate output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Convert to File": {
       "main": [
         [
@@ -349,8 +355,39 @@
       ]
     }
   },
-  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
   "meta": {
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "versionId": "d8c9d4e1-3c78-4ae5-a782-77d210e63dd3",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-10-10T09:46:26.421Z",
+      "updatedAt": "2025-10-10T09:46:26.421Z",
+      "id": "hPbNH8F18K7BMw1l",
+      "name": "v0.1.1"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-13T04:05:15.400Z",
+      "updatedAt": "2025-10-13T04:05:15.400Z",
+      "role": "workflow:owner",
+      "workflowId": "CKGsB2lYC0HQLFZB",
+      "projectId": "WyrnMA2kuhTLTB2s",
+      "project": {
+        "createdAt": "2025-10-13T03:41:54.147Z",
+        "updatedAt": "2025-10-13T03:42:22.828Z",
+        "id": "WyrnMA2kuhTLTB2s",
+        "name": "Benedict Wolff <benedictwolff@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

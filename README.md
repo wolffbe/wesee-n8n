@@ -2,11 +2,10 @@
 
 Wesee automates the extraction and structuring of startups and their company properties from emails and their attachments sent to `deals@` or `info@` inboxes of venture capital (VC) firms into a Notion database, e.g. company names and descriptions.
 
->In the latest test conducted together with an emerging health tech VC, **90 emails were analyzed for relevance** in accordance with the VC’s investment thesis. The contents of 23 remaining emails were structured in Notion across 18 properties **in 28 minutes and 4 seconds**.
+>In the latest test conducted together with an emerging healthtech VC, **90 emails were analyzed for relevance** in accordance with the VC’s investment thesis. The contents of 23 remaining emails were structured in Notion across 18 properties **in 28 minutes and 4 seconds**.
 >
 >The extraction of **18 properties** from a relevant email and its attachments took an average of **one minute**. Assuming a real VC analyst would take five to ten minutes to extract the same amount of properties, this automation **accelerates the process by at least 400%**.
 >
->Current tests do not assess the accuracy or completeness of the extracted information. This remains a concern for future research.
 
 ## Overview
 
@@ -48,7 +47,7 @@ This setup was tested using [n8n in Docker](https://docs.n8n.io/hosting/installa
 ### Notion
 
 1. Setup the database in Notion (add [integration](https://www.notion.so/my-integrations), set the database connection in your database's page and identify the URL of the page via `share` in the top-right hand corner of the page)
-2. Add database properties (i.e. table columns) with descriptions that specifically define each property. **Only properties with descriptions are processed by the OpenAI❗**
+2. Add database properties (i.e. table columns) with descriptions that specifically define each property. **Only properties with descriptions are processed OpenAI❗**
 
 ### N8n
 
@@ -58,22 +57,19 @@ This setup was tested using [n8n in Docker](https://docs.n8n.io/hosting/installa
 4. Setup `wesee` credentials
 5. `make im`
 6. Customize workflow configuration in the node `set workflow configuration` (see available parameters below)
-7. Open and set each sub-workflow
-8. Set each credential in each API node in each sub-workflow
-9. Test the workflow
+7. Test the workflow with `config.cache.reset` set to `true`
 
 ## Run
 
-1. Manually clear cache in `extract properties`, `classify email` and `get email`
-2. Set `config.cache.keep` to `true`
-3. Set `config.email.get.max` to `25`
-4. Set `config.email.get.read` to `unread`
-5. Set `config.email.set.read` to `true`
-6. (Optional) Set `config.notion.url` to a production database
-7. (Optional) Set emails in Outlook inbox to `unread`
-8. Set the `wesee` workflow to `active`
+1. Set `config.cache.add` to `true`
+2. Set `config.email.get.batch` to `25`
+3. Set `config.email.get.read` to `unread`
+4. Set `config.email.set.read` to `true`
+5. (Optional) Set `config.notion.url` to a production database
+6. (Optional) Set emails in Outlook inbox to `unread`
+7. Set the `wesee` workflow to `active`
 
-Note: The throttle `config.email.get.max` should only be used in combination with setting `config.email.get.read` to `unread` and `config.email.set.read` to `true`❗
+Note: The throttle `config.email.get.batch` should only be used in combination with setting `config.email.get.read` to `unread` and `config.email.set.read` to `true`❗
 
 ## Configuration
 
@@ -83,12 +79,14 @@ The following workflow properties are configurable in the node `set workflow con
 | -------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
 | `config.blacklist.file.name.contains`  | Array of blacklisted file name contents                                                              | `["facebook", "twitter"]`                           |
 | `config.blacklist.properties.contains` | Array of blacklisted property values                                                                 | `["VC company name", "VC executive", "VC address"]` |
-| `config.cache.keep`                    | Cache of emails used for deduplication                                                               | `true` or `false`                                   |
+| `config.cache.add`                     | Add emails to cache to avoid duplicate processing                                                    | `true` or `false`                                   |
+| `config.cache.reset`                   | Reset duplication cache                                                                              | `true` or `false`                                   |
 | `config.drive.name`                    | Name of the OneDrive or SharePoint drive                                                             | `Documents`                                         |
 | `config.folder.name`                   | Name of the root folder for storing attachments                                                      | `wesee`                                             |
 | `config.folder.path`                   | Path of the root folder in the drive                                                                 | `/sub/folder`                                       |
-| `config.email.get.max`                 | Throttle amount of emails being processed in one workflow (`0` defaults to maximum amount of emails) | `25`                                                |
+| `config.email.get.batch`               | Throttle amount of emails being processed in one workflow (`0` defaults to maximum amount of emails) | `12`                                                |
 | `config.email.get.read`                | Get types of email                                                                                   | `read` OR `unread` OR `both`                        |
+| `config.email.get.after`               | Get email after date                                                                                 | `2025-02-17T00:00:00Z`                              |
 | `config.email.set.read`                | Set emails to read or unread after processing                                                        | `true` OR `false`                                   |
 | `config.notion.url`                    | URL to page containing Notion database                                                               | `https://www.notion.so/VC/id`                       |
 | `config.site.host`                     | Host URL of the SharePoint site (leave blank if using personal OneDrive)                             | `https://VC-my.sharepoint.com`                      |
@@ -115,3 +113,6 @@ A `Makefile` is available to handle importing and exporting workflows between th
 | `make excrd`   | Export decrypted credentials from n8n in Docker to the host               |
 | `make ex`      | Export workflows and credentials from n8n in Docker to the host           |
 | `make exd`     | Export workflows and decrypted credentials from n8n in Docker to the host |
+| `make remove`  | Remove n8n Docker containers and volume |
+
+Exported credentials are saved in the `credentials` folder, which is part of `.gitignore`.
