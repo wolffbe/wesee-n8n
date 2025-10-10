@@ -1,4 +1,5 @@
 {
+  "name": "wesee - upload attachments",
   "nodes": [
     {
       "parameters": {
@@ -54,9 +55,15 @@
     {
       "parameters": {
         "method": "PUT",
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{$('loop over attachments').item.json.deal.folders.drive.id}}/items/{{$('loop over attachments').item.json.deal.folders.email.id}}:/{{$('loop over attachments').item.json.attachment.fileName.includes(\".\" + $('loop over attachments').item.json.attachment.fileExtension) ? $('loop over attachments').item.json.attachment.fileName : $('loop over attachments').item.json.attachment.fileName + \".\" + $('loop over attachments').item.json.attachment.fileExtension }}:/content",
+        "url": "={{\n(() => {\n  const driveId  = $('loop over attachments').item.json.deal.folders.drive.id;\n  const folderId = $('loop over attachments').item.json.deal.folders.email.id;\n  const a        = $('loop over attachments').item.json.attachment;\n\n  // ensure extension exactly once\n  const ext  = (a.fileExtension ?? '').trim();\n  let   name = (a.fileName ?? 'file').trim();\n  if (ext && !name.toLowerCase().endsWith('.' + ext.toLowerCase())) {\n    name = `${name}.${ext}`;\n  }\n\n  // normalize + remove illegal characters for OneDrive/Windows\n  name = name\n    .normalize('NFKD')                // split accent marks (Ä -> A + ¨)\n    .replace(/[\\u0300-\\u036f]/g, '')  // drop combining marks\n    .replace(/[\\\\\\/]/g, '-')          // slashes -> hyphen\n    .replace(/[:*?\"<>|]/g, ' - ')     // illegal chars -> \" - \"\n    .replace(/[.\\s]+$/,'')            // no trailing dots/spaces\n    .replace(/\\s+/g,' ')              // collapse whitespace\n    .trim();\n\n  // assemble URL: encode each dynamic segment, NOT the Graph colons\n  return `https://graph.microsoft.com/v1.0/drives/${encodeURIComponent(driveId)}` +\n         `/items/${encodeURIComponent(folderId)}:/` +\n         `${encodeURIComponent(name)}:/content`;\n})()\n}}",
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "microsoftOAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {}
+          ]
+        },
         "sendBody": true,
         "contentType": "binaryData",
         "inputDataFieldName": "binary",
@@ -70,6 +77,10 @@
       ],
       "id": "9fd9a8fb-634c-4167-ae51-373704cd1f68",
       "name": "upload attachments to OneDrive",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "alwaysOutputData": true,
+      "waitBetweenTries": 3000,
       "credentials": {
         "microsoftOAuth2Api": {
           "id": "OwQ0YTXkLNO8NlIj",
@@ -218,6 +229,7 @@
       "name": "remove binaries"
     }
   ],
+  "pinData": {},
   "connections": {
     "split attachments for file upload": {
       "main": [
@@ -366,8 +378,21 @@
       ]
     }
   },
-  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "13308e05-f104-4d06-bd56-570249a7b8ed",
   "meta": {
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "id": "qxgq0UopjV3KvEaE",
+  "tags": [
+    {
+      "createdAt": "2025-04-16T08:10:07.448Z",
+      "updatedAt": "2025-04-16T08:10:07.448Z",
+      "id": "qStWid6YOyvmHFDi",
+      "name": "v0.1.0"
+    }
+  ]
 }

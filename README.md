@@ -83,12 +83,14 @@ The following workflow properties are configurable in the node `set workflow con
 | -------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
 | `config.blacklist.file.name.contains`  | Array of blacklisted file name contents                                                              | `["facebook", "twitter"]`                           |
 | `config.blacklist.properties.contains` | Array of blacklisted property values                                                                 | `["VC company name", "VC executive", "VC address"]` |
-| `config.cache.keep`                    | Cache of emails used for deduplication                                                               | `true` or `false`                                   |
+| `config.cache.add`                     | Add emails to cache to avoid duplicate processing                                                    | `true` or `false`                                   |
+| `config.cache.reset`                   | Reset duplication cache                                                                              | `true` or `false`                                   |
 | `config.drive.name`                    | Name of the OneDrive or SharePoint drive                                                             | `Documents`                                         |
 | `config.folder.name`                   | Name of the root folder for storing attachments                                                      | `wesee`                                             |
 | `config.folder.path`                   | Path of the root folder in the drive                                                                 | `/sub/folder`                                       |
-| `config.email.get.max`                 | Throttle amount of emails being processed in one workflow (`0` defaults to maximum amount of emails) | `25`                                                |
+| `config.email.get.batch`               | Throttle amount of emails being processed in one workflow (`0` defaults to maximum amount of emails) | `12`                                                |
 | `config.email.get.read`                | Get types of email                                                                                   | `read` OR `unread` OR `both`                        |
+| `config.email.get.after`               | Get email after date                                                                                 | `2025-02-17T00:00:00Z`                              |
 | `config.email.set.read`                | Set emails to read or unread after processing                                                        | `true` OR `false`                                   |
 | `config.notion.url`                    | URL to page containing Notion database                                                               | `https://www.notion.so/VC/id`                       |
 | `config.site.host`                     | Host URL of the SharePoint site (leave blank if using personal OneDrive)                             | `https://VC-my.sharepoint.com`                      |

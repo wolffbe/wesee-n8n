@@ -1,4 +1,5 @@
 {
+  "name": "wesee - get database properties",
   "nodes": [
     {
       "parameters": {
@@ -933,6 +934,7 @@
       "name": "Merge"
     }
   ],
+  "pinData": {},
   "connections": {
     "get database properties": {
       "main": [
@@ -1453,9 +1455,22 @@
       ]
     }
   },
-  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "093d6da1-de4f-406a-9e4a-339a7440c6f3",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "id": "e1sIwEQTAYGALRDt",
+  "tags": [
+    {
+      "createdAt": "2025-04-16T08:10:07.448Z",
+      "updatedAt": "2025-04-16T08:10:07.448Z",
+      "id": "qStWid6YOyvmHFDi",
+      "name": "v0.1.0"
+    }
+  ]
 }

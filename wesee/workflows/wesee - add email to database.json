@@ -1,4 +1,5 @@
 {
+  "name": "wesee - add email to database",
   "nodes": [
     {
       "parameters": {
@@ -268,6 +269,7 @@
       }
     }
   ],
+  "pinData": {},
   "connections": {
     "drop Notion from email": {
       "main": [
@@ -382,17 +384,6 @@
         ]
       ]
     },
-    "keep email": {
-      "main": [
-        [
-          {
-            "node": "set email to read",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "wait one minute for gateway": {
       "main": [
         [
@@ -415,15 +406,39 @@
         ]
       ]
     },
+    "keep email": {
+      "main": [
+        [
+          {
+            "node": "set email to read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "set email to read": {
       "main": [
         []
       ]
     }
   },
-  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ce0deda4-62a9-431e-b595-a7fb36d85ab3",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "id": "PAL47cLFTyXBY0ke",
+  "tags": [
+    {
+      "createdAt": "2025-04-16T08:10:07.448Z",
+      "updatedAt": "2025-04-16T08:10:07.448Z",
+      "id": "qStWid6YOyvmHFDi",
+      "name": "v0.1.0"
+    }
+  ]
 }

@@ -1,4 +1,5 @@
 {
+  "name": "wesee - parse PDF",
   "nodes": [
     {
       "parameters": {
@@ -219,6 +220,7 @@
       "name": "Convert to File"
     }
   ],
+  "pinData": {},
   "connections": {
     "parse PDF": {
       "main": [
@@ -258,17 +260,6 @@
         [
           {
             "node": "has PDF attachments",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "merge PDF text with email": {
-      "main": [
-        [
-          {
-            "node": "consolidate output",
             "type": "main",
             "index": 0
           }
@@ -337,6 +328,17 @@
         ]
       ]
     },
+    "merge PDF text with email": {
+      "main": [
+        [
+          {
+            "node": "consolidate output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Convert to File": {
       "main": [
         [
@@ -349,8 +351,21 @@
       ]
     }
   },
-  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "06711d53-be6c-44c2-a306-4675a4636d2d",
   "meta": {
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "id": "CKGsB2lYC0HQLFZB",
+  "tags": [
+    {
+      "createdAt": "2025-04-16T08:10:07.448Z",
+      "updatedAt": "2025-04-16T08:10:07.448Z",
+      "id": "qStWid6YOyvmHFDi",
+      "name": "v0.1.0"
+    }
+  ]
 }

@@ -1,0 +1,215 @@
+{
+  "name": "wesee - utils",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a5767857-cd0c-4afa-ae76-709b1b90d3d9",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "operation": "deleteAssistant",
+        "assistantId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        800,
+        0
+      ],
+      "id": "34803ee5-a31f-4c27-9f30-f93589630164",
+      "name": "delete OpenAI assistants",
+      "credentials": {
+        "openAiApi": {
+          "id": "RHBGyb0N9eTeoTwJ",
+          "name": "wesee"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "383b1497-09e4-40c9-88b1-772d102559fe",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "wesee",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        600,
+        0
+      ],
+      "id": "09e73e20-e6be-4484-8a5b-8548cc00bb16",
+      "name": "keep wesee assistants"
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "operation": "list"
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1100,
+        0
+      ],
+      "id": "ffab1876-4bab-45d4-85a5-2c66c2d88d44",
+      "name": "list remaining assistants",
+      "credentials": {
+        "openAiApi": {
+          "id": "RHBGyb0N9eTeoTwJ",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "operation": "list"
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        200,
+        0
+      ],
+      "id": "430445f8-079e-4d7c-b5b7-55eda4f5a3f1",
+      "name": "list assistants",
+      "credentials": {
+        "openAiApi": {
+          "id": "RHBGyb0N9eTeoTwJ",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "id",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        400,
+        0
+      ],
+      "id": "f2aed1d8-b0f6-4cc5-b7a2-02459b2cdfe3",
+      "name": "split out assistant list"
+    },
+    {
+      "parameters": {
+        "operation": "clearDeduplicationHistory",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        200,
+        220
+      ],
+      "id": "2c0ae65e-9c15-4420-8744-d84302ef4960",
+      "name": "clear duplication cache"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "list assistants",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "delete OpenAI assistants": {
+      "main": [
+        [
+          {
+            "node": "list remaining assistants",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "keep wesee assistants": {
+      "main": [
+        [
+          {
+            "node": "delete OpenAI assistants",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "list assistants": {
+      "main": [
+        [
+          {
+            "node": "split out assistant list",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "split out assistant list": {
+      "main": [
+        [
+          {
+            "node": "keep wesee assistants",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "91277182-6ad4-4154-a10e-d4c2399d7420",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
+  },
+  "id": "ZJOioYYRBp6Oceg0",
+  "tags": []
+}

@@ -1,4 +1,5 @@
 {
+  "name": "wesee - create assistant",
   "nodes": [
     {
       "parameters": {
@@ -130,7 +131,7 @@
           "mode": "list",
           "cachedResultName": "GPT-4O"
         },
-        "name": "=wesee{{ $now.format('x') }}",
+        "name": "=wesee_{{ $now.format('x') }}",
         "description": "An assistant capable of extracting company properties from emails and their attachments.",
         "instructions": "=Role:\n\nYou are an expert VC analyst.\n\nObjective:\n\nYour objective is to find properties of a startup based on an email and its email attachments, if there are any.\n\nYou can find the EMAIL and its EMAIL ATTACHMENTS below. If there are no attachments, the fact that there are no attachments will be mentioned below.\n\nPay attention to the BLACKLIST below. Any entries in the blacklist are never startup properties as they are related to the VC for which you are doing the analysis.\n\nTask:\n\nIn the messages following this prompt, you will receive startup properties from the database and their definitions.\n\nYour task is to assign each property with values taken from the following EMAIL and ATTACHMENTS.\n\nDo not produce any response until you have not yet received the properties and their definitions that you are meant to look for.\n\nHere are the email and attachment:\n\nEMAIL:\n\n{{ $('When Executed by Another Workflow').item.json.deal.text.hasField(\"forwarding\") ? $('When Executed by Another Workflow').item.json.deal.text.forwarding.core : $('When Executed by Another Workflow').item.json.deal.text.cleaned }}\n\nEMAIL ATTACHMENTS:\n\n{{ $('When Executed by Another Workflow').item.json.attachments \n    ? Object.values($('When Executed by Another Workflow').item.json.attachments)\n        .map(item => item.parsed)\n        .filter(item => item.length > 0).length > 0 \n        ? Object.values($json.attachments).map(item => item.parsed) \n        : \"There are no attachments.\" \n    : \"There are no attachments.\"\n}}\nBLACKLIST:\n\n{{ \"- \" + $json.config.blacklist.properties.contains.join(\"\\n- \") }}\n",
         "options": {}
@@ -240,6 +241,7 @@
       "name": "get assistant ID"
     }
   ],
+  "pinData": {},
   "connections": {
     "error creating assistant": {
       "main": [
@@ -368,9 +370,22 @@
       ]
     }
   },
-  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "9182d0b6-230c-45d8-aeb3-00fc3901fb6b",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "id": "fOnbizpjBEg8qmw4",
+  "tags": [
+    {
+      "createdAt": "2025-04-16T08:10:07.448Z",
+      "updatedAt": "2025-04-16T08:10:07.448Z",
+      "id": "qStWid6YOyvmHFDi",
+      "name": "v0.1.0"
+    }
+  ]
 }

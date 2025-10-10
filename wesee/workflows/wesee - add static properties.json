@@ -1,4 +1,5 @@
 {
+  "name": "wesee - add static properties",
   "nodes": [
     {
       "parameters": {
@@ -112,6 +113,7 @@
       "name": "When Executed by Another Workflow"
     }
   ],
+  "pinData": {},
   "connections": {
     "add files property value": {
       "main": [
@@ -158,8 +160,21 @@
       ]
     }
   },
-  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "aad034f5-00f2-4136-a5a1-34e45e7fb6f6",
   "meta": {
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "id": "83nbv7huCcHgO66C",
+  "tags": [
+    {
+      "createdAt": "2025-04-16T08:10:07.448Z",
+      "updatedAt": "2025-04-16T08:10:07.448Z",
+      "id": "qStWid6YOyvmHFDi",
+      "name": "v0.1.0"
+    }
+  ]
 }

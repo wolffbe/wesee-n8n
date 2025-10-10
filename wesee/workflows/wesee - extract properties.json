@@ -1,4 +1,5 @@
 {
+  "name": "wesee - extract properties",
   "nodes": [
     {
       "parameters": {
@@ -643,23 +644,6 @@
     },
     {
       "parameters": {
-        "operation": "removeItemsSeenInPreviousExecutions",
-        "dedupeValue": "={{$('if company exists').item.json.email.internetMessageId}}",
-        "options": {
-          "scope": "workflow"
-        }
-      },
-      "type": "n8n-nodes-base.removeDuplicates",
-      "typeVersion": 2,
-      "position": [
-        3480,
-        1200
-      ],
-      "id": "6273d587-97f6-412e-93a0-82be17b539e9",
-      "name": "remove message"
-    },
-    {
-      "parameters": {
         "conditions": {
           "options": {
             "caseSensitive": false,
@@ -713,22 +697,6 @@
     },
     {
       "parameters": {
-        "operation": "clearDeduplicationHistory",
-        "options": {
-          "scope": "workflow"
-        }
-      },
-      "type": "n8n-nodes-base.removeDuplicates",
-      "typeVersion": 2,
-      "position": [
-        3240,
-        1080
-      ],
-      "id": "80bf98cc-cb71-4f7f-af5d-61e80594272e",
-      "name": "clear duplication cache"
-    },
-    {
-      "parameters": {
         "conditions": {
           "options": {
             "caseSensitive": true,
@@ -739,7 +707,7 @@
           "conditions": [
             {
               "id": "46e7c308-019a-4414-9bb3-4caaa914a985",
-              "leftValue": "={{ $('if company exists').item.json.config.cache.keep }}",
+              "leftValue": "={{ $('if company exists').item.json.config.cache.add }}",
               "rightValue": "",
               "operator": {
                 "type": "boolean",
@@ -759,22 +727,12 @@
         1200
       ],
       "id": "7945c97c-49ff-46ee-9b9b-f4ef90f39159",
-      "name": "clear cache"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
-      "position": [
-        3240,
-        1420
-      ],
-      "id": "0d0a2ef1-b1d2-4dd6-9849-a979071f82c3",
-      "name": "When clicking ‘Test workflow’"
+      "name": "if config.cache.add"
     },
     {
       "parameters": {
-        "operation": "clearDeduplicationHistory",
+        "operation": "removeItemsSeenInPreviousExecutions",
+        "dedupeValue": "={{$('if company exists').item.json.email.internetMessageId}}",
         "options": {
           "scope": "workflow"
         }
@@ -782,13 +740,14 @@
       "type": "n8n-nodes-base.removeDuplicates",
       "typeVersion": 2,
       "position": [
-        3480,
-        1420
+        3300,
+        1120
       ],
-      "id": "8a1ae531-499a-4383-a0bd-a1e772423af7",
-      "name": "clear duplication cache manually"
+      "id": "6273d587-97f6-412e-93a0-82be17b539e9",
+      "name": "add to cache"
     }
   ],
+  "pinData": {},
   "connections": {
     "merge property with output": {
       "main": [
@@ -1103,18 +1062,7 @@
       "main": [
         [
           {
-            "node": "clear cache",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "remove message": {
-      "main": [
-        [
-          {
-            "node": "remove message",
+            "node": "if config.cache.add",
             "type": "main",
             "index": 0
           }
@@ -1139,50 +1087,40 @@
         ]
       ]
     },
-    "clear duplication cache": {
+    "if config.cache.add": {
       "main": [
         [
           {
-            "node": "remove message",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "clear cache": {
-      "main": [
-        [
-          {
-            "node": "clear duplication cache",
+            "node": "add to cache",
             "type": "main",
             "index": 0
           }
         ],
-        [
-          {
-            "node": "remove message",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
-    "When clicking ‘Test workflow’": {
+    "add to cache": {
       "main": [
-        [
-          {
-            "node": "clear duplication cache manually",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     }
   },
-  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "69ad4183-a31d-45ae-ae68-a593d014374e",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "id": "lEudgL4ULbE6jqzu",
+  "tags": [
+    {
+      "createdAt": "2025-04-16T08:10:07.448Z",
+      "updatedAt": "2025-04-16T08:10:07.448Z",
+      "id": "qStWid6YOyvmHFDi",
+      "name": "v0.1.0"
+    }
+  ]
 }

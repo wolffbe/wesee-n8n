@@ -1,4 +1,5 @@
 {
+  "name": "wesee - get emails",
   "nodes": [
     {
       "parameters": {
@@ -8,7 +9,8 @@
         "filtersUI": {
           "values": {
             "filters": {
-              "readStatus": "={{ $json.config.email.get.read ?? \"both\" }}"
+              "readStatus": "={{ $json.config.email.get.read }}",
+              "receivedAfter": "={{ $json.config.email.get.after }}"
             }
           }
         },
@@ -245,23 +247,6 @@
     },
     {
       "parameters": {
-        "operation": "removeItemsSeenInPreviousExecutions",
-        "dedupeValue": "={{$json.email.internetMessageId}}",
-        "options": {
-          "scope": "workflow"
-        }
-      },
-      "type": "n8n-nodes-base.removeDuplicates",
-      "typeVersion": 2,
-      "position": [
-        1600,
-        220
-      ],
-      "id": "279afa5d-24be-40a7-8d75-0306f5078894",
-      "name": "remove duplicates"
-    },
-    {
-      "parameters": {
         "operation": "clearDeduplicationHistory",
         "options": {
           "scope": "workflow"
@@ -302,11 +287,11 @@
           "conditions": [
             {
               "id": "46e7c308-019a-4414-9bb3-4caaa914a985",
-              "leftValue": "={{ $json.config.cache.keep }}",
+              "leftValue": "={{ $json.config.cache.reset }}",
               "rightValue": "",
               "operator": {
                 "type": "boolean",
-                "operation": "false",
+                "operation": "true",
                 "singleValue": true
               }
             }
@@ -325,25 +310,13 @@
       "name": "clear cache"
     },
     {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
-      "position": [
-        1400,
-        400
-      ],
-      "id": "07c65b0b-fee0-4ad6-b806-e3d1b5966c91",
-      "name": "When clicking ‘Test workflow’"
-    },
-    {
       "parameters": {
-        "maxItems": "={{ $json.config.email.get.batch === 0 ? $('no error').all().length : $json.config.email.get.batch }}",
-        "keep": "lastItems"
+        "maxItems": "={{ $json.config.email.get.batch === 0 ? $('no error').all().length : $json.config.email.get.batch }}"
       },
       "type": "n8n-nodes-base.limit",
       "typeVersion": 1,
       "position": [
-        1400,
+        1860,
         220
       ],
       "id": "3a1d98ab-090b-4dad-98fe-5516baf6072c",
@@ -351,7 +324,8 @@
     },
     {
       "parameters": {
-        "operation": "clearDeduplicationHistory",
+        "operation": "removeItemsSeenInPreviousExecutions",
+        "dedupeValue": "={{$json.email.internetMessageId}}",
         "options": {
           "scope": "workflow"
         }
@@ -359,13 +333,48 @@
       "type": "n8n-nodes-base.removeDuplicates",
       "typeVersion": 2,
       "position": [
-        1600,
-        400
+        1620,
+        80
       ],
-      "id": "9a39da18-ff0f-453d-9308-938f143c1c99",
-      "name": "clear duplication cache manually"
+      "id": "562b94e8-f64d-4304-a448-78afba32547d",
+      "name": "remove duplicates"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "513f0279-cdae-4901-8fc6-ea7f82b6eaa4",
+              "leftValue": "={{ $json.config.cache.add }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1400,
+        220
+      ],
+      "id": "02850a03-99cf-425e-8aaf-34d6f07d160e",
+      "name": "add to cache"
     }
   ],
+  "pinData": {},
   "connections": {
     "get messages": {
       "main": [
@@ -466,7 +475,7 @@
       "main": [
         [
           {
-            "node": "throttle message batch",
+            "node": "add to cache",
             "type": "main",
             "index": 0
           }
@@ -542,18 +551,12 @@
         ]
       ]
     },
-    "When clicking ‘Test workflow’": {
+    "throttle message batch": {
       "main": [
-        [
-          {
-            "node": "clear duplication cache manually",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
-    "throttle message batch": {
+    "add to cache": {
       "main": [
         [
           {
@@ -561,13 +564,44 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "throttle message batch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "remove duplicates": {
+      "main": [
+        [
+          {
+            "node": "throttle message batch",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     }
   },
-  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b1ff4850-bd43-4d44-a863-99a14ceb2b95",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "id": "Lq2X4HLv1dy2ara4",
+  "tags": [
+    {
+      "createdAt": "2025-04-16T08:10:07.448Z",
+      "updatedAt": "2025-04-16T08:10:07.448Z",
+      "id": "qStWid6YOyvmHFDi",
+      "name": "v0.1.0"
+    }
+  ]
 }

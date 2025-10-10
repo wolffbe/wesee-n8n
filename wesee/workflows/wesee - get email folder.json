@@ -1,4 +1,5 @@
 {
+  "name": "wesee - get email folder",
   "nodes": [
     {
       "parameters": {
@@ -171,6 +172,7 @@
       "name": "merge email folder with email"
     }
   ],
+  "pinData": {},
   "connections": {
     "if email folder does not exist": {
       "main": [
@@ -195,17 +197,6 @@
         [
           {
             "node": "get email folder ID and URL",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "get email folder ID and URL": {
-      "main": [
-        [
-          {
-            "node": "merge email folder with email",
             "type": "main",
             "index": 0
           }
@@ -249,10 +240,34 @@
           }
         ]
       ]
+    },
+    "get email folder ID and URL": {
+      "main": [
+        [
+          {
+            "node": "merge email folder with email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e902a7b6-9df0-4038-84bf-b310befbd5c3",
   "meta": {
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "id": "iwUjjT9zFc5nG2CQ",
+  "tags": [
+    {
+      "createdAt": "2025-04-16T08:10:07.448Z",
+      "updatedAt": "2025-04-16T08:10:07.448Z",
+      "id": "qStWid6YOyvmHFDi",
+      "name": "v0.1.0"
+    }
+  ]
 }

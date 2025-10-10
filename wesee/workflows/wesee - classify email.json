@@ -1,4 +1,5 @@
 {
+  "name": "wesee - classify email",
   "nodes": [
     {
       "parameters": {
@@ -12,8 +13,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        520,
-        460
+        760,
+        440
       ],
       "id": "0bfca725-0775-4a6b-8f41-4ec85a849559",
       "name": "OpenAI Chat Model",
@@ -173,7 +174,7 @@
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [
-        1240,
+        1400,
         440
       ],
       "id": "f061b293-1a82-46d7-8178-362342e57048",
@@ -265,7 +266,7 @@
       "type": "n8n-nodes-base.removeDuplicates",
       "typeVersion": 2,
       "position": [
-        1900,
+        2300,
         440
       ],
       "id": "a59f1830-6528-4c03-8ee1-e418d9573154",
@@ -281,8 +282,8 @@
       "type": "n8n-nodes-base.removeDuplicates",
       "typeVersion": 2,
       "position": [
-        1660,
-        320
+        2060,
+        280
       ],
       "id": "1b99f944-5dae-4974-89bb-c43f06dbfb9b",
       "name": "clear duplication cache"
@@ -299,11 +300,11 @@
           "conditions": [
             {
               "id": "46e7c308-019a-4414-9bb3-4caaa914a985",
-              "leftValue": "={{ $('no error in other branch').item.json.config.cache.keep }}",
+              "leftValue": "={{ $json.config.cache.reset }}",
               "rightValue": "",
               "operator": {
                 "type": "boolean",
-                "operation": "false",
+                "operation": "true",
                 "singleValue": true
               }
             }
@@ -315,40 +316,62 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1440,
+        1820,
         440
       ],
       "id": "665bd00e-b4bd-4447-b0b6-25e3ded5779b",
       "name": "clear cache"
     },
     {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "59306b06-4235-4fda-a840-33ad1771dcf8",
+              "leftValue": "={{ $json.config.cache.add }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
       "position": [
-        1660,
-        660
+        2060,
+        600
       ],
-      "id": "ef3df009-3df6-48b9-82ff-2b4a2089e3e2",
-      "name": "When clicking ‘Test workflow’"
+      "id": "db20d2ba-f059-4018-9ebe-f87d00b95928",
+      "name": "if config.cache.add"
     },
     {
       "parameters": {
-        "operation": "clearDeduplicationHistory",
-        "options": {
-          "scope": "workflow"
-        }
+        "mode": "chooseBranch",
+        "useDataOfInput": 2
       },
-      "type": "n8n-nodes-base.removeDuplicates",
-      "typeVersion": 2,
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
       "position": [
-        1900,
+        1620,
         660
       ],
-      "id": "3a5daac5-20d6-41e8-80b7-27a9ea860df4",
-      "name": "clear duplication cache manually"
+      "id": "49e054f4-7c48-4979-8716-e7ee668a5cca",
+      "name": "keep email and config"
     }
   ],
+  "pinData": {},
   "connections": {
     "OpenAI Chat Model": {
       "ai_languageModel": [
@@ -356,36 +379,6 @@
           {
             "node": "classify email",
             "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "classify email": {
-      "main": [
-        [
-          {
-            "node": "no error in main branch",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "no error in other branch",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "no error in other branch",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "no error in main branch",
-            "type": "main",
             "index": 0
           }
         ]
@@ -465,6 +458,36 @@
         ]
       ]
     },
+    "classify email": {
+      "main": [
+        [
+          {
+            "node": "no error in main branch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "no error in other branch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "no error in other branch",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "no error in main branch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "drop error from email for classification": {
       "main": [
         [
@@ -480,7 +503,7 @@
       "main": [
         [
           {
-            "node": "clear cache",
+            "node": "keep email and config",
             "type": "main",
             "index": 0
           }
@@ -494,6 +517,11 @@
             "node": "set email to read",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "keep email and config",
+            "type": "main",
+            "index": 1
           }
         ],
         [
@@ -519,13 +547,7 @@
     },
     "remove message": {
       "main": [
-        [
-          {
-            "node": "remove message",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "clear duplication cache": {
@@ -550,6 +572,17 @@
         ],
         [
           {
+            "node": "if config.cache.add",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "if config.cache.add": {
+      "main": [
+        [
+          {
             "node": "remove message",
             "type": "main",
             "index": 0
@@ -557,11 +590,11 @@
         ]
       ]
     },
-    "When clicking ‘Test workflow’": {
+    "keep email and config": {
       "main": [
         [
           {
-            "node": "clear duplication cache manually",
+            "node": "clear cache",
             "type": "main",
             "index": 0
           }
@@ -569,9 +602,22 @@
       ]
     }
   },
-  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "75d23e72-3c0c-4530-af10-743b1b3436dd",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "id": "2pB8bHXOFQv1uYJg",
+  "tags": [
+    {
+      "createdAt": "2025-04-16T08:10:07.448Z",
+      "updatedAt": "2025-04-16T08:10:07.448Z",
+      "id": "qStWid6YOyvmHFDi",
+      "name": "v0.1.0"
+    }
+  ]
 }

@@ -1,4 +1,5 @@
 {
+  "name": "wesee - filter attachments",
   "nodes": [
     {
       "parameters": {
@@ -217,6 +218,7 @@
       "name": "split attachments"
     }
   ],
+  "pinData": {},
   "connections": {
     "filter by file name": {
       "main": [
@@ -331,8 +333,21 @@
       ]
     }
   },
-  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5b1f213d-ffe1-49da-a358-f376be7ee561",
   "meta": {
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "id": "gd1bg8shD9DOw1D8",
+  "tags": [
+    {
+      "createdAt": "2025-04-16T08:10:07.448Z",
+      "updatedAt": "2025-04-16T08:10:07.448Z",
+      "id": "qStWid6YOyvmHFDi",
+      "name": "v0.1.0"
+    }
+  ]
 }

@@ -1,4 +1,5 @@
 {
+  "name": "wesee - download attachments",
   "nodes": [
     {
       "parameters": {
@@ -114,7 +115,8 @@
         340
       ],
       "id": "a9d7e670-11d3-43d2-815f-c828293403c9",
-      "name": "merge attachment object with email"
+      "name": "merge attachment object with email",
+      "alwaysOutputData": false
     },
     {
       "parameters": {
@@ -223,6 +225,7 @@
       "name": "aggregate attachments"
     }
   ],
+  "pinData": {},
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -336,9 +339,22 @@
       ]
     }
   },
-  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3a081aae-39e5-4607-881e-c1b8d90d10c3",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "id": "oYVwDsI3xvH1hS8D",
+  "tags": [
+    {
+      "createdAt": "2025-04-16T08:10:07.448Z",
+      "updatedAt": "2025-04-16T08:10:07.448Z",
+      "id": "qStWid6YOyvmHFDi",
+      "name": "v0.1.0"
+    }
+  ]
 }

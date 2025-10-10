@@ -1,4 +1,5 @@
 {
+  "name": "wesee",
   "nodes": [
     {
       "parameters": {
@@ -6,7 +7,7 @@
           "__rl": true,
           "value": "iwUjjT9zFc5nG2CQ",
           "mode": "list",
-          "cachedResultName": "wesee - get email folder"
+          "cachedResultName": "wesee — wesee - get email folder"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -36,7 +37,7 @@
           "__rl": true,
           "value": "e1sIwEQTAYGALRDt",
           "mode": "list",
-          "cachedResultName": "wesee - get database properties"
+          "cachedResultName": "wesee — wesee - get database properties"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -66,7 +67,7 @@
           "__rl": true,
           "value": "qxgq0UopjV3KvEaE",
           "mode": "list",
-          "cachedResultName": "wesee - upload attachments"
+          "cachedResultName": "wesee — wesee - upload attachments"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -96,7 +97,7 @@
           "__rl": true,
           "value": "CKGsB2lYC0HQLFZB",
           "mode": "list",
-          "cachedResultName": "wesee - parse PDF"
+          "cachedResultName": "wesee — wesee - parse PDF"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -124,7 +125,7 @@
           "__rl": true,
           "value": "lEudgL4ULbE6jqzu",
           "mode": "list",
-          "cachedResultName": "wesee - extract properties"
+          "cachedResultName": "wesee — wesee - extract properties"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -152,7 +153,7 @@
           "__rl": true,
           "value": "7o2npp40mav8EdBX",
           "mode": "list",
-          "cachedResultName": "wesee - parse email"
+          "cachedResultName": "wesee — wesee - parse email"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -183,7 +184,7 @@
           "__rl": true,
           "value": "83nbv7huCcHgO66C",
           "mode": "list",
-          "cachedResultName": "wesee - add static properties"
+          "cachedResultName": "wesee — wesee - add static properties"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -211,7 +212,7 @@
           "__rl": true,
           "value": "fOnbizpjBEg8qmw4",
           "mode": "list",
-          "cachedResultName": "wesee - create assistant"
+          "cachedResultName": "wesee — wesee - create assistant"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -239,7 +240,7 @@
           "__rl": true,
           "value": "bmEhWJdZoJwJEG1o",
           "mode": "list",
-          "cachedResultName": "wesee - get root folder"
+          "cachedResultName": "wesee — wesee - get root folder"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -271,7 +272,7 @@
             {
               "id": "1c19b3a0-e754-436d-9072-b7f0c1493a2d",
               "name": "config.blacklist.file.name.contains",
-              "value": "=[]",
+              "value": "=[\n  \"34b6ba8c-c822-44e4-a54c-ec11997da49b\",\n  \"facebook\",\n  \"twitter\",\n  \"linkedin\",\n  \"logo\"\n]",
               "type": "array"
             },
             {
@@ -282,38 +283,44 @@
             },
             {
               "id": "ef623a91-f36b-4064-b21f-71123971fd9e",
-              "name": "config.cache.keep",
+              "name": "config.cache.add",
               "value": "=true",
+              "type": "boolean"
+            },
+            {
+              "id": "a98f81d5-1ccb-4b35-9a15-015975048f66",
+              "name": "config.cache.reset",
+              "value": "=false",
               "type": "boolean"
             },
             {
               "id": "5750b4cf-5983-44f5-b506-82bb87da539e",
               "name": "config.drive.name",
-              "value": "=",
-              "type": "string"
-            },
-            {
-              "id": "a98f81d5-1ccb-4b35-9a15-015975048f66",
-              "name": "config.folder.name",
-              "value": "=",
+              "value": "=Dokumente",
               "type": "string"
             },
             {
               "id": "05d2b7f5-1091-495c-989c-44d34f65e886",
               "name": "config.folder.path",
-              "value": "=",
+              "value": "=Deal-Flow",
               "type": "string"
             },
             {
               "id": "e742897d-7260-4fdc-ac50-2e38b6c91e81",
               "name": "config.email.get.batch",
-              "value": "=0",
+              "value": "=12",
               "type": "number"
             },
             {
               "id": "243775b3-3dd4-4c9f-b429-2a6f29715aaf",
               "name": "config.email.get.read",
               "value": "=unread",
+              "type": "string"
+            },
+            {
+              "id": "f1c4b315-b512-47a2-b56a-2b9a6836eea3",
+              "name": "config.email.get.after",
+              "value": "=2025-02-17T00:00:00Z",
               "type": "string"
             },
             {
@@ -343,7 +350,7 @@
             {
               "id": "9d3a82d7-0455-4f77-9286-ca7e925a9e24",
               "name": "config.thesis",
-              "value": "=",
+              "value": "=Early stage health tech startups",
               "type": "string"
             }
           ]
@@ -367,7 +374,7 @@
           "__rl": true,
           "value": "Lq2X4HLv1dy2ara4",
           "mode": "list",
-          "cachedResultName": "wesee - get emails"
+          "cachedResultName": "wesee — wesee - get emails"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -398,7 +405,7 @@
           "__rl": true,
           "value": "PAL47cLFTyXBY0ke",
           "mode": "list",
-          "cachedResultName": "wesee - add email to database"
+          "cachedResultName": "wesee — wesee - add email to database"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -426,7 +433,7 @@
           "__rl": true,
           "value": "2pB8bHXOFQv1uYJg",
           "mode": "list",
-          "cachedResultName": "wesee - classify email"
+          "cachedResultName": "wesee — wesee - classify email"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -456,7 +463,7 @@
           "__rl": true,
           "value": "oYVwDsI3xvH1hS8D",
           "mode": "list",
-          "cachedResultName": "wesee - download attachments"
+          "cachedResultName": "wesee — wesee - download attachments"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -478,7 +485,8 @@
         200
       ],
       "id": "02635f2e-2c2b-418b-a45a-f392d56a05c8",
-      "name": "download attachments"
+      "name": "download attachments",
+      "alwaysOutputData": false
     },
     {
       "parameters": {
@@ -486,7 +494,7 @@
           "__rl": true,
           "value": "gd1bg8shD9DOw1D8",
           "mode": "list",
-          "cachedResultName": "wesee - filter attachments"
+          "cachedResultName": "wesee — wesee - filter attachments"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -515,8 +523,7 @@
         "rule": {
           "interval": [
             {
-              "field": "minutes",
-              "minutesInterval": 30
+              "field": "hours"
             }
           ]
         }
@@ -531,6 +538,7 @@
       "name": "regularly"
     }
   ],
+  "pinData": {},
   "connections": {
     "get email folder": {
       "main": [
@@ -703,8 +711,22 @@
       ]
     }
   },
-  "pinData": {},
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "30376fde-a9ae-46b4-88a6-8d122d37d06a",
   "meta": {
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "id": "CIq5Rx7J63A09UwB",
+  "tags": [
+    {
+      "createdAt": "2025-04-16T08:10:07.448Z",
+      "updatedAt": "2025-04-16T08:10:07.448Z",
+      "id": "qStWid6YOyvmHFDi",
+      "name": "v0.1.0"
+    }
+  ]
 }

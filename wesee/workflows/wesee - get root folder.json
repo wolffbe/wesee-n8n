@@ -1,4 +1,5 @@
 {
+  "name": "wesee - get root folder",
   "nodes": [
     {
       "parameters": {
@@ -819,6 +820,7 @@
       "name": "contains configured site ID"
     }
   ],
+  "pinData": {},
   "connections": {
     "When Executed by Another Workflow": {
       "main": [
@@ -1007,22 +1009,22 @@
         ]
       ]
     },
-    "keep last item": {
+    "keep last deal": {
       "main": [
         [
           {
-            "node": "get folder ID",
+            "node": "set parents",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "keep last deal": {
+    "keep last item": {
       "main": [
         [
           {
-            "node": "set parents",
+            "node": "get folder ID",
             "type": "main",
             "index": 0
           }
@@ -1251,8 +1253,21 @@
       ]
     }
   },
-  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b5beb7b3-81d2-40da-91b3-42dd2067b268",
   "meta": {
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "id": "bmEhWJdZoJwJEG1o",
+  "tags": [
+    {
+      "createdAt": "2025-04-16T08:10:07.448Z",
+      "updatedAt": "2025-04-16T08:10:07.448Z",
+      "id": "qStWid6YOyvmHFDi",
+      "name": "v0.1.0"
+    }
+  ]
 }
