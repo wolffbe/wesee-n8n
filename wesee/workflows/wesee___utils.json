@@ -211,5 +211,12 @@
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
   },
   "id": "ZJOioYYRBp6Oceg0",
-  "tags": []
+  "tags": [
+    {
+      "createdAt": "2025-04-16T08:10:07.448Z",
+      "updatedAt": "2025-04-16T08:10:07.448Z",
+      "id": "qStWid6YOyvmHFDi",
+      "name": "v0.1.1"
+    }
+  ]
 }
