@@ -1,4 +1,10 @@
 {
+  "createdAt": "2025-10-13T04:05:15.386Z",
+  "updatedAt": "2025-10-13T04:08:21.000Z",
+  "id": "iwUjjT9zFc5nG2CQ",
+  "name": "wesee - get email folder",
+  "active": false,
+  "isArchived": false,
   "nodes": [
     {
       "parameters": {
@@ -28,8 +34,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -240,
-        180
+        -288,
+        96
       ],
       "id": "2c6d10bd-1f2f-4662-9734-7320bb446e0c",
       "name": "if email folder does not exist"
@@ -57,8 +63,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        0,
-        180
+        -64,
+        192
       ],
       "id": "f68ccdf4-e958-4b5b-99be-8f2cd85598c1",
       "name": "get email folder"
@@ -88,8 +94,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        200,
-        180
+        160,
+        96
       ],
       "id": "6b58b6ad-338d-43a4-84a8-df14fe976cbc",
       "name": "get email folder ID and URL"
@@ -101,8 +107,8 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -740,
-        340
+        -736,
+        168
       ],
       "id": "e041d0e6-c173-4164-968a-792be4e20392",
       "name": "When Executed by Another Workflow"
@@ -121,14 +127,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        0,
+        -64,
         0
       ],
       "id": "32391c46-0368-4656-bccc-9f30974f87f0",
       "name": "create root folder",
       "credentials": {
         "microsoftOAuth2Api": {
-          "id": "OwQ0YTXkLNO8NlIj",
+          "id": "mam00d7y7ZbLYfvJ",
           "name": "wesee"
         }
       }
@@ -143,14 +149,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -460,
-        180
+        -512,
+        96
       ],
       "id": "86a49fbb-7d7f-4687-ae17-3dd0daaf5a42",
       "name": "search for email folder",
       "credentials": {
         "microsoftOAuth2Api": {
-          "id": "OwQ0YTXkLNO8NlIj",
+          "id": "mam00d7y7ZbLYfvJ",
           "name": "wesee"
         }
       }
@@ -164,8 +170,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        440,
-        340
+        384,
+        168
       ],
       "id": "1318045d-6497-4f39-abe0-bbe0d9e2e688",
       "name": "merge email folder with email"
@@ -195,17 +201,6 @@
         [
           {
             "node": "get email folder ID and URL",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "get email folder ID and URL": {
-      "main": [
-        [
-          {
-            "node": "merge email folder with email",
             "type": "main",
             "index": 0
           }
@@ -249,10 +244,52 @@
           }
         ]
       ]
+    },
+    "get email folder ID and URL": {
+      "main": [
+        [
+          {
+            "node": "merge email folder with email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
   "meta": {
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "versionId": "e2fa5f7d-e020-4ffa-822f-6e1268d775cf",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-10-10T09:46:26.421Z",
+      "updatedAt": "2025-10-10T09:46:26.421Z",
+      "id": "hPbNH8F18K7BMw1l",
+      "name": "v0.1.1"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-13T04:05:15.387Z",
+      "updatedAt": "2025-10-13T04:05:15.387Z",
+      "role": "workflow:owner",
+      "workflowId": "iwUjjT9zFc5nG2CQ",
+      "projectId": "WyrnMA2kuhTLTB2s",
+      "project": {
+        "createdAt": "2025-10-13T03:41:54.147Z",
+        "updatedAt": "2025-10-13T03:42:22.828Z",
+        "id": "WyrnMA2kuhTLTB2s",
+        "name": "Benedict Wolff <benedictwolff@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

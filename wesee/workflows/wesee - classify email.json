@@ -1,25 +1,32 @@
 {
+  "createdAt": "2025-10-13T04:05:15.355Z",
+  "updatedAt": "2025-10-13T04:23:16.000Z",
+  "id": "2pB8bHXOFQv1uYJg",
+  "name": "wesee - classify email",
+  "active": false,
+  "isArchived": false,
   "nodes": [
     {
       "parameters": {
         "model": {
           "__rl": true,
+          "value": "gpt-4o",
           "mode": "list",
-          "value": "gpt-4o-mini"
+          "cachedResultName": "gpt-4o"
         },
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        520,
-        460
+        128,
+        544
       ],
       "id": "0bfca725-0775-4a6b-8f41-4ec85a849559",
       "name": "OpenAI Chat Model",
       "credentials": {
         "openAiApi": {
-          "id": "RHBGyb0N9eTeoTwJ",
+          "id": "eukNxUc5q1dN0W0u",
           "name": "wesee"
         }
       }
@@ -43,8 +50,8 @@
       "type": "@n8n/n8n-nodes-langchain.textClassifier",
       "typeVersion": 1,
       "position": [
-        620,
-        200
+        48,
+        288
       ],
       "id": "f7d0a4ba-b231-4400-9872-2e0226e72931",
       "name": "classify email",
@@ -58,8 +65,8 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -40,
-        440
+        -400,
+        832
       ],
       "id": "ea051885-7ef0-47b0-8003-e1b0bdb63934",
       "name": "When Executed by Another Workflow"
@@ -82,8 +89,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -160,
-        60
+        848,
+        96
       ],
       "id": "09216e55-7888-4eab-b0e3-30cc9bfe731a",
       "name": "get rate limit"
@@ -95,8 +102,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        20,
-        60
+        1072,
+        192
       ],
       "id": "ec7a1954-89cc-4315-95dc-7e4a58f6d86e",
       "name": "wait for rate limit",
@@ -111,8 +118,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        -400,
-        60
+        624,
+        80
       ],
       "id": "93b61daf-ed95-4395-9506-02e13165266d",
       "name": "handle error"
@@ -124,8 +131,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        -160,
-        220
+        848,
+        288
       ],
       "id": "8b5901ff-ed2f-4e20-8b17-baa67ec332e2",
       "name": "wait for 30 seconds",
@@ -138,8 +145,8 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        -160,
-        -100
+        848,
+        -96
       ],
       "id": "3013131f-c235-4922-aba8-2217e7f0bdac",
       "name": "throw other error"
@@ -152,8 +159,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        240,
-        200
+        -176,
+        736
       ],
       "id": "4d36a64c-18a0-499f-a64d-28f56fdd669a",
       "name": "drop error from email for classification"
@@ -173,15 +180,15 @@
       "type": "n8n-nodes-base.microsoftOutlook",
       "typeVersion": 2,
       "position": [
-        1240,
-        440
+        848,
+        576
       ],
       "id": "f061b293-1a82-46d7-8178-362342e57048",
       "name": "set email to read",
       "webhookId": "e6a3af6d-5933-46e0-9394-e988cefb876c",
       "credentials": {
         "microsoftOutlookOAuth2Api": {
-          "id": "juI8yxXGQl6ci0BY",
+          "id": "pRe66D8yA97hf5uz",
           "name": "wesee"
         }
       }
@@ -214,8 +221,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1020,
-        440
+        400,
+        432
       ],
       "id": "6529223b-a0b0-4628-9cd0-6911d7a9de4d",
       "name": "no error in other branch"
@@ -248,8 +255,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1240,
-        200
+        400,
+        48
       ],
       "id": "cf72d928-7560-49a0-9e15-0ff7b48dec63",
       "name": "no error in main branch"
@@ -257,7 +264,7 @@
     {
       "parameters": {
         "operation": "removeItemsSeenInPreviousExecutions",
-        "dedupeValue": "={{$('no error in other branch').item.json.email.internetMessageId}}",
+        "dedupeValue": "={{ $json.email.internetMessageId }}",
         "options": {
           "scope": "workflow"
         }
@@ -265,27 +272,11 @@
       "type": "n8n-nodes-base.removeDuplicates",
       "typeVersion": 2,
       "position": [
-        1900,
-        440
+        1744,
+        448
       ],
       "id": "a59f1830-6528-4c03-8ee1-e418d9573154",
       "name": "remove message"
-    },
-    {
-      "parameters": {
-        "operation": "clearDeduplicationHistory",
-        "options": {
-          "scope": "workflow"
-        }
-      },
-      "type": "n8n-nodes-base.removeDuplicates",
-      "typeVersion": 2,
-      "position": [
-        1660,
-        320
-      ],
-      "id": "1b99f944-5dae-4974-89bb-c43f06dbfb9b",
-      "name": "clear duplication cache"
     },
     {
       "parameters": {
@@ -299,7 +290,7 @@
           "conditions": [
             {
               "id": "46e7c308-019a-4414-9bb3-4caaa914a985",
-              "leftValue": "={{ $('no error in other branch').item.json.config.cache.keep }}",
+              "leftValue": "={{ $json.config.email.set.read }}",
               "rightValue": "",
               "operator": {
                 "type": "boolean",
@@ -315,22 +306,45 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1440,
-        440
+        624,
+        512
       ],
-      "id": "665bd00e-b4bd-4447-b0b6-25e3ded5779b",
-      "name": "clear cache"
+      "id": "83588a38-ca7b-4039-ad4d-e5445ec3e6e0",
+      "name": "if not config.email.set.read"
     },
     {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "59306b06-4235-4fda-a840-33ad1771dcf8",
+              "leftValue": "={{ $json.config.cache.reset }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
       "position": [
-        1660,
-        660
+        1072,
+        528
       ],
-      "id": "ef3df009-3df6-48b9-82ff-2b4a2089e3e2",
-      "name": "When clicking ‘Test workflow’"
+      "id": "d6f3832b-9ef2-42f7-bdd5-0baa67ced342",
+      "name": "if config.cache.reset"
     },
     {
       "parameters": {
@@ -342,11 +356,79 @@
       "type": "n8n-nodes-base.removeDuplicates",
       "typeVersion": 2,
       "position": [
-        1900,
-        660
+        1296,
+        448
       ],
-      "id": "3a5daac5-20d6-41e8-80b7-27a9ea860df4",
-      "name": "clear duplication cache manually"
+      "id": "681e292e-3252-4134-b940-509c92b0de8c",
+      "name": "clear cache"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "59306b06-4235-4fda-a840-33ad1771dcf8",
+              "leftValue": "={{ $json.config.cache.add }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1520,
+        448
+      ],
+      "id": "db20d2ba-f059-4018-9ebe-f87d00b95928",
+      "name": "if not config.cache.add"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9025889c-a102-4979-ad48-12c2da3d19da",
+              "leftValue": false,
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1968,
+        448
+      ],
+      "id": "d208f05d-87c0-42f2-b68b-568869e17fe6",
+      "name": "drop item"
     }
   ],
   "connections": {
@@ -356,36 +438,6 @@
           {
             "node": "classify email",
             "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "classify email": {
-      "main": [
-        [
-          {
-            "node": "no error in main branch",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "no error in other branch",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "no error in other branch",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "no error in main branch",
-            "type": "main",
             "index": 0
           }
         ]
@@ -465,6 +517,36 @@
         ]
       ]
     },
+    "classify email": {
+      "main": [
+        [
+          {
+            "node": "no error in main branch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "no error in other branch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "no error in other branch",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "no error in main branch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "drop error from email for classification": {
       "main": [
         [
@@ -480,7 +562,7 @@
       "main": [
         [
           {
-            "node": "clear cache",
+            "node": "if config.cache.reset",
             "type": "main",
             "index": 0
           }
@@ -491,7 +573,7 @@
       "main": [
         [
           {
-            "node": "set email to read",
+            "node": "if not config.email.set.read",
             "type": "main",
             "index": 0
           }
@@ -521,18 +603,48 @@
       "main": [
         [
           {
-            "node": "remove message",
+            "node": "drop item",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "clear duplication cache": {
+    "if not config.email.set.read": {
       "main": [
         [
           {
+            "node": "if config.cache.reset",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "set email to read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "if config.cache.reset": {
+      "main": [
+        [
+          {
+            "node": "clear cache",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
             "node": "remove message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "if not config.cache.add",
             "type": "main",
             "index": 0
           }
@@ -543,7 +655,18 @@
       "main": [
         [
           {
-            "node": "clear duplication cache",
+            "node": "if not config.cache.add",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "if not config.cache.add": {
+      "main": [
+        [
+          {
+            "node": "drop item",
             "type": "main",
             "index": 0
           }
@@ -556,22 +679,42 @@
           }
         ]
       ]
-    },
-    "When clicking ‘Test workflow’": {
-      "main": [
-        [
-          {
-            "node": "clear duplication cache manually",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
     }
   },
-  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "versionId": "c3426d45-1777-49b5-b39d-5ce4722921d0",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-10-10T09:46:26.421Z",
+      "updatedAt": "2025-10-10T09:46:26.421Z",
+      "id": "hPbNH8F18K7BMw1l",
+      "name": "v0.1.1"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-13T04:05:15.357Z",
+      "updatedAt": "2025-10-13T04:05:15.357Z",
+      "role": "workflow:owner",
+      "workflowId": "2pB8bHXOFQv1uYJg",
+      "projectId": "WyrnMA2kuhTLTB2s",
+      "project": {
+        "createdAt": "2025-10-13T03:41:54.147Z",
+        "updatedAt": "2025-10-13T03:42:22.828Z",
+        "id": "WyrnMA2kuhTLTB2s",
+        "name": "Benedict Wolff <benedictwolff@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

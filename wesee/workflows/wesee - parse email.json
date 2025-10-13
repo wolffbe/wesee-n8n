@@ -1,4 +1,10 @@
 {
+  "createdAt": "2025-10-13T04:05:15.403Z",
+  "updatedAt": "2025-10-13T04:06:23.000Z",
+  "id": "7o2npp40mav8EdBX",
+  "name": "wesee - parse email",
+  "active": false,
+  "isArchived": false,
   "nodes": [
     {
       "parameters": {
@@ -20,8 +26,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -820,
-        140
+        -752,
+        72
       ],
       "id": "dc9499ee-2949-44b9-8c38-0a4477b21a9d",
       "name": "decode special characters"
@@ -46,8 +52,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -1020,
-        140
+        -976,
+        72
       ],
       "id": "d0b596b9-2f44-4617-b39e-ad2bb5727b23",
       "name": "remove markup tags"
@@ -78,7 +84,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        0,
+        144,
         0
       ],
       "id": "814afb3a-12b8-4f05-b8b9-d7d02ef7990b",
@@ -102,8 +108,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -1220,
-        140
+        -1200,
+        72
       ],
       "id": "c50362f9-52c7-4962-88a5-ada2b209ee61",
       "name": "hash line breaks"
@@ -126,8 +132,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -620,
-        140
+        -528,
+        72
       ],
       "id": "c20dc063-2a1f-4c6b-a2da-2f30f97eb8ac",
       "name": "replace hashed line breaks"
@@ -150,8 +156,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -420,
-        140
+        -304,
+        72
       ],
       "id": "74b3e823-6638-45e6-9ebd-e946a053dfa3",
       "name": "add whitespace after comma"
@@ -163,8 +169,8 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -1420,
-        140
+        -1424,
+        72
       ],
       "id": "fc603c7a-57e3-4a6e-9f46-fa4daa224f8d",
       "name": "When Executed by Another Workflow"
@@ -187,8 +193,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        400,
-        140
+        592,
+        72
       ],
       "id": "03991a02-46ec-4f53-8650-bfe29d4fe17f",
       "name": "extract source"
@@ -220,8 +226,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -220,
-        140
+        -80,
+        72
       ],
       "id": "c7e925c9-eb88-43ef-b211-15a837b70a1a",
       "name": "has forwarding"
@@ -244,8 +250,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        220,
-        140
+        368,
+        72
       ],
       "id": "d6247496-2773-4c1a-b545-bcdff5664175",
       "name": "remove URLs and new lines"
@@ -359,8 +365,39 @@
       ]
     }
   },
-  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
   "meta": {
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "versionId": "55991317-f535-4f76-b1a4-1de8fafd31d2",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-10-10T09:46:26.421Z",
+      "updatedAt": "2025-10-10T09:46:26.421Z",
+      "id": "hPbNH8F18K7BMw1l",
+      "name": "v0.1.1"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-13T04:05:15.404Z",
+      "updatedAt": "2025-10-13T04:05:15.404Z",
+      "role": "workflow:owner",
+      "workflowId": "7o2npp40mav8EdBX",
+      "projectId": "WyrnMA2kuhTLTB2s",
+      "project": {
+        "createdAt": "2025-10-13T03:41:54.147Z",
+        "updatedAt": "2025-10-13T03:42:22.828Z",
+        "id": "WyrnMA2kuhTLTB2s",
+        "name": "Benedict Wolff <benedictwolff@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

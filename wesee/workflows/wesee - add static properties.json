@@ -1,4 +1,10 @@
 {
+  "createdAt": "2025-10-13T04:05:15.350Z",
+  "updatedAt": "2025-10-13T04:07:09.000Z",
+  "id": "83nbv7huCcHgO66C",
+  "name": "wesee - add static properties",
+  "active": false,
+  "isArchived": false,
   "nodes": [
     {
       "parameters": {
@@ -20,7 +26,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        200,
+        224,
         0
       ],
       "id": "6dd37f51-a9e5-4ba4-acfc-c90842149092",
@@ -44,8 +50,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        420,
-        240
+        896,
+        0
       ],
       "id": "dc77fbbf-2563-41c8-b4d0-1993eada8122",
       "name": "add stage property value"
@@ -68,8 +74,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        200,
-        240
+        672,
+        0
       ],
       "id": "26594698-39e7-4152-b9c3-a45c1421f978",
       "name": "add source property value"
@@ -92,7 +98,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        420,
+        448,
         0
       ],
       "id": "4155fdc6-08c4-43e7-9f51-7369dead4e05",
@@ -158,8 +164,39 @@
       ]
     }
   },
-  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
   "meta": {
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "versionId": "99985c75-db40-40f2-9076-d578753335dc",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-10-10T09:46:26.421Z",
+      "updatedAt": "2025-10-10T09:46:26.421Z",
+      "id": "hPbNH8F18K7BMw1l",
+      "name": "v0.1.1"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-13T04:05:15.352Z",
+      "updatedAt": "2025-10-13T04:05:15.352Z",
+      "role": "workflow:owner",
+      "workflowId": "83nbv7huCcHgO66C",
+      "projectId": "WyrnMA2kuhTLTB2s",
+      "project": {
+        "createdAt": "2025-10-13T03:41:54.147Z",
+        "updatedAt": "2025-10-13T03:42:22.828Z",
+        "id": "WyrnMA2kuhTLTB2s",
+        "name": "Benedict Wolff <benedictwolff@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

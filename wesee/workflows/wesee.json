@@ -1,4 +1,10 @@
 {
+  "createdAt": "2025-10-13T04:05:15.314Z",
+  "updatedAt": "2025-10-13T04:37:25.000Z",
+  "id": "CIq5Rx7J63A09UwB",
+  "name": "wesee",
+  "active": false,
+  "isArchived": false,
   "nodes": [
     {
       "parameters": {
@@ -6,7 +12,7 @@
           "__rl": true,
           "value": "iwUjjT9zFc5nG2CQ",
           "mode": "list",
-          "cachedResultName": "wesee - get email folder"
+          "cachedResultName": "wesee — wesee - get email folder"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -24,7 +30,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        160,
+        208,
         640
       ],
       "id": "c056b617-2bcb-4c35-85ff-474067dfac77",
@@ -36,7 +42,7 @@
           "__rl": true,
           "value": "e1sIwEQTAYGALRDt",
           "mode": "list",
-          "cachedResultName": "wesee - get database properties"
+          "cachedResultName": "wesee — wesee - get database properties"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -54,8 +60,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        360,
-        420
+        400,
+        432
       ],
       "id": "7d915ff6-7a95-4916-8c4b-377d408e47fe",
       "name": "get database properties"
@@ -66,7 +72,7 @@
           "__rl": true,
           "value": "qxgq0UopjV3KvEaE",
           "mode": "list",
-          "cachedResultName": "wesee - upload attachments"
+          "cachedResultName": "wesee — wesee - upload attachments"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -84,7 +90,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        360,
+        400,
         640
       ],
       "id": "f6514ca3-58ff-4f81-ba09-f8e2d7117af3",
@@ -96,7 +102,7 @@
           "__rl": true,
           "value": "CKGsB2lYC0HQLFZB",
           "mode": "list",
-          "cachedResultName": "wesee - parse PDF"
+          "cachedResultName": "wesee — wesee - parse PDF"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -112,8 +118,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        760,
-        200
+        800,
+        208
       ],
       "id": "e01c8f43-7dce-4983-b1d6-9c67b5d99995",
       "name": "parse PDF"
@@ -124,6 +130,7 @@
           "__rl": true,
           "value": "lEudgL4ULbE6jqzu",
           "mode": "list",
+          "cachedResultUrl": "/workflow/lEudgL4ULbE6jqzu",
           "cachedResultName": "wesee - extract properties"
         },
         "workflowInputs": {
@@ -140,8 +147,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        560,
-        420
+        608,
+        432
       ],
       "id": "c23ba296-ea93-4daa-bee0-de7a79604b24",
       "name": "extract properties"
@@ -152,7 +159,7 @@
           "__rl": true,
           "value": "7o2npp40mav8EdBX",
           "mode": "list",
-          "cachedResultName": "wesee - parse email"
+          "cachedResultName": "wesee — wesee - parse email"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -170,8 +177,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        760,
-        -20
+        800,
+        -16
       ],
       "id": "7abd53dd-5f50-4c29-a611-a63142c6e3fc",
       "name": "parse email",
@@ -183,7 +190,7 @@
           "__rl": true,
           "value": "83nbv7huCcHgO66C",
           "mode": "list",
-          "cachedResultName": "wesee - add static properties"
+          "cachedResultName": "wesee — wesee - add static properties"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -199,7 +206,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        560,
+        608,
         640
       ],
       "id": "b87f90be-8420-4a69-a7ad-81f5610013e4",
@@ -211,7 +218,7 @@
           "__rl": true,
           "value": "fOnbizpjBEg8qmw4",
           "mode": "list",
-          "cachedResultName": "wesee - create assistant"
+          "cachedResultName": "wesee — wesee - create assistant"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -227,8 +234,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        160,
-        420
+        208,
+        432
       ],
       "id": "87f529b5-fe9c-4661-9162-72d228d7ff4b",
       "name": "create assistant"
@@ -239,7 +246,7 @@
           "__rl": true,
           "value": "bmEhWJdZoJwJEG1o",
           "mode": "list",
-          "cachedResultName": "wesee - get root folder"
+          "cachedResultName": "wesee — wesee - get root folder"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -257,8 +264,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        760,
-        420
+        800,
+        432
       ],
       "id": "88e923d2-4a52-4dfc-b741-52cd1eee5f6c",
       "name": "get root folder",
@@ -271,30 +278,30 @@
             {
               "id": "1c19b3a0-e754-436d-9072-b7f0c1493a2d",
               "name": "config.blacklist.file.name.contains",
-              "value": "=[]",
+              "value": "=",
               "type": "array"
             },
             {
               "id": "ab9a8798-76eb-43de-948f-1131a8008dd4",
               "name": "config.blacklist.properties.contains",
-              "value": "=[]",
+              "value": "=",
               "type": "array"
             },
             {
               "id": "ef623a91-f36b-4064-b21f-71123971fd9e",
-              "name": "config.cache.keep",
+              "name": "config.cache.add",
+              "value": "=true",
+              "type": "boolean"
+            },
+            {
+              "id": "a98f81d5-1ccb-4b35-9a15-015975048f66",
+              "name": "config.cache.reset",
               "value": "=true",
               "type": "boolean"
             },
             {
               "id": "5750b4cf-5983-44f5-b506-82bb87da539e",
               "name": "config.drive.name",
-              "value": "=",
-              "type": "string"
-            },
-            {
-              "id": "a98f81d5-1ccb-4b35-9a15-015975048f66",
-              "name": "config.folder.name",
               "value": "=",
               "type": "string"
             },
@@ -307,19 +314,31 @@
             {
               "id": "e742897d-7260-4fdc-ac50-2e38b6c91e81",
               "name": "config.email.get.batch",
-              "value": "=0",
+              "value": "=25",
               "type": "number"
             },
             {
               "id": "243775b3-3dd4-4c9f-b429-2a6f29715aaf",
               "name": "config.email.get.read",
-              "value": "=unread",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "f1c4b315-b512-47a2-b56a-2b9a6836eea3",
+              "name": "config.email.get.after",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "f1c4b315-b512-47a2-b56a-2b9a6836eea3",
+              "name": "config.email.get.after",
+              "value": "=2025-02-17T00:00:00Z",
               "type": "string"
             },
             {
               "id": "048b1ed8-8162-4c80-a6cd-627eb5a2a053",
               "name": "config.email.set.read",
-              "value": "=true",
+              "value": "=",
               "type": "boolean"
             },
             {
@@ -355,8 +374,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        360,
-        -20
+        400,
+        -16
       ],
       "id": "2417ad8e-7fa1-40a4-a648-54e3cef24917",
       "name": "set workflow configuration"
@@ -367,7 +386,7 @@
           "__rl": true,
           "value": "Lq2X4HLv1dy2ara4",
           "mode": "list",
-          "cachedResultName": "wesee - get emails"
+          "cachedResultName": "wesee — wesee - get emails"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -385,8 +404,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        560,
-        -20
+        608,
+        -16
       ],
       "id": "41345198-fc00-4919-abdc-556421592cd3",
       "name": "get emails",
@@ -398,7 +417,7 @@
           "__rl": true,
           "value": "PAL47cLFTyXBY0ke",
           "mode": "list",
-          "cachedResultName": "wesee - add email to database"
+          "cachedResultName": "wesee — wesee - add email to database"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -414,7 +433,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        760,
+        800,
         640
       ],
       "id": "4dead5aa-9d31-40e4-9f9d-4dd7f23f3f9e",
@@ -426,7 +445,7 @@
           "__rl": true,
           "value": "2pB8bHXOFQv1uYJg",
           "mode": "list",
-          "cachedResultName": "wesee - classify email"
+          "cachedResultName": "wesee — wesee - classify email"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -444,8 +463,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        160,
-        200
+        208,
+        208
       ],
       "id": "d3d6e29e-0479-4eda-b908-7a347b00133b",
       "name": "classify email"
@@ -456,6 +475,7 @@
           "__rl": true,
           "value": "oYVwDsI3xvH1hS8D",
           "mode": "list",
+          "cachedResultUrl": "/workflow/oYVwDsI3xvH1hS8D",
           "cachedResultName": "wesee - download attachments"
         },
         "workflowInputs": {
@@ -474,11 +494,12 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        360,
-        200
+        400,
+        208
       ],
       "id": "02635f2e-2c2b-418b-a45a-f392d56a05c8",
-      "name": "download attachments"
+      "name": "download attachments",
+      "alwaysOutputData": false
     },
     {
       "parameters": {
@@ -486,7 +507,7 @@
           "__rl": true,
           "value": "gd1bg8shD9DOw1D8",
           "mode": "list",
-          "cachedResultName": "wesee - filter attachments"
+          "cachedResultName": "wesee — wesee - filter attachments"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -504,8 +525,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        560,
-        200
+        608,
+        208
       ],
       "id": "3d00a386-cf9c-4fe7-991b-a34f08a9567c",
       "name": "filter attachments"
@@ -515,8 +536,7 @@
         "rule": {
           "interval": [
             {
-              "field": "minutes",
-              "minutesInterval": 30
+              "field": "hours"
             }
           ]
         }
@@ -524,8 +544,8 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
-        160,
-        -20
+        208,
+        -16
       ],
       "id": "2c58566e-2d2a-4d28-88af-5a1358658830",
       "name": "regularly"
@@ -703,8 +723,40 @@
       ]
     }
   },
-  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
   "meta": {
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "versionId": "30924a80-ee1d-4e3f-9fb5-599b34151f22",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-10-10T09:46:26.421Z",
+      "updatedAt": "2025-10-10T09:46:26.421Z",
+      "id": "hPbNH8F18K7BMw1l",
+      "name": "v0.1.1"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-13T04:05:15.331Z",
+      "updatedAt": "2025-10-13T04:05:15.331Z",
+      "role": "workflow:owner",
+      "workflowId": "CIq5Rx7J63A09UwB",
+      "projectId": "WyrnMA2kuhTLTB2s",
+      "project": {
+        "createdAt": "2025-10-13T03:41:54.147Z",
+        "updatedAt": "2025-10-13T03:42:22.828Z",
+        "id": "WyrnMA2kuhTLTB2s",
+        "name": "Benedict Wolff <benedictwolff@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }
