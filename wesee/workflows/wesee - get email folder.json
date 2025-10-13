@@ -276,15 +276,15 @@
   ],
   "shared": [
     {
-      "createdAt": "2025-10-13T04:05:15.387Z",
-      "updatedAt": "2025-10-13T04:05:15.387Z",
+      "createdAt": "2025-10-13T05:03:03.979Z",
+      "updatedAt": "2025-10-13T05:03:03.979Z",
       "role": "workflow:owner",
       "workflowId": "iwUjjT9zFc5nG2CQ",
-      "projectId": "WyrnMA2kuhTLTB2s",
+      "projectId": "exnwUqm0vCLlUr2H",
       "project": {
-        "createdAt": "2025-10-13T03:41:54.147Z",
-        "updatedAt": "2025-10-13T03:42:22.828Z",
-        "id": "WyrnMA2kuhTLTB2s",
+        "createdAt": "2025-10-13T05:02:37.847Z",
+        "updatedAt": "2025-10-13T05:03:23.290Z",
+        "id": "exnwUqm0vCLlUr2H",
         "name": "Benedict Wolff <benedictwolff@gmail.com>",
         "type": "personal",
         "icon": null,

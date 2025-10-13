@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-13T04:05:15.370Z",
-  "updatedAt": "2025-10-13T04:38:09.000Z",
+  "updatedAt": "2025-10-13T05:52:22.000Z",
   "id": "lEudgL4ULbE6jqzu",
   "name": "wesee - extract properties",
   "active": false,
@@ -16,30 +16,37 @@
       "typeVersion": 3,
       "position": [
         576,
-        336
+        216
       ],
       "id": "88b89c35-472f-4511-afe0-a3e404858f69",
       "name": "merge property with output"
     },
     {
       "parameters": {
-        "resource": "assistant",
-        "assistantId": {
+        "modelId": {
           "__rl": true,
-          "value": "={{ $json['deal.flowAssistant.id'] }}",
-          "mode": "id"
+          "value": "gpt-5",
+          "mode": "list",
+          "cachedResultName": "GPT-5"
         },
-        "prompt": "define",
-        "text": "=Task:\n\nFind the following property in the email and attachments.\n\nProperty definition:\n\nThe property \"{{ $json.property.name }}\" is defined as \"{{ $json.property.description }}\".\n\nProperty and response type:\n\n{{ $json.property.type === \"email\" ? \"Your response is an email. Please look for it in the attachments. DO NOT INVENT AN EMAIL. Be as precise as possible\" : \"\" }}\n\n{{ $json.property.type === \"multi_select\" ? \n  \"Response Format: \\n- Your response must be a single string containing only the exact predefined options below, separated by commas if multiple apply. \\n- DO NOT add any extra words, formatting, explanations, or modifications. \\n- DO NOT change the formatting of each of any of the options. \\n- If no valid option applies, respond with \\\"\\\" (an empty string).\" \n: \"\"}}\n{{ $json.property.type === \"multi_select\" ? \"Predefined Options (ONLY use these): \" +\n$json.property.multi_select.options.map(option => option.name).join(\", \") : \"\" }}\n\n{{ $json.property.type === \"number\" ? \"Your response is a numerical value. Respond with the full value. Do not abbreviate large numbers with K or M.\" : \"\" }}\n\n{{ $json.property.type === \"select\" ? \"Your response is pre-defined based on a selection of options. DO NOT MAKE UP OPTIONS YOURSELF! DO NOT change the formatting of each of any of the options. You may choose exactly one of the following options: \" : \"\" }}\n{{ $json.property.type === \"select\" ? $json.properties.select.options.map(option => option.name).join(\", \") : \"\" }}\n\n{{ $json.property.type === \"url\" ? \"Your response is a URL.\" : \"\" }}\n\nAs a response type, produce a string without any formatting.\nIf you cannot find any appropriate response, respond with \"\".\n",
-        "memory": "threadId",
-        "threadId": "=",
+        "messages": {
+          "values": [
+            {
+              "content": "=ROLE:\n\nYou are an expert VC analyst.\n\nOBJECTIVE:\n\nYour objective is to find properties of a startup based on an email and its email attachments, if there are any.\n\nYou can find the EMAIL and its EMAIL ATTACHMENTS below. If there are no attachments, the fact that there are no attachments will be mentioned below.\n\nPay attention to the BLACKLIST below. Any entries in the blacklist are never startup properties as they are related to the VC for which you are doing the analysis.\n\nTASK:\n\nIn the messages following this prompt, you will receive startup properties from the database and their definitions.\n\nYour task is to assign each property with values taken from the following EMAIL and ATTACHMENTS.\n\nDo not produce any response until you have not yet received the properties and their definitions that you are meant to look for.\n\nHere are the email and attachment:\n\nEmail:\n\n{{ $('When Executed by Another Workflow').item.json.deal.text.hasField(\"forwarding\") ? $('When Executed by Another Workflow').item.json.deal.text.forwarding.core : $('When Executed by Another Workflow').item.json.deal.text.cleaned }}\n\nAttachments:\n\n{{ $('When Executed by Another Workflow').item.json.attachments \n    ? Object.values($('When Executed by Another Workflow').item.json.attachments)\n        .map(item => item.parsed)\n        .filter(item => item.length > 0).length > 0 \n        ? Object.values($json.attachments).map(item => item.parsed) \n        : \"There are no attachments.\" \n    : \"There are no attachments.\"\n}}\n\nBlacklist:\n\n{{ \"- \" + $('When Executed by Another Workflow').item.json.config.blacklist.properties.contains.join(\"\\n- \") }}\n",
+              "role": "system"
+            },
+            {
+              "content": "=Task:\n\nFind the following property in the email and attachments.\n\nProperty definition:\n\nThe property \"{{ $json.property.name }}\" is defined as \"{{ $json.property.description }}\".\n\nProperty and response type:\n\n{{ $json.property.type === \"email\" ? \"Your response is an email. Please look for it in the attachments. DO NOT INVENT AN EMAIL. Be as precise as possible\" : \"\" }}\n\n{{ $json.property.type === \"multi_select\" ? \n  \"Response Format: \\n- Your response must be a single string containing only the exact predefined options below, separated by commas if multiple apply. \\n- DO NOT add any extra words, formatting, explanations, or modifications. \\n- DO NOT change the formatting of each of any of the options. \\n- If no valid option applies, respond with \\\"\\\" (an empty string).\" \n: \"\"}}\n{{ $json.property.type === \"multi_select\" ? \"Predefined Options (ONLY use these): \" +\n$json.property.multi_select.options.map(option => option.name).join(\", \") : \"\" }}\n\n{{ $json.property.type === \"number\" ? \"Your response is a numerical value. Respond with the full value. Do not abbreviate large numbers with K or M.\" : \"\" }}\n\n{{ $json.property.type === \"select\" ? \"Your response is pre-defined based on a selection of options. DO NOT MAKE UP OPTIONS YOURSELF! DO NOT change the formatting of each of any of the options. You may choose exactly one of the following options: \" : \"\" }}\n{{ $json.property.type === \"select\" ? $json.properties.select.options.map(option => option.name).join(\", \") : \"\" }}\n\n{{ $json.property.type === \"url\" ? \"Your response is a URL.\" : \"\" }}\n\nAs a response type, produce a string without any formatting.\nIf you cannot find any appropriate response, respond with \"\".\n"
+            }
+          ]
+        },
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 1.8,
       "position": [
         -224,
-        40
+        392
       ],
       "id": "26cbd470-8b6f-430a-93ed-80d15dec8381",
       "name": "extract property",
@@ -53,20 +60,6 @@
         }
       },
       "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "amount": "={{ $json.rateLimit * 1,5 }}"
-      },
-      "type": "n8n-nodes-base.wait",
-      "typeVersion": 1.1,
-      "position": [
-        576,
-        -48
-      ],
-      "id": "73dfe750-0470-4332-a86b-7331e5c06b8a",
-      "name": "wait for rate limit",
-      "webhookId": "1c60b188-b8ec-4082-ae2d-260ec7af9b89"
     },
     {
       "parameters": {
@@ -107,7 +100,7 @@
       "typeVersion": 2.2,
       "position": [
         -448,
-        424
+        464
       ],
       "id": "4f27ce4c-496e-4d7e-96db-6e5d53a1bf4f",
       "name": "filter properties with description"
@@ -122,7 +115,7 @@
       "typeVersion": 3,
       "position": [
         2368,
-        960
+        224
       ],
       "id": "63cc5356-1bc2-4aab-a636-66d15fc7a9a8",
       "name": "merge properties for AI with email"
@@ -166,7 +159,7 @@
       "typeVersion": 2.2,
       "position": [
         1248,
-        816
+        800
       ],
       "id": "99d7f6cd-ed0c-4a47-b3f7-9355dffec623",
       "name": "filter properties without description"
@@ -184,7 +177,7 @@
       "typeVersion": 1,
       "position": [
         -672,
-        720
+        536
       ],
       "id": "e381f410-1647-41aa-8f73-7b317d62dcd3",
       "name": "split properties for AI"
@@ -210,7 +203,7 @@
       "typeVersion": 3.4,
       "position": [
         800,
-        400
+        216
       ],
       "id": "68f1aa34-58ac-4ff9-a19e-325ab83f1c7f",
       "name": "add value property"
@@ -229,7 +222,7 @@
       "typeVersion": 3.4,
       "position": [
         1472,
-        816
+        800
       ],
       "id": "5946ec92-cbfb-4abe-b599-a52fe1616a1f",
       "name": "remove assistant"
@@ -240,7 +233,7 @@
       "typeVersion": 3,
       "position": [
         1696,
-        792
+        224
       ],
       "id": "78608a06-d418-41f9-ad9e-450f617df685",
       "name": "merge properties"
@@ -255,7 +248,7 @@
       "typeVersion": 1,
       "position": [
         1920,
-        792
+        224
       ],
       "id": "5d0062d4-ec5f-42a7-974e-2c465eb8120d",
       "name": "aggregate properties"
@@ -271,7 +264,7 @@
       "typeVersion": 3.4,
       "position": [
         2144,
-        984
+        944
       ],
       "id": "34623429-5c3b-4ea5-ab9c-9f15fd079e54",
       "name": "remove properties"
@@ -294,7 +287,7 @@
       "typeVersion": 3.4,
       "position": [
         2144,
-        792
+        224
       ],
       "id": "b4b537ad-f259-411b-aec6-c1f57a6ca6fe",
       "name": "reduce properties to Object"
@@ -306,13 +299,13 @@
             {
               "id": "3bc19462-14e4-4964-8eef-17eaa3056246",
               "name": "output",
-              "value": "={{ !$json.output || $json.output.length === 0 || $json.output === \"\\\"\\\"\" ? null : $json.output }}",
+              "value": "={{ !$json.message.content || $json.message.content.length === 0 || $json.message.content === \"\\\"\\\"\" ? null : $json.output }}",
               "type": "string"
             },
             {
               "id": "080aaf73-1341-4bb3-9a60-173f4d2957cb",
               "name": "output",
-              "value": "={{ $json.output && $json.output.includes('\"') ? $json.output.replace(/\"/g, '') : $json.output }}",
+              "value": "={{ $json.message.content && $json.message.content.includes('\"') ? $json.message.content.replace(/\"/g, '') : $json.message.content }}",
               "type": "string"
             }
           ]
@@ -323,24 +316,10 @@
       "typeVersion": 3.4,
       "position": [
         352,
-        336
+        216
       ],
       "id": "0ab2fae9-7d7e-4a23-bea9-82a7df9ac520",
       "name": "nullify empty fields"
-    },
-    {
-      "parameters": {
-        "mode": "chooseBranch",
-        "useDataOfInput": 2
-      },
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3,
-      "position": [
-        800,
-        136
-      ],
-      "id": "91127f1d-bd64-4e1a-95aa-945ecab0be6f",
-      "name": "drop error from email for property"
     },
     {
       "parameters": {
@@ -350,7 +329,7 @@
       "typeVersion": 1.1,
       "position": [
         -896,
-        816
+        608
       ],
       "id": "25e4ac56-e578-4c1b-8df0-84cd4d9f1f0b",
       "name": "When Executed by Another Workflow"
@@ -384,7 +363,7 @@
       "typeVersion": 2.2,
       "position": [
         128,
-        24
+        392
       ],
       "id": "e0363df8-f3cc-41de-a928-450d1e6f880d",
       "name": "no error"
@@ -418,7 +397,7 @@
       "typeVersion": 2.2,
       "position": [
         1024,
-        112
+        32
       ],
       "id": "1f43c946-0094-4887-b9b3-badd8f22ea41",
       "name": "filter select"
@@ -431,7 +410,7 @@
       "typeVersion": 3,
       "position": [
         1472,
-        312
+        208
       ],
       "id": "cb57435e-2164-4918-ad2c-d4e76d5b896d",
       "name": "Merge"
@@ -465,7 +444,7 @@
       "typeVersion": 2.2,
       "position": [
         1024,
-        400
+        224
       ],
       "id": "40160fb5-625d-4e56-ad61-35d68d702d4e",
       "name": "filter multi_select"
@@ -509,7 +488,7 @@
       "typeVersion": 2.2,
       "position": [
         1248,
-        616
+        416
       ],
       "id": "55ec1821-fd81-4de8-bc44-f93f381bd6dd",
       "name": "filter non-select and non-multi_select"
@@ -533,7 +512,7 @@
       "typeVersion": 3.4,
       "position": [
         1248,
-        400
+        224
       ],
       "id": "e17b015e-6396-4cca-981d-f6a7b77dfaad",
       "name": "remove false multi_select"
@@ -557,23 +536,10 @@
       "typeVersion": 3.4,
       "position": [
         1248,
-        112
+        32
       ],
       "id": "1be55a81-f1c7-4865-92da-e913d4aee79e",
       "name": "remove false select"
-    },
-    {
-      "parameters": {
-        "errorMessage": "Error extracting property!"
-      },
-      "type": "n8n-nodes-base.stopAndError",
-      "typeVersion": 1,
-      "position": [
-        576,
-        144
-      ],
-      "id": "1c0f3782-faff-4e77-bf53-f98e5bb1e616",
-      "name": "throw other error"
     },
     {
       "parameters": {
@@ -614,7 +580,7 @@
       "typeVersion": 2.2,
       "position": [
         2592,
-        960
+        224
       ],
       "id": "05584900-5eec-4b89-9db5-3c6c37a329b8",
       "name": "if company exists"
@@ -635,7 +601,7 @@
       "typeVersion": 2,
       "position": [
         2816,
-        960
+        224
       ],
       "id": "d0504b1a-c23e-47e0-92a4-2a701cc9ff87",
       "name": "set email to read",
@@ -646,59 +612,6 @@
           "name": "wesee"
         }
       }
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": false,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "e7514e33-fa0f-4826-b434-ea219df293dd",
-              "leftValue": "={{ $json.error }}",
-              "rightValue": "Connection error",
-              "operator": {
-                "type": "string",
-                "operation": "contains"
-              }
-            },
-            {
-              "id": "78f4388f-520b-4afc-89ce-ea4b533e8c92",
-              "leftValue": "={{ $json.error }}",
-              "rightValue": "Unexpected run status expired",
-              "operator": {
-                "type": "string",
-                "operation": "contains"
-              }
-            },
-            {
-              "id": "0b1a3db1-b137-48cc-adc7-e6e8e4f47002",
-              "leftValue": "={{ $json.error }}",
-              "rightValue": "Unexpected run status failed",
-              "operator": {
-                "type": "string",
-                "operation": "contains"
-              }
-            }
-          ],
-          "combinator": "or"
-        },
-        "options": {
-          "ignoreCase": true
-        }
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        352,
-        24
-      ],
-      "id": "cfddbaa0-ddf2-4665-a41d-16b57bf7d123",
-      "name": "known error"
     },
     {
       "parameters": {
@@ -729,7 +642,7 @@
       "typeVersion": 2.2,
       "position": [
         3040,
-        960
+        224
       ],
       "id": "7945c97c-49ff-46ee-9b9b-f4ef90f39159",
       "name": "if config.cache.add"
@@ -746,7 +659,7 @@
       "typeVersion": 2,
       "position": [
         3264,
-        840
+        144
       ],
       "id": "6273d587-97f6-412e-93a0-82be17b539e9",
       "name": "add to cache"
@@ -780,7 +693,7 @@
       "typeVersion": 2.2,
       "position": [
         3488,
-        960
+        344
       ],
       "id": "07aa6122-3477-44e9-ae24-936eb6f83815",
       "name": "drop item"
@@ -816,17 +729,6 @@
         ]
       ]
     },
-    "wait for rate limit": {
-      "main": [
-        [
-          {
-            "node": "drop error from email for property",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "filter properties with description": {
       "main": [
         [
@@ -837,11 +739,6 @@
           },
           {
             "node": "merge property with output",
-            "type": "main",
-            "index": 1
-          },
-          {
-            "node": "drop error from email for property",
             "type": "main",
             "index": 1
           }
@@ -973,17 +870,6 @@
         ]
       ]
     },
-    "drop error from email for property": {
-      "main": [
-        [
-          {
-            "node": "extract property",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "When Executed by Another Workflow": {
       "main": [
         [
@@ -1011,7 +897,7 @@
         ],
         [
           {
-            "node": "known error",
+            "node": "drop item",
             "type": "main",
             "index": 0
           }
@@ -1107,24 +993,6 @@
         ]
       ]
     },
-    "known error": {
-      "main": [
-        [
-          {
-            "node": "wait for rate limit",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "throw other error",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "if config.cache.add": {
       "main": [
         [
@@ -1163,7 +1031,7 @@
     "templateCredsSetupCompleted": true,
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
   },
-  "versionId": "2977c4a9-0ff0-4aa1-8b23-993d215bbf33",
+  "versionId": "3ebe13d8-38f8-4533-9c6e-69f3fa968d91",
   "triggerCount": 0,
   "tags": [
     {
@@ -1175,15 +1043,15 @@
   ],
   "shared": [
     {
-      "createdAt": "2025-10-13T04:05:15.371Z",
-      "updatedAt": "2025-10-13T04:05:15.371Z",
+      "createdAt": "2025-10-13T05:03:03.968Z",
+      "updatedAt": "2025-10-13T05:03:03.968Z",
       "role": "workflow:owner",
       "workflowId": "lEudgL4ULbE6jqzu",
-      "projectId": "WyrnMA2kuhTLTB2s",
+      "projectId": "exnwUqm0vCLlUr2H",
       "project": {
-        "createdAt": "2025-10-13T03:41:54.147Z",
-        "updatedAt": "2025-10-13T03:42:22.828Z",
-        "id": "WyrnMA2kuhTLTB2s",
+        "createdAt": "2025-10-13T05:02:37.847Z",
+        "updatedAt": "2025-10-13T05:03:23.290Z",
+        "id": "exnwUqm0vCLlUr2H",
         "name": "Benedict Wolff <benedictwolff@gmail.com>",
         "type": "personal",
         "icon": null,

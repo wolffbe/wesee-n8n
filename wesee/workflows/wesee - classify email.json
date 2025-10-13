@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-13T04:05:15.355Z",
-  "updatedAt": "2025-10-13T04:23:16.000Z",
+  "updatedAt": "2025-10-13T05:16:20.000Z",
   "id": "2pB8bHXOFQv1uYJg",
   "name": "wesee - classify email",
   "active": false,
@@ -10,9 +10,9 @@
       "parameters": {
         "model": {
           "__rl": true,
-          "value": "gpt-4o",
+          "value": "gpt-5",
           "mode": "list",
-          "cachedResultName": "gpt-4o"
+          "cachedResultName": "gpt-5"
         },
         "options": {}
       },
@@ -689,7 +689,7 @@
     "templateCredsSetupCompleted": true,
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
   },
-  "versionId": "c3426d45-1777-49b5-b39d-5ce4722921d0",
+  "versionId": "f716e7ba-c735-4929-9d5f-7f6beb5ae345",
   "triggerCount": 0,
   "tags": [
     {
@@ -701,15 +701,15 @@
   ],
   "shared": [
     {
-      "createdAt": "2025-10-13T04:05:15.357Z",
-      "updatedAt": "2025-10-13T04:05:15.357Z",
+      "createdAt": "2025-10-13T05:03:03.955Z",
+      "updatedAt": "2025-10-13T05:03:03.955Z",
       "role": "workflow:owner",
       "workflowId": "2pB8bHXOFQv1uYJg",
-      "projectId": "WyrnMA2kuhTLTB2s",
+      "projectId": "exnwUqm0vCLlUr2H",
       "project": {
-        "createdAt": "2025-10-13T03:41:54.147Z",
-        "updatedAt": "2025-10-13T03:42:22.828Z",
-        "id": "WyrnMA2kuhTLTB2s",
+        "createdAt": "2025-10-13T05:02:37.847Z",
+        "updatedAt": "2025-10-13T05:03:23.290Z",
+        "id": "exnwUqm0vCLlUr2H",
         "name": "Benedict Wolff <benedictwolff@gmail.com>",
         "type": "personal",
         "icon": null,

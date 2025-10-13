@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-10-13T04:05:15.314Z",
-  "updatedAt": "2025-10-13T04:37:25.000Z",
+  "updatedAt": "2025-10-13T05:47:14.000Z",
   "id": "CIq5Rx7J63A09UwB",
   "name": "wesee",
   "active": false,
@@ -190,7 +190,8 @@
           "__rl": true,
           "value": "83nbv7huCcHgO66C",
           "mode": "list",
-          "cachedResultName": "wesee — wesee - add static properties"
+          "cachedResultUrl": "/workflow/83nbv7huCcHgO66C",
+          "cachedResultName": "wesee - add static properties"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -238,7 +239,8 @@
         432
       ],
       "id": "87f529b5-fe9c-4661-9162-72d228d7ff4b",
-      "name": "create assistant"
+      "name": "create assistant",
+      "disabled": true
     },
     {
       "parameters": {
@@ -246,7 +248,8 @@
           "__rl": true,
           "value": "bmEhWJdZoJwJEG1o",
           "mode": "list",
-          "cachedResultName": "wesee — wesee - get root folder"
+          "cachedResultUrl": "/workflow/bmEhWJdZoJwJEG1o",
+          "cachedResultName": "wesee - get root folder"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -320,13 +323,7 @@
             {
               "id": "243775b3-3dd4-4c9f-b429-2a6f29715aaf",
               "name": "config.email.get.read",
-              "value": "=",
-              "type": "string"
-            },
-            {
-              "id": "f1c4b315-b512-47a2-b56a-2b9a6836eea3",
-              "name": "config.email.get.after",
-              "value": "=",
+              "value": "=true",
               "type": "string"
             },
             {
@@ -338,7 +335,7 @@
             {
               "id": "048b1ed8-8162-4c80-a6cd-627eb5a2a053",
               "name": "config.email.set.read",
-              "value": "=",
+              "value": "=true",
               "type": "boolean"
             },
             {
@@ -417,7 +414,8 @@
           "__rl": true,
           "value": "PAL47cLFTyXBY0ke",
           "mode": "list",
-          "cachedResultName": "wesee — wesee - add email to database"
+          "cachedResultUrl": "/workflow/PAL47cLFTyXBY0ke",
+          "cachedResultName": "wesee - add email to database"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -731,7 +729,7 @@
   "meta": {
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
   },
-  "versionId": "30924a80-ee1d-4e3f-9fb5-599b34151f22",
+  "versionId": "c31119dd-eff0-4a45-b3b7-57b11033e1f0",
   "triggerCount": 0,
   "tags": [
     {
@@ -743,15 +741,15 @@
   ],
   "shared": [
     {
-      "createdAt": "2025-10-13T04:05:15.331Z",
-      "updatedAt": "2025-10-13T04:05:15.331Z",
+      "createdAt": "2025-10-13T05:03:04.015Z",
+      "updatedAt": "2025-10-13T05:03:04.015Z",
       "role": "workflow:owner",
       "workflowId": "CIq5Rx7J63A09UwB",
-      "projectId": "WyrnMA2kuhTLTB2s",
+      "projectId": "exnwUqm0vCLlUr2H",
       "project": {
-        "createdAt": "2025-10-13T03:41:54.147Z",
-        "updatedAt": "2025-10-13T03:42:22.828Z",
-        "id": "WyrnMA2kuhTLTB2s",
+        "createdAt": "2025-10-13T05:02:37.847Z",
+        "updatedAt": "2025-10-13T05:03:23.290Z",
+        "id": "exnwUqm0vCLlUr2H",
         "name": "Benedict Wolff <benedictwolff@gmail.com>",
         "type": "personal",
         "icon": null,
