@@ -1,4 +1,10 @@
 {
+  "createdAt": "2025-10-13T04:05:15.377Z",
+  "updatedAt": "2025-10-13T04:07:39.000Z",
+  "id": "gd1bg8shD9DOw1D8",
+  "name": "wesee - filter attachments",
+  "active": false,
+  "isArchived": false,
   "nodes": [
     {
       "parameters": {
@@ -28,8 +34,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        -200,
-        -120
+        -272,
+        -128
       ],
       "id": "0b1e42c7-cbf0-43bd-8839-3c41b8e3cf47",
       "name": "filter by file name"
@@ -62,8 +68,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -440,
-        40
+        -496,
+        -56
       ],
       "id": "f1ff7235-5fd2-4dbf-8ae5-32664e8a78a4",
       "name": "has file name blacklist items"
@@ -84,8 +90,8 @@
       "type": "n8n-nodes-base.aggregate",
       "typeVersion": 1,
       "position": [
-        40,
-        40
+        -48,
+        -56
       ],
       "id": "f1cb5df4-45fe-4f47-84f4-0cf27e1c3050",
       "name": "aggregate attachments"
@@ -107,8 +113,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        260,
-        40
+        176,
+        -56
       ],
       "id": "20696c0a-99f8-4bc2-b26b-d02768bca7d5",
       "name": "convert attachment array into object"
@@ -123,8 +129,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -660,
-        200
+        176,
+        160
       ],
       "id": "2e6e2404-fdd6-4b56-88c3-cec62fa29664",
       "name": "remove attachments"
@@ -167,8 +173,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -960,
-        320
+        -944,
+        160
       ],
       "id": "ec286a15-9800-44c6-8259-102e2b05b6c9",
       "name": "has attachments"
@@ -182,8 +188,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        540,
-        320
+        400,
+        160
       ],
       "id": "c4840311-5ef9-45db-bbb2-857a2e93b462",
       "name": "merge filtered attachments with email"
@@ -195,8 +201,8 @@
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "typeVersion": 1.1,
       "position": [
-        -1160,
-        320
+        -1168,
+        160
       ],
       "id": "68b6a15b-2c77-4032-b678-f2557e36cb2f",
       "name": "When Executed by Another Workflow"
@@ -210,8 +216,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        -660,
-        40
+        -720,
+        -56
       ],
       "id": "60c3e59e-3dc4-4266-9d52-ff65feb858f7",
       "name": "split attachments"
@@ -331,8 +337,39 @@
       ]
     }
   },
-  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
   "meta": {
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "versionId": "bc25d8e5-9ecc-45f1-a686-e7cb2b9162e9",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-10-10T09:46:26.421Z",
+      "updatedAt": "2025-10-10T09:46:26.421Z",
+      "id": "hPbNH8F18K7BMw1l",
+      "name": "v0.1.1"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-13T04:05:15.378Z",
+      "updatedAt": "2025-10-13T04:05:15.378Z",
+      "role": "workflow:owner",
+      "workflowId": "gd1bg8shD9DOw1D8",
+      "projectId": "WyrnMA2kuhTLTB2s",
+      "project": {
+        "createdAt": "2025-10-13T03:41:54.147Z",
+        "updatedAt": "2025-10-13T03:42:22.828Z",
+        "id": "WyrnMA2kuhTLTB2s",
+        "name": "Benedict Wolff <benedictwolff@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }

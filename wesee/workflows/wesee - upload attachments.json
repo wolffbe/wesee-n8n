@@ -1,4 +1,10 @@
 {
+  "createdAt": "2025-10-13T04:05:15.406Z",
+  "updatedAt": "2025-10-13T04:08:16.000Z",
+  "id": "qxgq0UopjV3KvEaE",
+  "name": "wesee - upload attachments",
+  "active": false,
+  "isArchived": false,
   "nodes": [
     {
       "parameters": {
@@ -11,8 +17,8 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        240,
-        400
+        208,
+        416
       ],
       "id": "f4579261-5640-434e-a031-69c8bf5ea9f8",
       "name": "split attachments for file upload"
@@ -45,8 +51,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -20,
-        80
+        -16,
+        248
       ],
       "id": "31395fe8-f879-4a62-b555-11cfd9609d0a",
       "name": "has attachments for file upload"
@@ -54,9 +60,15 @@
     {
       "parameters": {
         "method": "PUT",
-        "url": "=https://graph.microsoft.com/v1.0/drives/{{$('loop over attachments').item.json.deal.folders.drive.id}}/items/{{$('loop over attachments').item.json.deal.folders.email.id}}:/{{$('loop over attachments').item.json.attachment.fileName.includes(\".\" + $('loop over attachments').item.json.attachment.fileExtension) ? $('loop over attachments').item.json.attachment.fileName : $('loop over attachments').item.json.attachment.fileName + \".\" + $('loop over attachments').item.json.attachment.fileExtension }}:/content",
+        "url": "={{\n(() => {\n  const driveId  = $('loop over attachments').item.json.deal.folders.drive.id;\n  const folderId = $('loop over attachments').item.json.deal.folders.email.id;\n  const a        = $('loop over attachments').item.json.attachment;\n\n  // ensure extension exactly once\n  const ext  = (a.fileExtension ?? '').trim();\n  let   name = (a.fileName ?? 'file').trim();\n  if (ext && !name.toLowerCase().endsWith('.' + ext.toLowerCase())) {\n    name = `${name}.${ext}`;\n  }\n\n  // normalize + remove illegal characters for OneDrive/Windows\n  name = name\n    .normalize('NFKD')                // split accent marks (Ä -> A + ¨)\n    .replace(/[\\u0300-\\u036f]/g, '')  // drop combining marks\n    .replace(/[\\\\\\/]/g, '-')          // slashes -> hyphen\n    .replace(/[:*?\"<>|]/g, ' - ')     // illegal chars -> \" - \"\n    .replace(/[.\\s]+$/,'')            // no trailing dots/spaces\n    .replace(/\\s+/g,' ')              // collapse whitespace\n    .trim();\n\n  // assemble URL: encode each dynamic segment, NOT the Graph colons\n  return `https://graph.microsoft.com/v1.0/drives/${encodeURIComponent(driveId)}` +\n         `/items/${encodeURIComponent(folderId)}:/` +\n         `${encodeURIComponent(name)}:/content`;\n})()\n}}",
         "authentication": "predefinedCredentialType",
         "nodeCredentialType": "microsoftOAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {}
+          ]
+        },
         "sendBody": true,
         "contentType": "binaryData",
         "inputDataFieldName": "binary",
@@ -65,14 +77,18 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1800,
-        580
+        1552,
+        368
       ],
       "id": "9fd9a8fb-634c-4167-ae51-373704cd1f68",
       "name": "upload attachments to OneDrive",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "alwaysOutputData": true,
+      "waitBetweenTries": 3000,
       "credentials": {
         "microsoftOAuth2Api": {
-          "id": "OwQ0YTXkLNO8NlIj",
+          "id": "mam00d7y7ZbLYfvJ",
           "name": "wesee"
         }
       }
@@ -85,7 +101,7 @@
       "typeVersion": 1.1,
       "position": [
         -240,
-        80
+        248
       ],
       "id": "1bc75869-2312-4046-bd47-c6c6e25dfb6e",
       "name": "When Executed by Another Workflow"
@@ -97,7 +113,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        740,
+        656,
         80
       ],
       "id": "26c6295b-3b21-4a30-b011-351cff65752e",
@@ -113,14 +129,14 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        740,
-        280
+        656,
+        272
       ],
       "id": "d191b6cc-75e5-432f-a4df-8d57ffd780b1",
       "name": "get email folder content",
       "credentials": {
         "microsoftOAuth2Api": {
-          "id": "OwQ0YTXkLNO8NlIj",
+          "id": "mam00d7y7ZbLYfvJ",
           "name": "wesee"
         }
       }
@@ -152,8 +168,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1060,
-        400
+        880,
+        272
       ],
       "id": "714366de-033a-4ea5-be57-4d86f1b9c40c",
       "name": "attachment does not exist"
@@ -165,8 +181,8 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        460,
-        400
+        432,
+        416
       ],
       "id": "87b99026-1a24-4715-bb2b-20d167747494",
       "name": "loop over attachments"
@@ -181,8 +197,8 @@
       "type": "n8n-nodes-base.convertToFile",
       "typeVersion": 1.1,
       "position": [
-        1580,
-        580
+        1328,
+        368
       ],
       "id": "f06cbe4b-9b26-4721-809e-34ef80fe922e",
       "name": "Convert to File"
@@ -195,8 +211,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
       "position": [
-        1380,
-        580
+        1104,
+        368
       ],
       "id": "c2e9d007-cef0-4611-9446-e0643b38490b",
       "name": "Merge"
@@ -211,8 +227,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1980,
-        580
+        1776,
+        440
       ],
       "id": "04ca6614-50c2-41c8-aa00-3232c1575849",
       "name": "remove binaries"
@@ -366,8 +382,39 @@
       ]
     }
   },
-  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
   "meta": {
     "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
-  }
+  },
+  "versionId": "27efe35d-1a69-4fb9-bed8-948e5438a1e6",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-10-10T09:46:26.421Z",
+      "updatedAt": "2025-10-10T09:46:26.421Z",
+      "id": "hPbNH8F18K7BMw1l",
+      "name": "v0.1.1"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-13T04:05:15.408Z",
+      "updatedAt": "2025-10-13T04:05:15.408Z",
+      "role": "workflow:owner",
+      "workflowId": "qxgq0UopjV3KvEaE",
+      "projectId": "WyrnMA2kuhTLTB2s",
+      "project": {
+        "createdAt": "2025-10-13T03:41:54.147Z",
+        "updatedAt": "2025-10-13T03:42:22.828Z",
+        "id": "WyrnMA2kuhTLTB2s",
+        "name": "Benedict Wolff <benedictwolff@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
 }
