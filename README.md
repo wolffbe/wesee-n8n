@@ -65,7 +65,7 @@ This setup was tested using [n8n in Docker](https://docs.n8n.io/hosting/installa
 2. Set `config.email.get.batch` to `25`
 3. Set `config.email.get.read` to `unread`
 4. Set `config.email.set.read` to `true`
-5. (Optional) Set `config.notion.url` to a production database
+5. (Optional) Set `config.notion.url` to a production database after adding the Notion connector to the page
 6. (Optional) Set emails in Outlook inbox to `unread`
 7. Set the `wesee` workflow to `active`
 
