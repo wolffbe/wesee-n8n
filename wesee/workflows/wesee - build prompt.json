@@ -1,0 +1,104 @@
+{
+  "createdAt": "2025-10-13T04:05:15.360Z",
+  "updatedAt": "2025-10-13T04:24:21.000Z",
+  "id": "fOnbizpjBEg8qmw4",
+  "name": "wesee - build prompt",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -240,
+        608
+      ],
+      "id": "fd1b051b-74d0-4d64-a296-4e11f7380176",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3d722179-744a-4cf2-93ba-99ca75e58aa8",
+              "name": "deal.prompt.instructions",
+              "value": "=Role:\n\nYou are an expert VC analyst.\n\nObjective:\n\nYour objective is to find properties of a startup based on an email and its email attachments, if there are any.\n\nYou can find the EMAIL and its EMAIL ATTACHMENTS below. If there are no attachments, the fact that there are no attachments will be mentioned below.\n\nWhere a property asks you to judge the company against the VC's investment thesis, use the INVESTMENT THESIS below as the only definition of that thesis.\n\nPay attention to the BLACKLIST below. Any entries in the blacklist are never startup properties as they are related to the VC for which you are doing the analysis.\n\nTask:\n\nIn the messages following this prompt, you will receive startup properties from the database and their definitions.\n\nYour task is to assign each property with values taken from the following EMAIL and ATTACHMENTS.\n\nDo not produce any response until you have not yet received the properties and their definitions that you are meant to look for.\n\nHere are the email and attachment:\n\nEMAIL:\n\n{{ $('When Executed by Another Workflow').item.json.deal.text.hasField(\"forwarding\") ? $('When Executed by Another Workflow').item.json.deal.text.forwarding.core : $('When Executed by Another Workflow').item.json.deal.text.cleaned }}\n\nEMAIL ATTACHMENTS:\n\n{{ $('When Executed by Another Workflow').item.json.attachments \n    ? Object.values($('When Executed by Another Workflow').item.json.attachments)\n        .map(item => item.parsed)\n        .filter(item => item.length > 0).length > 0 \n        ? Object.values($json.attachments).map(item => item.parsed) \n        : \"There are no attachments.\" \n    : \"There are no attachments.\"\n}}\nBLACKLIST:\n\n{{ \"- \" + $json.config.blacklist.properties.contains.join(\"\\n- \") }}\n\nINVESTMENT THESIS OF THE VC:\n\n{{ $json.config.thesis || \"No investment thesis has been configured.\" }}\n",
+              "type": "string"
+            },
+            {
+              "id": "cf09afc0-c719-40f3-b4de-6ff1c9da1e4b",
+              "name": "deal.prompt.model",
+              "value": "={{ ($json.config && $json.config.openai && $json.config.openai.model) || 'gpt-4o' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -16,
+        256
+      ],
+      "id": "cecd017c-a955-4779-a248-3a3f59fafca4",
+      "name": "build prompt"
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "build prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3dbdd72bc001352b40a92dfc05edd652dd07bbd3ff4f8694d3bc216f66056a97"
+  },
+  "versionId": "e741a8d1-8cc2-4f12-9d2c-d8840d567478",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-10-10T09:46:26.421Z",
+      "updatedAt": "2025-10-10T09:46:26.421Z",
+      "id": "hPbNH8F18K7BMw1l",
+      "name": "v0.1.1"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-13T04:05:15.362Z",
+      "updatedAt": "2025-10-13T04:05:15.362Z",
+      "role": "workflow:owner",
+      "workflowId": "fOnbizpjBEg8qmw4",
+      "projectId": "WyrnMA2kuhTLTB2s",
+      "project": {
+        "createdAt": "2025-10-13T03:41:54.147Z",
+        "updatedAt": "2025-10-13T03:42:22.828Z",
+        "id": "WyrnMA2kuhTLTB2s",
+        "name": "Benedict Wolff <benedictwolff@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}
