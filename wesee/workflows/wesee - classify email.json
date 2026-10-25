@@ -10,9 +10,8 @@
       "parameters": {
         "model": {
           "__rl": true,
-          "value": "gpt-4o",
-          "mode": "list",
-          "cachedResultName": "gpt-4o"
+          "value": "={{ ($json.config && $json.config.openai && $json.config.openai.model) || 'gpt-4o' }}",
+          "mode": "id"
         },
         "options": {}
       },
@@ -205,7 +204,7 @@
           "conditions": [
             {
               "id": "7e6e9e06-d46f-4b78-909d-dbd1012e1e1d",
-              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "leftValue": "={{ !!($json.error) }}",
               "rightValue": "",
               "operator": {
                 "type": "boolean",
@@ -239,7 +238,7 @@
           "conditions": [
             {
               "id": "7e6e9e06-d46f-4b78-909d-dbd1012e1e1d",
-              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "leftValue": "={{ !!($json.error) }}",
               "rightValue": "",
               "operator": {
                 "type": "boolean",

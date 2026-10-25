@@ -23,20 +23,19 @@
     },
     {
       "parameters": {
-        "resource": "assistant",
-        "assistantId": {
-          "__rl": true,
-          "value": "={{ $json['deal.flowAssistant.id'] }}",
-          "mode": "id"
-        },
-        "prompt": "define",
-        "text": "=Task:\n\nFind the following property in the email and attachments.\n\nProperty definition:\n\nThe property \"{{ $json.property.name }}\" is defined as \"{{ $json.property.description }}\".\n\nProperty and response type:\n\n{{ $json.property.type === \"email\" ? \"Your response is an email. Please look for it in the attachments. DO NOT INVENT AN EMAIL. Be as precise as possible\" : \"\" }}\n\n{{ $json.property.type === \"multi_select\" ? \n  \"Response Format: \\n- Your response must be a single string containing only the exact predefined options below, separated by commas if multiple apply. \\n- DO NOT add any extra words, formatting, explanations, or modifications. \\n- DO NOT change the formatting of each of any of the options. \\n- If no valid option applies, respond with \\\"\\\" (an empty string).\" \n: \"\"}}\n{{ $json.property.type === \"multi_select\" ? \"Predefined Options (ONLY use these): \" +\n$json.property.multi_select.options.map(option => option.name).join(\", \") : \"\" }}\n\n{{ $json.property.type === \"number\" ? \"Your response is a numerical value. Respond with the full value. Do not abbreviate large numbers with K or M.\" : \"\" }}\n\n{{ $json.property.type === \"select\" ? \"Your response is pre-defined based on a selection of options. DO NOT MAKE UP OPTIONS YOURSELF! DO NOT change the formatting of each of any of the options. You may choose exactly one of the following options: \" : \"\" }}\n{{ $json.property.type === \"select\" ? $json.properties.select.options.map(option => option.name).join(\", \") : \"\" }}\n\n{{ $json.property.type === \"url\" ? \"Your response is a URL.\" : \"\" }}\n\nAs a response type, produce a string without any formatting.\nIf you cannot find any appropriate response, respond with \"\".\n",
-        "memory": "threadId",
-        "threadId": "=",
-        "options": {}
+        "method": "POST",
+        "url": "https://api.openai.com/v1/responses",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  model: $json['deal.prompt.model'] || 'gpt-4o',\n  temperature: 0,\n  instructions: $json['deal.prompt.instructions'],\n  input: `Task:\n\nFind the following property in the email and attachments.\n\nProperty definition:\n\nThe property \"${ $json.property.name }\" is defined as \"${ $json.property.description }\".\n\nProperty and response type:\n\n${ $json.property.type === \"email\" ? \"Your response is an email. Please look for it in the attachments. DO NOT INVENT AN EMAIL. Be as precise as possible\" : \"\" }\n\n${ $json.property.type === \"multi_select\" ? \"Response Format: \\n- Your response must be a single string containing only the exact predefined options below, separated by commas if multiple apply. \\n- DO NOT add any extra words, formatting, explanations, or modifications. \\n- DO NOT change the formatting of each of any of the options. \\n- If no valid option applies, respond with \\\"\\\" (an empty string).\" : \"\" }\n${ $json.property.type === \"multi_select\" ? \"Predefined Options (ONLY use these): \" + $json.property.multi_select.options.map(option => option.name).join(\", \") : \"\" }\n\n${ $json.property.type === \"number\" ? \"Your response is a numerical value. Respond with the full value. Do not abbreviate large numbers with K or M.\" : \"\" }\n\n${ $json.property.type === \"select\" ? \"Your response is pre-defined based on a selection of options. DO NOT MAKE UP OPTIONS YOURSELF! DO NOT change the formatting of each of any of the options. You may choose exactly one of the following options: \" : \"\" }\n${ $json.property.type === \"select\" ? $json.property.select.options.map(option => option.name).join(\", \") : \"\" }\n\n${ $json.property.type === \"url\" ? \"Your response is a URL.\" : \"\" }\n\nAs a response type, produce a string without any formatting.\nIf you cannot find any appropriate response, respond with \"\".`\n}) }}",
+        "options": {
+          "timeout": 120000
+        }
       },
-      "type": "@n8n/n8n-nodes-langchain.openAi",
-      "typeVersion": 1.8,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [
         -224,
         40
@@ -175,7 +174,7 @@
       "parameters": {
         "fieldToSplitOut": "=deal.properties",
         "include": "selectedOtherFields",
-        "fieldsToInclude": "deal.flowAssistant.id",
+        "fieldsToInclude": "deal.prompt.instructions, deal.prompt.model",
         "options": {
           "destinationFieldName": "property"
         }
@@ -222,7 +221,7 @@
         },
         "includeOtherFields": true,
         "include": "except",
-        "excludeFields": "deal.flowAssistant.id",
+        "excludeFields": "deal.prompt.instructions, deal.prompt.model",
         "options": {}
       },
       "type": "n8n-nodes-base.set",
@@ -232,7 +231,7 @@
         816
       ],
       "id": "5946ec92-cbfb-4abe-b599-a52fe1616a1f",
-      "name": "remove assistant"
+      "name": "remove prompt fields"
     },
     {
       "parameters": {},
@@ -306,13 +305,7 @@
             {
               "id": "3bc19462-14e4-4964-8eef-17eaa3056246",
               "name": "output",
-              "value": "={{ !$json.output || $json.output.length === 0 || $json.output === \"\\\"\\\"\" ? null : $json.output }}",
-              "type": "string"
-            },
-            {
-              "id": "080aaf73-1341-4bb3-9a60-173f4d2957cb",
-              "name": "output",
-              "value": "={{ $json.output && $json.output.includes('\"') ? $json.output.replace(/\"/g, '') : $json.output }}",
+              "value": "={{ (() => {\n  const j = $json;\n  let t = '';\n  if (Array.isArray(j.output)) {\n    const msg = j.output.find(o => o && o.type === 'message');\n    const parts = msg && Array.isArray(msg.content) ? msg.content : [];\n    const part = parts.find(c => c && c.type === 'output_text');\n    if (part && part.text) t = part.text;\n  }\n  if (!t && j.output_text) t = j.output_text;\n  if (!t && j.choices && j.choices[0] && j.choices[0].message) t = j.choices[0].message.content;\n  t = String(t || '').replace(/\"/g, '').trim();\n  return t === '' ? null : t;\n})() }}",
               "type": "string"
             }
           ]
@@ -367,7 +360,7 @@
           "conditions": [
             {
               "id": "7e6e9e06-d46f-4b78-909d-dbd1012e1e1d",
-              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "leftValue": "={{ !!($json.error) }}",
               "rightValue": "",
               "operator": {
                 "type": "boolean",
@@ -388,179 +381,6 @@
       ],
       "id": "e0363df8-f3cc-41de-a928-450d1e6f880d",
       "name": "no error"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "6fe6bf01-e06b-4f22-8716-5b7d0062d80b",
-              "leftValue": "={{ $json.property.select }}",
-              "rightValue": "",
-              "operator": {
-                "type": "object",
-                "operation": "exists",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.filter",
-      "typeVersion": 2.2,
-      "position": [
-        1024,
-        112
-      ],
-      "id": "1f43c946-0094-4887-b9b3-badd8f22ea41",
-      "name": "filter select"
-    },
-    {
-      "parameters": {
-        "numberInputs": 3
-      },
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3,
-      "position": [
-        1472,
-        312
-      ],
-      "id": "cb57435e-2164-4918-ad2c-d4e76d5b896d",
-      "name": "Merge"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "6fe6bf01-e06b-4f22-8716-5b7d0062d80b",
-              "leftValue": "={{ $json.property.multi_select }}",
-              "rightValue": "",
-              "operator": {
-                "type": "object",
-                "operation": "exists",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.filter",
-      "typeVersion": 2.2,
-      "position": [
-        1024,
-        400
-      ],
-      "id": "40160fb5-625d-4e56-ad61-35d68d702d4e",
-      "name": "filter multi_select"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "6fe6bf01-e06b-4f22-8716-5b7d0062d80b",
-              "leftValue": "={{ $json.property.select }}",
-              "rightValue": "",
-              "operator": {
-                "type": "object",
-                "operation": "notExists",
-                "singleValue": true
-              }
-            },
-            {
-              "id": "22b8f248-8d86-48e5-87dd-0b9d29dee834",
-              "leftValue": "={{ $json.property.multi_select }}",
-              "rightValue": "",
-              "operator": {
-                "type": "object",
-                "operation": "notExists",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.filter",
-      "typeVersion": 2.2,
-      "position": [
-        1248,
-        616
-      ],
-      "id": "55ec1821-fd81-4de8-bc44-f93f381bd6dd",
-      "name": "filter non-select and non-multi_select"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "82f8c176-8f90-4373-952f-90775cbb55bc",
-              "name": "property.value",
-              "value": "={{\n    ($json.property.value || \"\")\n      .split(\",\")\n      .map((val) => val.trim())\n      .filter((val) =>\n        $json.property.multi_select.options\n          .map((item) => item.name)\n          .includes(val),\n      )\n      .join(\", \") || \"\";\n}}\n",
-              "type": "string"
-            }
-          ]
-        },
-        "includeOtherFields": true,
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        1248,
-        400
-      ],
-      "id": "e17b015e-6396-4cca-981d-f6a7b77dfaad",
-      "name": "remove false multi_select"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "82f8c176-8f90-4373-952f-90775cbb55bc",
-              "name": "property.value",
-              "value": "={{ \n  $json.property.value && $json.property.select.options.map(item => item.name).includes($json.property.value) \n    ? $json.property.value \n    : \"\" \n}}",
-              "type": "string"
-            }
-          ]
-        },
-        "includeOtherFields": true,
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        1248,
-        112
-      ],
-      "id": "1be55a81-f1c7-4865-92da-e913d4aee79e",
-      "name": "remove false select"
     },
     {
       "parameters": {
@@ -683,6 +503,60 @@
                 "type": "string",
                 "operation": "contains"
               }
+            },
+            {
+              "id": "d04c85ff-dc27-4d61-9793-7b30cc9b62f7",
+              "leftValue": "={{ JSON.stringify($json.error) }}",
+              "rightValue": "429",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "3a8ec691-4e35-4d13-ae41-ecf635e5ca0a",
+              "leftValue": "={{ JSON.stringify($json.error) }}",
+              "rightValue": "too many requests",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "e2db59ac-8a59-40ef-b17c-60330a58e2a2",
+              "leftValue": "={{ JSON.stringify($json.error) }}",
+              "rightValue": "rate limit",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "d88cb980-c8e0-42eb-a8ae-9ca062a2f560",
+              "leftValue": "={{ JSON.stringify($json.error) }}",
+              "rightValue": "timeout",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ba32a166-9957-460f-943d-7b8dabf25d42",
+              "leftValue": "={{ JSON.stringify($json.error) }}",
+              "rightValue": "502",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "12285217-0d84-42a5-b126-1eeffc1f67dc",
+              "leftValue": "={{ JSON.stringify($json.error) }}",
+              "rightValue": "503",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
             }
           ],
           "combinator": "or"
@@ -784,6 +658,30 @@
       ],
       "id": "07aa6122-3477-44e9-ae24-936eb6f83815",
       "name": "drop item"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9ab31f70-6c21-4d8e-b5a1-0f2c7d9e4401",
+              "name": "property.value",
+              "value": "={{ (() => {\n  const p = $json.property;\n  const v = p.value;\n  if (p.type === 'select') {\n    const opts = ((p.select || {}).options || []).map(o => o.name);\n    return v && opts.includes(v) ? v : '';\n  }\n  if (p.type === 'multi_select') {\n    const opts = ((p.multi_select || {}).options || []).map(o => o.name);\n    return String(v || '').split(',').map(x => x.trim()).filter(x => opts.includes(x)).join(', ');\n  }\n  return v;\n})() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1020,
+        400
+      ],
+      "id": "9ab31f70-6c21-4d8e-b5a1-0f2c7d9e4401",
+      "name": "validate property value"
     }
   ],
   "connections": {
@@ -863,7 +761,7 @@
       "main": [
         [
           {
-            "node": "remove assistant",
+            "node": "remove prompt fields",
             "type": "main",
             "index": 0
           }
@@ -890,30 +788,9 @@
       "main": [
         [
           {
-            "node": "filter select",
+            "node": "validate property value",
             "type": "main",
             "index": 0
-          },
-          {
-            "node": "filter multi_select",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "filter non-select and non-multi_select",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "remove assistant": {
-      "main": [
-        [
-          {
-            "node": "merge properties",
-            "type": "main",
-            "index": 1
           }
         ]
       ]
@@ -1018,72 +895,6 @@
         ]
       ]
     },
-    "filter select": {
-      "main": [
-        [
-          {
-            "node": "remove false select",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Merge": {
-      "main": [
-        [
-          {
-            "node": "merge properties",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "filter multi_select": {
-      "main": [
-        [
-          {
-            "node": "remove false multi_select",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "filter non-select and non-multi_select": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 2
-          }
-        ]
-      ]
-    },
-    "remove false multi_select": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
-          }
-        ]
-      ]
-    },
-    "remove false select": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "if company exists": {
       "main": [
         [],
@@ -1148,6 +959,28 @@
         [
           {
             "node": "drop item",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "remove prompt fields": {
+      "main": [
+        [
+          {
+            "node": "merge properties",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "validate property value": {
+      "main": [
+        [
+          {
+            "node": "merge properties",
             "type": "main",
             "index": 0
           }
