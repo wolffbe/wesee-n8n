@@ -11,13 +11,11 @@ Wesee automates the extraction and structuring of startups and their company pro
 
 The workflow is hosted in [N8n](https://github.com/n8n-io/),
 
-1. reads Outlook emails and their attachments **every hour**,
-2. classifies emails according to their relevance to the VC,
-3. extracts companies and their properties,
-4. saves them in a Notion database,
-5. and stores the email attachments in OneDrive.
-
-![wesee](./img/wesee.png)
+- reads Outlook emails and their attachments **every hour**,
+- classifies emails according to their relevance to the VC,
+- extracts companies and their properties,
+- saves them in a Notion database,
+- and stores the pitch deck in OneDrive.
 
 ## Requirements
 
