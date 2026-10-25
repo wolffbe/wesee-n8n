@@ -232,6 +232,67 @@
       ],
       "id": "04ca6614-50c2-41c8-aa00-3232c1575849",
       "name": "remove binaries"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cc11aa22-0001-4b3c-9d4e-ee0000000001",
+              "name": "deal.folders.attachment.url",
+              "value": "={{ $json.webUrl }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1752,
+        368
+      ],
+      "id": "cc11aa22-0001-4b3c-9d4e-ee0000000001",
+      "name": "capture attachment link"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "aa11bb22-cc33-4d44-9e55-f66600000001",
+              "leftValue": "={{ (() => {\n  const NAME = /deck|pitch|teaser|presentation|investor/i;\n  const SECTIONS = ['problem','solution','market','traction','team','business model','roadmap','raising','tam','use of funds','runway','competition','go-to-market','milestones'];\n  const looksLikeDeck = (a) => {\n    if (!a) return false;\n    if (NAME.test(String(a.fileName || ''))) return true;\n    const x = String(a.parsed || '').toLowerCase();\n    if (x.length < 400) return false;\n    return SECTIONS.filter((s) => x.includes(s)).length >= 5;\n  };\n  return looksLikeDeck($json.attachment);\n})() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        408,
+        416
+      ],
+      "id": "aa11bb22-cc33-4d44-9e55-f66600000001",
+      "name": "keep pitch deck only"
     }
   ],
   "connections": {
@@ -239,7 +300,7 @@
       "main": [
         [
           {
-            "node": "loop over attachments",
+            "node": "keep pitch deck only",
             "type": "main",
             "index": 0
           }
@@ -278,7 +339,7 @@
       "main": [
         [
           {
-            "node": "remove binaries",
+            "node": "capture attachment link",
             "type": "main",
             "index": 0
           }
@@ -371,6 +432,28 @@
       ]
     },
     "remove binaries": {
+      "main": [
+        [
+          {
+            "node": "loop over attachments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "capture attachment link": {
+      "main": [
+        [
+          {
+            "node": "remove binaries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "keep pitch deck only": {
       "main": [
         [
           {
