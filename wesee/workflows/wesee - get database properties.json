@@ -31,168 +31,6 @@
     },
     {
       "parameters": {
-        "method": "PATCH",
-        "url": "=https://api.notion.com/v1/databases/{{ $('get database').item.json.id }}",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "notionApi",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"properties\": {\n    \"Files\": {\n      \"url\": {}\n    }\n  }\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1792,
-        936
-      ],
-      "id": "36ccdc7f-2b9d-4fe1-9d72-3c82e7ff213d",
-      "name": "add files field to database",
-      "credentials": {
-        "notionApi": {
-          "id": "G3mQRX7Ga4sm8sn9",
-          "name": "wesee"
-        }
-      },
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "method": "PATCH",
-        "url": "=https://api.notion.com/v1/databases/{{ $('get database').item.json.id }}",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "notionApi",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"properties\": {\n    \"Comment\": {\n      \"type\": \"rich_text\",\n      \"rich_text\": {}\n    }\n  }\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        2016,
-        1128
-      ],
-      "id": "8bece8c0-5623-49ad-9e5a-b6c39496c443",
-      "name": "add comment field to database",
-      "credentials": {
-        "notionApi": {
-          "id": "G3mQRX7Ga4sm8sn9",
-          "name": "wesee"
-        }
-      },
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "method": "PATCH",
-        "url": "=https://api.notion.com/v1/databases/{{ $('get database').item.json.id }}",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "notionApi",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"properties\": {\n    \"Stage\": {\n      \"type\": \"select\",\n      \"select\": {\n        \"options\": [\n          { \"name\": \"Inflow (deals@)\", \"color\": \"default\" },\n          { \"name\": \"To Approach\", \"color\": \"yellow\" },\n          { \"name\": \"Initial conversation\", \"color\": \"purple\" },\n          { \"name\": \"To Pass\", \"color\": \"blue\" },\n          { \"name\": \"To Present to Team\", \"color\": \"teal\" },\n          { \"name\": \"Opportunity Qualification\", \"color\": \"green\" },\n          { \"name\": \"Watchlist\", \"color\": \"brown\" },\n          { \"name\": \"Invest\", \"color\": \"green\" },\n          { \"name\": \"Direct Reject\", \"color\": \"gray\" },\n          { \"name\": \"Rejected\", \"color\": \"red\" },\n          { \"name\": \"Interested\", \"color\": \"purple\" }\n        ]\n      }\n    }\n  }\n}\n",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        2240,
-        1320
-      ],
-      "id": "76b1e3d1-10e8-49b5-900f-f5d77cb6304d",
-      "name": "add source field to database",
-      "credentials": {
-        "notionApi": {
-          "id": "G3mQRX7Ga4sm8sn9",
-          "name": "wesee"
-        }
-      },
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "method": "PATCH",
-        "url": "=https://api.notion.com/v1/databases/{{ $('get database').item.json.id }}",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "notionApi",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"properties\": {\n    \"Description\": {\n      \"description\": \"A short summary of the company. It should be as concise and factual as possible, and use as little marketing language as possible.\",\n      \"type\": \"rich_text\",\n      \"rich_text\": {}\n    }\n  }\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1568,
-        744
-      ],
-      "id": "09d5d25f-1427-4692-a181-3bccf3ac9c28",
-      "name": "add description field to database",
-      "credentials": {
-        "notionApi": {
-          "id": "G3mQRX7Ga4sm8sn9",
-          "name": "wesee"
-        }
-      },
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "method": "PATCH",
-        "url": "=https://api.notion.com/v1/databases/{{ $('get database').item.json.id }}",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "notionApi",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"properties\": {\n    \"Company\": {\n      \"description\": \"The name of the company, ideally including its legal form\",\n      \"type\": \"rich_text\",\n      \"rich_text\": {}\n    }\n  }\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1344,
-        552
-      ],
-      "id": "85f987e5-4151-4400-8283-5c6028a985b2",
-      "name": "add company field to database",
-      "credentials": {
-        "notionApi": {
-          "id": "G3mQRX7Ga4sm8sn9",
-          "name": "wesee"
-        }
-      },
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
-        "method": "PATCH",
-        "url": "=https://api.notion.com/v1/databases/{{ $('get database').item.json.id }}",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "notionApi",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"properties\": {\n    \"Stage\": {\n      \"type\": \"select\",\n      \"select\": {\n        \"options\": [\n          { \"name\": \"Inflow (deals@)\", \"color\": \"default\" },\n          { \"name\": \"To Approach\", \"color\": \"yellow\" },\n          { \"name\": \"Initial conversation\", \"color\": \"purple\" },\n          { \"name\": \"To Pass\", \"color\": \"blue\" },\n          { \"name\": \"To Present to Team\", \"color\": \"teal\" },\n          { \"name\": \"Opportunity Qualification\", \"color\": \"green\" },\n          { \"name\": \"Watchlist\", \"color\": \"brown\" },\n          { \"name\": \"Invest\", \"color\": \"green\" },\n          { \"name\": \"Direct Reject\", \"color\": \"gray\" },\n          { \"name\": \"Rejected\", \"color\": \"red\" },\n          { \"name\": \"Interested\", \"color\": \"purple\" }\n        ]\n      }\n    }\n  }\n}\n",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        2464,
-        1560
-      ],
-      "id": "65d2768f-3143-49a0-8496-8ee190020b5e",
-      "name": "add stage field to database",
-      "credentials": {
-        "notionApi": {
-          "id": "G3mQRX7Ga4sm8sn9",
-          "name": "wesee"
-        }
-      },
-      "onError": "continueErrorOutput"
-    },
-    {
-      "parameters": {
         "inputSource": "passthrough"
       },
       "type": "n8n-nodes-base.executeWorkflowTrigger",
@@ -203,230 +41,6 @@
       ],
       "id": "80dd1489-ef23-4c4b-b237-a26759275c3a",
       "name": "When Executed by Another Workflow"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
-              "leftValue": "={{ $json?.properties &&     typeof $json.properties === \"object\" &&     Object.keys($json.properties).some(key => key.toLowerCase() === \"company\") }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "true",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        1120,
-        957.5
-      ],
-      "id": "a6be590c-5e9c-411f-8d4c-1f5a7d2a613c",
-      "name": "has company field"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "f3b68674-8f2f-417b-a904-ff3f42afa012",
-              "leftValue": "={{ $json?.properties &&     typeof $json.properties === \"object\" &&     Object.keys($json.properties).some(key => key.toLowerCase() === \"description\") }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "true",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        1344,
-        1053.5
-      ],
-      "id": "00f429de-8779-464c-9ff6-4468dbe7e49a",
-      "name": "has description field"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "4b9f167a-ac54-40fa-959b-014b70f1740e",
-              "leftValue": "={{ $json.properties }}",
-              "rightValue": "",
-              "operator": {
-                "type": "object",
-                "operation": "exists",
-                "singleValue": true
-              }
-            },
-            {
-              "id": "179d802f-8e70-4ce1-958e-6144602158c0",
-              "leftValue": "={{ $json.properties.Files }}",
-              "rightValue": "",
-              "operator": {
-                "type": "object",
-                "operation": "exists",
-                "singleValue": true
-              }
-            },
-            {
-              "id": "f641caa1-2e5c-4677-ae1e-f10df7ddc263",
-              "leftValue": "={{ $json.properties.Files.type }}",
-              "rightValue": "url",
-              "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        1568,
-        1149.5
-      ],
-      "id": "8740eb14-39ac-4134-a755-ab70f68db6f9",
-      "name": "has files field"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "28a18903-03af-4c8a-ae81-8b0fee516a24",
-              "leftValue": "={{ $json?.properties &&     typeof $json.properties === \"object\" &&     Object.keys($json.properties).some(key => key.toLowerCase() === \"comment\") }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "true",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        1792,
-        1245.5
-      ],
-      "id": "8a35b295-83a4-4287-881a-da63c04f9146",
-      "name": "has comments field"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "8661d0b3-f121-445f-9792-ce65b1ae77ed",
-              "leftValue": "={{ $json?.properties &&     typeof $json.properties === \"object\" &&     Object.keys($json.properties).some(key => key.toLowerCase() === \"comment\") }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "true",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        2016,
-        1344
-      ],
-      "id": "9e026d0e-e717-448e-8087-ad34fd7ad0c8",
-      "name": "has source field"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "9f9429f2-0f7b-4d0b-b6c6-e439394fdfe1",
-              "leftValue": "={{ $json?.properties &&     typeof $json.properties === \"object\" &&     Object.keys($json.properties).some(key => key.toLowerCase() === \"stage\") }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "true",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        2240,
-        1512
-      ],
-      "id": "b8c4d57b-d0c9-4f4a-9b23-e0ce72c15664",
-      "name": "has stage field"
     },
     {
       "parameters": {
@@ -562,7 +176,7 @@
           "conditions": [
             {
               "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
-              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "leftValue": "={{ !!($json.error) }}",
               "rightValue": "",
               "operator": {
                 "type": "boolean",
@@ -586,40 +200,6 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
-              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "false",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        1568,
-        552
-      ],
-      "id": "80e1b7d4-1d34-4a30-878e-6935eed51098",
-      "name": "does not have error adding company"
-    },
-    {
-      "parameters": {
         "amount": 1,
         "unit": "minutes"
       },
@@ -632,176 +212,6 @@
       "id": "83f51025-4229-4ab6-9d3c-6d77fbb525e6",
       "name": "wait one minute",
       "webhookId": "fb794516-d5bf-41d1-ba87-8d10eff2e8df"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
-              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "false",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        1792,
-        744
-      ],
-      "id": "bd6e5ed9-a933-49d7-8f2e-8a127665a5ae",
-      "name": "does not have error adding description"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
-              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "false",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        2016,
-        936
-      ],
-      "id": "5f8f5b23-971c-4b72-a4d3-fd8657595434",
-      "name": "does not have error adding files"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
-              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "false",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        2240,
-        1128
-      ],
-      "id": "0445d24c-1b27-4e97-8e10-4d51a9af5c5a",
-      "name": "does not have error adding comment"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
-              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "false",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        2464,
-        1320
-      ],
-      "id": "beb6c440-6983-4b42-950b-a3df749d53c9",
-      "name": "does not have error adding source"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 2
-          },
-          "conditions": [
-            {
-              "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
-              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
-              "rightValue": "",
-              "operator": {
-                "type": "boolean",
-                "operation": "false",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.2,
-      "position": [
-        2688,
-        1560
-      ],
-      "id": "05e552e9-a469-4dc9-aa59-97f1a9385605",
-      "name": "does not have error adding stage"
     },
     {
       "parameters": {
@@ -861,7 +271,7 @@
           "conditions": [
             {
               "id": "775e99ca-6140-40cb-a9be-c1a11018bd7d",
-              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "leftValue": "={{ !!($json.error) }}",
               "rightValue": "",
               "operator": {
                 "type": "boolean",
@@ -937,6 +347,125 @@
       ],
       "id": "6c6ca7fa-7b89-4fe2-8795-8254ef3c4dd8",
       "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b1d2c3e4-0001-4a1b-9c2d-aa0000000001",
+              "name": "pendingFields",
+              "value": "={{ (() => {\n  const defs = {\n \"Stage\": {\n  \"type\": \"select\",\n  \"select\": {\n   \"options\": [\n    {\n     \"name\": \"Inflow (deals@)\",\n     \"color\": \"default\"\n    },\n    {\n     \"name\": \"To Approach\",\n     \"color\": \"yellow\"\n    },\n    {\n     \"name\": \"Initial conversation\",\n     \"color\": \"purple\"\n    },\n    {\n     \"name\": \"To Pass\",\n     \"color\": \"blue\"\n    },\n    {\n     \"name\": \"To Present to Team\",\n     \"color\": \"orange\"\n    },\n    {\n     \"name\": \"Opportunity Qualification\",\n     \"color\": \"green\"\n    },\n    {\n     \"name\": \"Watchlist\",\n     \"color\": \"brown\"\n    },\n    {\n     \"name\": \"Invest\",\n     \"color\": \"green\"\n    },\n    {\n     \"name\": \"Direct Reject\",\n     \"color\": \"gray\"\n    },\n    {\n     \"name\": \"Rejected\",\n     \"color\": \"red\"\n    },\n    {\n     \"name\": \"Interested\",\n     \"color\": \"purple\"\n    }\n   ]\n  }\n },\n \"Website\": {\n  \"type\": \"url\",\n  \"url\": {},\n  \"description\": \"The company's own website URL. Only use a URL that actually appears in the email or its attachments.\"\n },\n \"Pitch Deck\": {\n  \"type\": \"url\",\n  \"url\": {}\n },\n \"Description\": {\n  \"type\": \"rich_text\",\n  \"rich_text\": {},\n  \"description\": \"A short summary of the company. It should be as concise and factual as possible, and use as little marketing language as possible.\"\n },\n \"Thesis Fit\": {\n  \"type\": \"rich_text\",\n  \"rich_text\": {},\n  \"description\": \"How well the company matches the VC's investment thesis, naming the specific points of fit and of mismatch, including sector, stage and whether the amount being raised is compatible with the fund's ticket size.\"\n },\n \"Investment Advice\": {\n  \"type\": \"rich_text\",\n  \"rich_text\": {},\n  \"description\": \"Your view on whether the VC should invest, judged against their thesis. Start with exactly one of: Invest, Explore further, or Pass. Then one or two sentences citing the strongest supporting evidence and the most serious concern. Use only what the material states.\"\n },\n \"Round\": {\n  \"type\": \"select\",\n  \"select\": {\n   \"options\": [\n    {\n     \"name\": \"Pre-seed\",\n     \"color\": \"gray\"\n    },\n    {\n     \"name\": \"Seed\",\n     \"color\": \"blue\"\n    },\n    {\n     \"name\": \"Series A\",\n     \"color\": \"green\"\n    },\n    {\n     \"name\": \"Series B\",\n     \"color\": \"yellow\"\n    },\n    {\n     \"name\": \"Series C+\",\n     \"color\": \"orange\"\n    },\n    {\n     \"name\": \"Unknown\",\n     \"color\": \"default\"\n    }\n   ]\n  },\n  \"description\": \"The funding round the company is currently raising. Choose exactly one of the predefined options, and Unknown if the round is not stated.\"\n },\n \"Raise Amount\": {\n  \"type\": \"number\",\n  \"number\": {},\n  \"description\": \"The amount of money the company is currently raising, in US dollars, as a full number without abbreviation.\"\n },\n \"Revenue\": {\n  \"type\": \"number\",\n  \"number\": {},\n  \"description\": \"Current annual recurring revenue (ARR) in US dollars, as a full number without abbreviation, if stated.\"\n },\n \"Sector\": {\n  \"type\": \"rich_text\",\n  \"rich_text\": {},\n  \"description\": \"The industry or vertical the company operates in, for example healthtech, fintech, climate or enterprise software.\"\n },\n \"Location\": {\n  \"type\": \"rich_text\",\n  \"rich_text\": {},\n  \"description\": \"The company headquarters as city and country, if stated.\"\n },\n \"Team\": {\n  \"type\": \"rich_text\",\n  \"rich_text\": {},\n  \"description\": \"The founders and key team members, with the relevant parts of their background such as prior companies or domain expertise.\"\n },\n \"Contact\": {\n  \"type\": \"rich_text\",\n  \"rich_text\": {},\n  \"description\": \"The person presenting the company, normally a founder, with their role if given. Take it from the signature, sender or deck. If forwarded, use the original sender, not the forwarder. Never use a name from the blacklist above - they work at the VC, not the startup.\"\n },\n \"Market\": {\n  \"type\": \"rich_text\",\n  \"rich_text\": {},\n  \"description\": \"What market this company is really in and who the actual buyer is, in your own words rather than quoting the pitch. Note their claimed TAM, SAM or SOM figures, and say if those look inflated or poorly defined versus what they can realistically sell into.\"\n },\n \"Moat\": {\n  \"type\": \"rich_text\",\n  \"rich_text\": {},\n  \"description\": \"What would make this business defensible over time - proprietary technology, data, distribution, switching costs, network effects or regulatory position - and how convincing that defensibility actually is on the evidence given.\"\n },\n \"Risks\": {\n  \"type\": \"rich_text\",\n  \"rich_text\": {},\n  \"description\": \"The most serious risks and red flags, including anything exaggerated, unverifiable or inconsistent: implausible metrics, name-dropped advisors or investors presented as endorsements, or claims with no supporting evidence.\"\n },\n \"Growth\": {\n  \"type\": \"rich_text\",\n  \"rich_text\": {},\n  \"description\": \"The growth rate the company reports, for example year-on-year revenue growth or month-on-month user growth.\"\n },\n \"Customers\": {\n  \"type\": \"rich_text\",\n  \"rich_text\": {},\n  \"description\": \"The number and type of customers, including named reference customers or logos if they are given.\"\n },\n \"Traction\": {\n  \"type\": \"rich_text\",\n  \"rich_text\": {},\n  \"description\": \"Key traction and efficiency metrics such as net revenue retention, churn, CAC payback, burn rate or runway.\"\n },\n \"Source\": {\n  \"type\": \"email\",\n  \"email\": {}\n },\n \"Files\": {\n  \"type\": \"url\",\n  \"url\": {}\n },\n \"Email\": {\n  \"type\": \"url\",\n  \"url\": {}\n }\n};\n  const existing = $json.properties || {};\n  const have = new Set(Object.keys(existing).map(k => k.toLowerCase()));\n  const out = {};\n  const title = Object.entries(existing).find(([, p]) => p && p.type === \"title\");\n  if (title) {\n    const needsRename = title[0].toLowerCase() !== \"company\";\n    const needsDesc = !String(title[1].description || \"\").trim();\n    if (needsRename || needsDesc) out[title[0]] = { name: \"Company\", description: \"The name of the company, ideally including its legal form\", title: {} };\n  }\n  for (const name of Object.keys(defs)) {\n    if (!have.has(name.toLowerCase())) out[name] = defs[name];\n  }\n  return out;\n})() }}",
+              "type": "object"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        885.5
+      ],
+      "id": "b1d2c3e4-0001-4a1b-9c2d-aa0000000001",
+      "name": "compute missing fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b1d2c3e4-0002-4a1b-9c2d-aa0000000002",
+              "leftValue": "={{ Object.keys($json.pendingFields || {}).length > 0 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1344,
+        885.5
+      ],
+      "id": "b1d2c3e4-0002-4a1b-9c2d-aa0000000002",
+      "name": "has missing fields"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.notion.com/v1/databases/{{ $('get database').item.json.id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "notionApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ properties: $json.pendingFields }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1568,
+        760
+      ],
+      "id": "b1d2c3e4-0003-4a1b-9c2d-aa0000000003",
+      "name": "add missing fields to database",
+      "credentials": {
+        "notionApi": {
+          "id": "G3mQRX7Ga4sm8sn9",
+          "name": "wesee"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b1d2c3e4-0004-4a1b-9c2d-aa0000000004",
+              "leftValue": "={{ !!($json.error) }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1792,
+        760
+      ],
+      "id": "b1d2c3e4-0004-4a1b-9c2d-aa0000000004",
+      "name": "does not have error adding fields"
     }
   ],
   "connections": {
@@ -952,114 +481,6 @@
         [
           {
             "node": "does not have error getting database properties",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "add files field to database": {
-      "main": [
-        [
-          {
-            "node": "does not have error adding files",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "does not have error adding files",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "add comment field to database": {
-      "main": [
-        [
-          {
-            "node": "does not have error adding comment",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "does not have error adding comment",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "add source field to database": {
-      "main": [
-        [
-          {
-            "node": "does not have error adding source",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "does not have error adding source",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "add description field to database": {
-      "main": [
-        [
-          {
-            "node": "does not have error adding description",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "does not have error adding description",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "add company field to database": {
-      "main": [
-        [
-          {
-            "node": "does not have error adding company",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "does not have error adding company",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "add stage field to database": {
-      "main": [
-        [
-          {
-            "node": "does not have error adding stage",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "does not have error adding stage",
             "type": "main",
             "index": 0
           }
@@ -1083,114 +504,6 @@
             "node": "Merge",
             "type": "main",
             "index": 1
-          }
-        ]
-      ]
-    },
-    "has company field": {
-      "main": [
-        [
-          {
-            "node": "has description field",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "add company field to database",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "has description field": {
-      "main": [
-        [
-          {
-            "node": "has files field",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "add description field to database",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "has files field": {
-      "main": [
-        [
-          {
-            "node": "has comments field",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "add files field to database",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "has comments field": {
-      "main": [
-        [
-          {
-            "node": "has source field",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "add comment field to database",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "has source field": {
-      "main": [
-        [
-          {
-            "node": "has stage field",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "add source field to database",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "has stage field": {
-      "main": [
-        [
-          {
-            "node": "merge identifiers with properties",
-            "type": "main",
-            "index": 1
-          }
-        ],
-        [
-          {
-            "node": "add stage field to database",
-            "type": "main",
-            "index": 0
           }
         ]
       ]
@@ -1250,27 +563,9 @@
       "main": [
         [
           {
-            "node": "has company field",
+            "node": "compute missing fields",
             "type": "main",
             "index": 0
-          }
-        ],
-        [
-          {
-            "node": "gateway timed out",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "does not have error adding company": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
           }
         ],
         [
@@ -1289,96 +584,6 @@
             "node": "Merge",
             "type": "main",
             "index": 1
-          }
-        ]
-      ]
-    },
-    "does not have error adding description": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
-          }
-        ],
-        [
-          {
-            "node": "gateway timed out",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "does not have error adding files": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
-          }
-        ],
-        [
-          {
-            "node": "gateway timed out",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "does not have error adding comment": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
-          }
-        ],
-        [
-          {
-            "node": "gateway timed out",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "does not have error adding source": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
-          }
-        ],
-        [
-          {
-            "node": "gateway timed out",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "does not have error adding stage": {
-      "main": [
-        [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
-          }
-        ],
-        [
-          {
-            "node": "gateway timed out",
-            "type": "main",
-            "index": 0
           }
         ]
       ]
@@ -1452,6 +657,71 @@
           },
           {
             "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "compute missing fields": {
+      "main": [
+        [
+          {
+            "node": "has missing fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "has missing fields": {
+      "main": [
+        [
+          {
+            "node": "add missing fields to database",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "merge identifiers with properties",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "add missing fields to database": {
+      "main": [
+        [
+          {
+            "node": "does not have error adding fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "does not have error adding fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "does not have error adding fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "gateway timed out",
             "type": "main",
             "index": 0
           }

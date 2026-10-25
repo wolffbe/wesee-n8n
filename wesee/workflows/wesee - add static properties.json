@@ -39,7 +39,7 @@
             {
               "id": "16fdf853-a3ce-4f35-8f01-95d3d759426b",
               "name": "deal.properties.Stage.value",
-              "value": "={{ $json.deal.properties.Stage.select.options[0].name }}",
+              "value": "={{ (() => {\n  const props = ($json.deal && $json.deal.properties) || {};\n  const stage = props.Stage || {};\n  const opts = ((stage.select || {}).options || []).map(o => o.name);\n  const advice = String((props['Investment Advice'] || {}).value || '').trim().toLowerCase();\n  const want = advice.startsWith('pass') ? 'Direct Reject' : (opts[0] || '');\n  return opts.includes(want) ? want : (opts[0] || '');\n})() }}",
               "type": "string"
             }
           ]
@@ -82,30 +82,6 @@
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "16fdf853-a3ce-4f35-8f01-95d3d759426b",
-              "name": "deal.properties.Comment.value",
-              "value": "={{ $json.deal.text.forwarding.forward.substring(0,2000).trim()}}",
-              "type": "string"
-            }
-          ]
-        },
-        "includeOtherFields": true,
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        448,
-        0
-      ],
-      "id": "4155fdc6-08c4-43e7-9f51-7369dead4e05",
-      "name": "add comments property value"
-    },
-    {
-      "parameters": {
         "inputSource": "passthrough"
       },
       "type": "n8n-nodes-base.executeWorkflowTrigger",
@@ -116,6 +92,104 @@
       ],
       "id": "9306c4e3-ab22-45a5-ae64-73e3926366d1",
       "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dd22bb33-1-4c5d-8e9f-ff0000000000",
+              "name": "deal.properties.Email.value",
+              "value": "={{ (() => {\n  const props = ($json.deal && $json.deal.properties) || {};\n  const company = String((props.Company || {}).value || '').trim();\n  const subject = String(($json.email || {}).subject || '').trim();\n  const q = company || subject;\n  if (!q) return \"\";\n  return 'https://outlook.live.com/mail/0/search?q=' + encodeURIComponent(q);\n})() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1116,
+        0
+      ],
+      "id": "dd22bb33-1-4c5d-8e9f-ff0000000000",
+      "name": "add email link property"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e5f60718-deal-4a55-9b7c-1d2e3f4a5b61",
+              "name": "deal",
+              "value": "={{ $('add email link property').item.json.deal }}",
+              "type": "object"
+            },
+            {
+              "id": "e5f60718-attachments-4a55-9b7c-1d2e3f4a5b61",
+              "name": "attachments",
+              "value": "={{ $('add email link property').item.json.attachments }}",
+              "type": "object"
+            },
+            {
+              "id": "e5f60718-config-4a55-9b7c-1d2e3f4a5b61",
+              "name": "config",
+              "value": "={{ $('add email link property').item.json.config }}",
+              "type": "object"
+            },
+            {
+              "id": "e5f60718-email-4a55-9b7c-1d2e3f4a5b61",
+              "name": "email",
+              "value": "={{ $('add email link property').item.json.email }}",
+              "type": "object"
+            },
+            {
+              "id": "e5f60718-dddd-4a55-9b7c-1d2e3f4a5b62",
+              "name": "deal.properties.Pitch Deck.value",
+              "value": "={{ (() => {\n  const t = $('add email link property').item.json;\n  const atts = t.attachments ? Object.values(t.attachments) : [];\n  const NAME = /deck|pitch|teaser|presentation|investor/i;\n  const SECTIONS = ['problem','solution','market','traction','team','business model','roadmap','raising','tam','use of funds','runway','competition','go-to-market','milestones'];\n  const looksLikeDeck = (a) => {\n    if (NAME.test(String(a.fileName || ''))) return true;\n    const x = String(a.parsed || '').toLowerCase();\n    if (x.length < 400) return false;\n    return SECTIONS.filter((s) => x.includes(s)).length >= 5;\n  };\n  const deck = atts.find(looksLikeDeck);\n  if (!deck) return \"\";\n  const files = Array.isArray($json.value) ? $json.value : [];\n  const byName = files.find((f) => f.name === deck.fileName);\n  const byHint = files.find((f) => NAME.test(String(f.name)));\n  const hit = byName || byHint;\n  return hit && hit.webUrl ? hit.webUrl : \"\";\n})() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1556,
+        0
+      ],
+      "id": "dd22bb33-2-4c5d-8e9f-ff0000000000",
+      "name": "add pitch deck link property"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/drives/{{ $json.deal.folders.drive.id }}/items/{{ $json.deal.folders.email.id }}/children?$select=name,webUrl",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1336,
+        0
+      ],
+      "id": "e5f60718-2233-4a55-9b7c-1d2e3f4a5b60",
+      "name": "list email folder files",
+      "credentials": {
+        "microsoftOAuth2Api": {
+          "id": "mam00d7y7ZbLYfvJ",
+          "name": "wesee"
+        }
+      },
+      "onError": "continueRegularOutput"
     }
   ],
   "connections": {
@@ -123,7 +197,7 @@
       "main": [
         [
           {
-            "node": "add comments property value",
+            "node": "add source property value",
             "type": "main",
             "index": 0
           }
@@ -141,22 +215,44 @@
         ]
       ]
     },
-    "add comments property value": {
+    "When Executed by Another Workflow": {
       "main": [
         [
           {
-            "node": "add source property value",
+            "node": "add files property value",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "When Executed by Another Workflow": {
+    "add stage property value": {
       "main": [
         [
           {
-            "node": "add files property value",
+            "node": "add email link property",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add email link property": {
+      "main": [
+        [
+          {
+            "node": "list email folder files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "list email folder files": {
+      "main": [
+        [
+          {
+            "node": "add pitch deck link property",
             "type": "main",
             "index": 0
           }
