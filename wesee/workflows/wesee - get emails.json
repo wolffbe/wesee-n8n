@@ -15,7 +15,8 @@
           "values": {
             "filters": {
               "readStatus": "={{ $json.config.email.get.read }}",
-              "receivedAfter": "={{ $json.config.email.get.after }}"
+              "receivedAfter": "={{ $json.config.email.get.after }}",
+              "foldersToInclude": "={{ $json.mailFolderId ? [$json.mailFolderId] : undefined }}"
             }
           }
         },
@@ -65,7 +66,7 @@
           "conditions": [
             {
               "id": "7e6e9e06-d46f-4b78-909d-dbd1012e1e1d",
-              "leftValue": "={{ Object.keys($json).includes(\"error\") }}",
+              "leftValue": "={{ !!($json.error) }}",
               "rightValue": "",
               "operator": {
                 "type": "boolean",
@@ -377,6 +378,294 @@
       ],
       "id": "02850a03-99cf-425e-8aaf-34d6f07d160e",
       "name": "add to cache"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ret-00-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "429",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-01-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "500",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-02-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "502",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-03-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "503",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-04-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "504",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-05-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "too many requests",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-06-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "rate limit",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-07-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "timeout",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-08-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "timed out",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-09-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "econnreset",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-10-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "etimedout",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-11-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "enotfound",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-12-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "socket hang up",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-13-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "service unavailable",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-14-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "bad gateway",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-15-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "gateway timeout",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-16-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "connection error",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "ret-17-4a1b-9c2d-bb0000000000",
+              "leftValue": "={{ JSON.stringify($json.error ?? $json) }}",
+              "rightValue": "temporarily",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        492
+      ],
+      "id": "ba7c1d20-9f31-4e55-aa10-7c21d9e0f001",
+      "name": "error is retryable"
+    },
+    {
+      "parameters": {
+        "errorMessage": "=Could not read messages from Outlook, and the error is not retryable: {{ JSON.stringify($json.error ?? $json) }}"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1116,
+        492
+      ],
+      "id": "ba7c1d20-9f31-4e55-aa10-7c21d9e0f002",
+      "name": "throw permanent email error"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "fa001122-3344-4556-8899-aabbccdd0001",
+              "leftValue": "={{ $json.config.email.get.folder }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        8,
+        240
+      ],
+      "id": "fa001122-3344-4556-8899-aabbccdd0001",
+      "name": "folder configured"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/me/mailFolders/{{ encodeURIComponent($json.config.email.get.folder) }}?$select=id,displayName",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "microsoftOutlookOAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        158,
+        170
+      ],
+      "id": "fa001122-3344-4556-8899-aabbccdd0002",
+      "name": "get mail folder",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "pRe66D8yA97hf5uz",
+          "name": "wesee"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa001122-3344-4556-8899-aabbccdd0003",
+              "name": "config",
+              "value": "={{ $('When Executed by Another Workflow').item.json.config }}",
+              "type": "object"
+            },
+            {
+              "id": "fa001122-3344-4556-8899-aabbccdd0004",
+              "name": "mailFolderId",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        303,
+        170
+      ],
+      "id": "fa001122-3344-4556-8899-aabbccdd0003",
+      "name": "restore config with folder"
     }
   ],
   "connections": {
@@ -435,7 +724,7 @@
         ],
         [
           {
-            "node": "wait 30 seconds",
+            "node": "error is retryable",
             "type": "main",
             "index": 0
           }
@@ -501,7 +790,7 @@
       "main": [
         [
           {
-            "node": "get messages",
+            "node": "folder configured",
             "type": "main",
             "index": 0
           }
@@ -583,6 +872,64 @@
         [
           {
             "node": "throttle message batch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "error is retryable": {
+      "main": [
+        [
+          {
+            "node": "wait 30 seconds",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "throw permanent email error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "folder configured": {
+      "main": [
+        [
+          {
+            "node": "get mail folder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get mail folder": {
+      "main": [
+        [
+          {
+            "node": "restore config with folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "restore config with folder": {
+      "main": [
+        [
+          {
+            "node": "get messages",
             "type": "main",
             "index": 0
           }
