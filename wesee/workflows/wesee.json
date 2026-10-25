@@ -14,14 +14,6 @@
           "mode": "list",
           "cachedResultName": "wesee — wesee - get email folder"
         },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
-        },
         "mode": "each",
         "options": {
           "waitForSubWorkflow": true
@@ -43,14 +35,6 @@
           "value": "e1sIwEQTAYGALRDt",
           "mode": "list",
           "cachedResultName": "wesee — wesee - get database properties"
-        },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
         },
         "mode": "each",
         "options": {
@@ -74,14 +58,6 @@
           "mode": "list",
           "cachedResultName": "wesee — wesee - upload attachments"
         },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
-        },
         "mode": "each",
         "options": {
           "waitForSubWorkflow": true
@@ -104,14 +80,6 @@
           "mode": "list",
           "cachedResultName": "wesee — wesee - parse PDF"
         },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
-        },
         "mode": "each",
         "options": {}
       },
@@ -133,14 +101,6 @@
           "cachedResultUrl": "/workflow/lEudgL4ULbE6jqzu",
           "cachedResultName": "wesee - extract properties"
         },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
-        },
         "mode": "each",
         "options": {}
       },
@@ -160,14 +120,6 @@
           "value": "7o2npp40mav8EdBX",
           "mode": "list",
           "cachedResultName": "wesee — wesee - parse email"
-        },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
         },
         "mode": "each",
         "options": {
@@ -192,14 +144,6 @@
           "mode": "list",
           "cachedResultName": "wesee — wesee - add static properties"
         },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
-        },
         "mode": "each",
         "options": {}
       },
@@ -218,15 +162,7 @@
           "__rl": true,
           "value": "fOnbizpjBEg8qmw4",
           "mode": "list",
-          "cachedResultName": "wesee — wesee - create assistant"
-        },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
+          "cachedResultName": "wesee — wesee - build prompt"
         },
         "mode": "each",
         "options": {}
@@ -238,7 +174,7 @@
         432
       ],
       "id": "87f529b5-fe9c-4661-9162-72d228d7ff4b",
-      "name": "create assistant"
+      "name": "build prompt"
     },
     {
       "parameters": {
@@ -247,14 +183,6 @@
           "value": "bmEhWJdZoJwJEG1o",
           "mode": "list",
           "cachedResultName": "wesee — wesee - get root folder"
-        },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
         },
         "mode": "each",
         "options": {
@@ -278,13 +206,13 @@
             {
               "id": "1c19b3a0-e754-436d-9072-b7f0c1493a2d",
               "name": "config.blacklist.file.name.contains",
-              "value": "=",
+              "value": "={{ [] }}",
               "type": "array"
             },
             {
               "id": "ab9a8798-76eb-43de-948f-1131a8008dd4",
               "name": "config.blacklist.properties.contains",
-              "value": "=",
+              "value": "={{ [] }}",
               "type": "array"
             },
             {
@@ -306,9 +234,9 @@
               "type": "string"
             },
             {
-              "id": "05d2b7f5-1091-495c-989c-44d34f65e886",
-              "name": "config.folder.path",
-              "value": "=",
+              "id": "f1c4b315-b512-47a2-b56a-2b9a6836eea3",
+              "name": "config.email.get.after",
+              "value": "=2025-02-17T00:00:00Z",
               "type": "string"
             },
             {
@@ -318,27 +246,45 @@
               "type": "number"
             },
             {
-              "id": "243775b3-3dd4-4c9f-b429-2a6f29715aaf",
-              "name": "config.email.get.read",
-              "value": "=",
+              "id": "f0a1b2c3-1122-4d5e-9f01-aabbccdd0011",
+              "name": "config.email.get.folder",
+              "value": "=inbox",
               "type": "string"
             },
             {
-              "id": "f1c4b315-b512-47a2-b56a-2b9a6836eea3",
-              "name": "config.email.get.after",
-              "value": "=2025-02-17T00:00:00Z",
+              "id": "243775b3-3dd4-4c9f-b429-2a6f29715aaf",
+              "name": "config.email.get.read",
+              "value": "=both",
               "type": "string"
             },
             {
               "id": "048b1ed8-8162-4c80-a6cd-627eb5a2a053",
               "name": "config.email.set.read",
-              "value": "=",
+              "value": "=false",
               "type": "boolean"
+            },
+            {
+              "id": "7b0c4e2a-3f61-4d58-9a27-1c8e5d3b6f40",
+              "name": "config.folder.name",
+              "value": "=wesee",
+              "type": "string"
+            },
+            {
+              "id": "05d2b7f5-1091-495c-989c-44d34f65e886",
+              "name": "config.folder.path",
+              "value": "=",
+              "type": "string"
             },
             {
               "id": "cb395983-a5af-4f5d-921d-b2b209986050",
               "name": "config.notion.url",
               "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "e7c55394-4e65-44a0-ba9d-b89a68d65be1",
+              "name": "config.openai.model",
+              "value": "gpt-4o",
               "type": "string"
             },
             {
@@ -382,14 +328,6 @@
           "mode": "list",
           "cachedResultName": "wesee — wesee - get emails"
         },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
-        },
         "mode": "each",
         "options": {
           "waitForSubWorkflow": true
@@ -413,14 +351,6 @@
           "mode": "list",
           "cachedResultName": "wesee — wesee - add email to database"
         },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
-        },
         "mode": "each",
         "options": {}
       },
@@ -440,14 +370,6 @@
           "value": "2pB8bHXOFQv1uYJg",
           "mode": "list",
           "cachedResultName": "wesee — wesee - classify email"
-        },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
         },
         "mode": "each",
         "options": {
@@ -472,14 +394,6 @@
           "cachedResultUrl": "/workflow/oYVwDsI3xvH1hS8D",
           "cachedResultName": "wesee - download attachments"
         },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
-        },
         "mode": "each",
         "options": {
           "waitForSubWorkflow": true
@@ -502,14 +416,6 @@
           "value": "gd1bg8shD9DOw1D8",
           "mode": "list",
           "cachedResultName": "wesee — wesee - filter attachments"
-        },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": true
         },
         "mode": "each",
         "options": {
@@ -543,6 +449,17 @@
       ],
       "id": "2c58566e-2d2a-4d28-88af-5a1358658830",
       "name": "regularly"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        208,
+        -176
+      ],
+      "id": "c7e1a40b-55d2-4f9a-8f31-2b6d9c0a1e77",
+      "name": "When clicking Test workflow"
     }
   ],
   "connections": {
@@ -583,7 +500,7 @@
       "main": [
         [
           {
-            "node": "create assistant",
+            "node": "build prompt",
             "type": "main",
             "index": 0
           }
@@ -617,17 +534,6 @@
         [
           {
             "node": "add email to database",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "create assistant": {
-      "main": [
-        [
-          {
-            "node": "get database properties",
             "type": "main",
             "index": 0
           }
@@ -710,6 +616,28 @@
         [
           {
             "node": "set workflow configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking Test workflow": {
+      "main": [
+        [
+          {
+            "node": "set workflow configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "build prompt": {
+      "main": [
+        [
+          {
+            "node": "get database properties",
             "type": "main",
             "index": 0
           }
