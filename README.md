@@ -200,6 +200,8 @@ The following workflow properties are configurable in the node `set workflow con
 
 If `site` is not set, the workflow will try to find the configured drive in your personal OneDrive. If `drive` is not set, a default drive in your personal OneDrive will be used. If `path` is not set, the folder will be placed in the root of its drive.
 
+`config.notion.url`, `config.thesis` and `config.blacklist.properties.contains` are deliberately empty in this repository — they identify a specific deployment. Fill them in after importing, and re-enter them after any later import, which overwrites the node with the committed values. Exporting with `make exwf` writes them back into `wesee.json`, so check the diff before committing.
+
 ## OpenAI
 
 Classification and property extraction both use the OpenAI **Chat Completions** API, with one request per described Notion property (`temperature` 0). The model is taken from `config.openai.model` and defaults to `gpt-4o`.
